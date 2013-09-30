@@ -28,8 +28,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		}
 
         $this->id					= 'mailchimp';
-        $this->method_title     	= __( 'MailChimp', 'wc_mailchimp' );
-        $this->method_description	= __( 'MailChimp is a popular email marketing service.', 'wc_mailchimp' );
+        $this->method_title     	= __( 'MailChimp', 'ss_wc_mailchimp' );
+        $this->method_description	= __( 'MailChimp is a popular email marketing service.', 'ss_wc_mailchimp' );
 
 		// Load the settings.
 		$this->init_settings();
@@ -137,56 +137,56 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
      */
     function init_form_fields() {
 
-    	$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'wc_mailchimp' ) ), $this->get_lists() ) : array( '' => __( 'Enter your key and save to see your lists', 'wc_mailchimp' ) );
-    	//$mailchimp_interest_groupings = $this->has_list() ? array_merge( array( '' => __('Select an interest grouping...', 'wc_mailchimp' ) ), $this->get_interest_groupings( $this->list ) ) : array( '' => __( 'Please select a list to see your interest groupings.', 'wc_mailchimp' ) );
+    	$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'ss_wc_mailchimp' ) ), $this->get_lists() ) : array( '' => __( 'Enter your key and save to see your lists', 'ss_wc_mailchimp' ) );
+    	//$mailchimp_interest_groupings = $this->has_list() ? array_merge( array( '' => __('Select an interest grouping...', 'ss_wc_mailchimp' ) ), $this->get_interest_groupings( $this->list ) ) : array( '' => __( 'Please select a list to see your interest groupings.', 'ss_wc_mailchimp' ) );
 
     	$this->form_fields = array(
 			'enabled' => array(
-							'title' => __( 'Enable/Disable', 'wc_mailchimp' ),
-							'label' => __( 'Enable MailChimp', 'wc_mailchimp' ),
+							'title' => __( 'Enable/Disable', 'ss_wc_mailchimp' ),
+							'label' => __( 'Enable MailChimp', 'ss_wc_mailchimp' ),
 							'type' => 'checkbox',
 							'description' => '',
 							'default' => 'no'
 						),
 			'occurs' => array(
-							'title' => __( 'Event Occurs', 'wc_mailchimp' ),
+							'title' => __( 'Event Occurs', 'ss_wc_mailchimp' ),
 							'type' => 'select',
-							'description' => __( 'When will customers be added to lists?', 'wc_mailchimp' ),
+							'description' => __( 'When will customers be added to lists?', 'ss_wc_mailchimp' ),
 							'default' => 'order_completed',
 							'options' => array(
 								'completed' => 'Order Completed',
 								'processing' => 'Order Created',						),
 						),
 			'api_key' => array(
-							'title' => __( 'API Key', 'wc_mailchimp' ),
+							'title' => __( 'API Key', 'ss_wc_mailchimp' ),
 							'type' => 'text',
-							'description' => __( '<a href="https://login.mailchimp.com/" target="_blank">Login to mailchimp</a> to look up your api key.', 'wc_mailchimp' ),
+							'description' => __( '<a href="https://login.mailchimp.com/" target="_blank">Login to mailchimp</a> to look up your api key.', 'ss_wc_mailchimp' ),
 							'default' => ''
 						),
 			'list' => array(
-							'title' => __( 'Main List', 'wc_mailchimp' ),
+							'title' => __( 'Main List', 'ss_wc_mailchimp' ),
 							'type' => 'select',
-							'description' => __( 'All customers will be added to this list.', 'wc_mailchimp' ),
+							'description' => __( 'All customers will be added to this list.', 'ss_wc_mailchimp' ),
 							'default' => '',
 							'options' => $mailchimp_lists,
 						),
 			'interest_groupings' => array(
-							'title' => __( 'Group Name', 'wc_mailchimp' ),
+							'title' => __( 'Group Name', 'ss_wc_mailchimp' ),
 							'type' => 'text',
-							'description' => __( 'Optional: Enter the name of the group. Learn more about <a href="http://mailchimp.com/features/groups" target="_blank">Groups</a>', 'wc_mailchimp' ),
+							'description' => __( 'Optional: Enter the name of the group. Learn more about <a href="http://mailchimp.com/features/groups" target="_blank">Groups</a>', 'ss_wc_mailchimp' ),
 							'default' => '',
 						),
 			'groups' => array(
-							'title' => __( 'Groups', 'wc_mailchimp' ),
+							'title' => __( 'Groups', 'ss_wc_mailchimp' ),
 							'type' => 'text',
-							'description' => __( 'Optional: Comma delimited list of interest groups to add the email to.', 'wc_mailchimp' ),
+							'description' => __( 'Optional: Comma delimited list of interest groups to add the email to.', 'ss_wc_mailchimp' ),
 							'default' => '',
 						),
 			'double_optin' => array(
-							'title' => __( 'Double Opt-In', 'wc_mailchimp' ),
-							'label' => __( 'Enable Double Opt-In', 'wc_mailchimp' ),
+							'title' => __( 'Double Opt-In', 'ss_wc_mailchimp' ),
+							'label' => __( 'Enable Double Opt-In', 'ss_wc_mailchimp' ),
 							'type' => 'checkbox',
-							'description' => __( 'If enabled, customers will receive an email prompting them to confirm their subscription to the list above.', 'wc_mailchimp' ),
+							'description' => __( 'If enabled, customers will receive an email prompting them to confirm their subscription to the list above.', 'ss_wc_mailchimp' ),
 							'default' => 'no'
 						),
 		);
@@ -208,7 +208,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 			if ( $mailchimp->errorCode ) {
 
-				echo '<div class="error"><p>' . sprintf( __( 'Unable to load lists() from MailChimp: (%s) %s', 'wc_mailchimp' ), $mailchimp->errorCode, $mailchimp->errorMessage ) . '</p></div>';
+				echo '<div class="error"><p>' . sprintf( __( 'Unable to load lists() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $mailchimp->errorCode, $mailchimp->errorMessage ) . '</p></div>';
 
 				return false;
 
@@ -244,7 +244,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 			if ( $mailchimp->errorCode ) {
 
-				echo '<div class="error"><p>' . sprintf( __( 'Unable to load listInterestGroupings() from MailChimp: (%s) %s', 'wc_mailchimp' ), $mailchimp->errorCode, $mailchimp->errorMessage ) . '</p></div>';
+				echo '<div class="error"><p>' . sprintf( __( 'Unable to load listInterestGroupings() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $mailchimp->errorCode, $mailchimp->errorMessage ) . '</p></div>';
 
 				return false;
 
@@ -306,7 +306,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			do_action( 'wc_mailchimp_subscribe', $email );
 
 			// Email admin
-			wp_mail( get_option('admin_email'), __( 'Email subscription failed (Mailchimp)', 'wc_mailchimp_subscribe' ), '(' . $api->errorCode . ') ' . $api->errorMessage );
+			wp_mail( get_option('admin_email'), __( 'Email subscription failed (Mailchimp)', 'ss_wc_mailchimp' ), '(' . $api->errorCode . ') ' . $api->errorMessage );
 		}
 	}
 
@@ -316,7 +316,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	function admin_options() {
     	?>
     	<h3><?php _e( 'MailChimp', 'wc_mailchimp' ); ?></h3>
-    	<p><?php _e( 'Enter your MailChimp settings below to control how WooCommerce integrates with your mailchimp lists.', 'wc_mailchimp' ); ?></p>
+    	<p><?php _e( 'Enter your MailChimp settings below to control how WooCommerce integrates with your mailchimp lists.', 'ss_wc_mailchimp' ); ?></p>
     	<?php?>
     		<table class="form-table">
 	    		<?php $this->generate_settings_html(); ?>

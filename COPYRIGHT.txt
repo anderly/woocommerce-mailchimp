@@ -1,5 +1,5 @@
 
- Groups
+ WooCommerce MailChimp
  
  Copyright 2013 "anderly" (Adam Anderly) www.anderly.com
  
