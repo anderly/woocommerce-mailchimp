@@ -3,10 +3,10 @@ Contributors: anderly
 Tags: woocommerce, mailchimp
 Requires at least: 3.6
 Tested up to: 3.6.1
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv3
 
-WooCommerce MailChimp provides simple MailChimp integration for WooCommerce.
+Simple MailChimp integration for WooCommerce.
 
 == Description ==
 
@@ -53,7 +53,7 @@ Thanks in advance for your help on any translation efforts!
 1. Upload or extract the `woocommerce-mailchimp` folder to your site's `/wp-content/plugins/` directory. You can also use the *Add new* option found in the *Plugins* menu in WordPress.  
 2. Enable the plugin from the *Plugins* menu in WordPress.
 
-== Usage ==
+= Usage =
 
 1. Go to WooCommerce > Settings > Integration > MailChimp
 2. First, enable the plugin and set your MailChimp API Key and hit save.
@@ -67,5 +67,8 @@ Thanks in advance for your help on any translation efforts!
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.1 =
+* Added "Settings" link on the Plugins administration screen
+
+= 1.0 =
 * This is the first public release.
