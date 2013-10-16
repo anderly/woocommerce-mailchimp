@@ -50,11 +50,12 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		add_action( 'woocommerce_update_options_integration', array( $this, 'process_admin_options') );
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options') );
 
+		// hook into woocommerce order status changed hook to handle the desired subscription event trigger
 		add_action( 'woocommerce_order_status_changed', array( &$this, 'status_changed' ), 10, 3 );
   	}
 
   	/**
- 	* Check if SSL is enabled and notify the user
+ 	* Check if the user has enabled the plugin functionality, but hasn't provided an api key
  	**/
 	function checks() {
 	    global $woocommerce;
@@ -130,7 +131,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	}
 	
     /**
-     * Initialise Settings Form Fields
+     * Initialize Settings Form Fields
      *
      * @access public
      * @return void
@@ -149,10 +150,10 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 							'default' => 'no'
 						),
 			'occurs' => array(
-							'title' => __( 'Event Occurs', 'ss_wc_mailchimp' ),
+							'title' => __( 'Subscribe Event', 'ss_wc_mailchimp' ),
 							'type' => 'select',
-							'description' => __( 'When will customers be added to lists?', 'ss_wc_mailchimp' ),
-							'default' => 'order_completed',
+							'description' => __( 'When should customers be subscribed to lists?', 'ss_wc_mailchimp' ),
+							'default' => 'completed',
 							'options' => array(
 								'completed' => 'Order Completed',
 								'processing' => 'Order Created',						),
@@ -200,7 +201,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 * @return void
 	 */
 	public function get_lists() {
-		if ( ! $mailchimp_lists = get_transient( 'wc_mailchimp_list_' . md5( $this->api_key ) ) ) {
+		if ( ! $mailchimp_lists = get_transient( 'ss_wc_mailchimp_list_' . md5( $this->api_key ) ) ) {
 
 			$mailchimp_lists = array();
 			$mailchimp       = new MCAPI( $this->api_key );
@@ -217,7 +218,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 					$mailchimp_lists[ $list['id'] ] = $list['name'];
 
 				if ( sizeof( $mailchimp_lists ) > 0 )
-					set_transient( 'wc_mailchimp_list_' . md5( $this->api_key ), $mailchimp_lists, 60*60*1 );
+					set_transient( 'ss_wc_mailchimp_list_' . md5( $this->api_key ), $mailchimp_lists, 60*60*1 );
 			}
 		}
 
