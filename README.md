@@ -68,6 +68,9 @@ Thanks in advance for your help on any translation efforts!
 
 == Changelog ==
 
+= 1.1 =
+* Add the option to display an opt-in field on checkout
+
 = 1.0.2 =
 * Minor text and comment changes
 
