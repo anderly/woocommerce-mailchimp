@@ -318,7 +318,6 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
     	?>
     	<h3><?php _e( 'MailChimp', 'wc_mailchimp' ); ?></h3>
     	<p><?php _e( 'Enter your MailChimp settings below to control how WooCommerce integrates with your MailChimp lists.', 'ss_wc_mailchimp' ); ?></p>
-    	<?php?>
     		<table class="form-table">
 	    		<?php $this->generate_settings_html(); ?>
 			</table><!--/.form-table-->
