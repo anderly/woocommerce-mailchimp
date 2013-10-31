@@ -3,7 +3,7 @@ Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.6
 Tested up to: 3.6.1
-Stable tag: 1.0.2
+Stable tag: 1.1
 License: GPLv3
 
 Simple MailChimp integration for WooCommerce.
@@ -66,6 +66,9 @@ Thanks in advance for your help on any translation efforts!
 1. WooCommerce MailChimp options screen.
 
 == Changelog ==
+
+= 1.1 =
+* Add the option to display an opt-in field on checkout
 
 = 1.0.2 =
 * Minor text and comment changes
