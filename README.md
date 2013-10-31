@@ -1,4 +1,5 @@
-=== WooCommerce MailChimp ===
+## WooCommerce MailChimp ##
+
 Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.6
@@ -8,7 +9,7 @@ License: GPLv3
 
 Simple MailChimp integration for WooCommerce.
 
-== Description ==
+### Description ###
 
 WooCommerce MailChimp provides simple MailChimp integration for WooCommerce.
 
