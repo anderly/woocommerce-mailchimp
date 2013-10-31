@@ -155,8 +155,9 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 							'description' => __( 'When should customers be subscribed to lists?', 'ss_wc_mailchimp' ),
 							'default' => 'completed',
 							'options' => array(
-								'completed' => 'Order Completed',
-								'processing' => 'Order Created',						),
+								'completed'  => __( 'Order Completed', 'ss_wc_mailchimp' ),
+								'processing' => __( 'Order Created', 'ss_wc_mailchimp' ),
+							),
 						),
 			'api_key' => array(
 							'title' => __( 'API Key', 'ss_wc_mailchimp' ),
