@@ -40,6 +40,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		$this->api_key      = $this->get_option( 'api_key' );
 		$this->list         = $this->get_option( 'list' );
 		$this->double_optin = $this->get_option( 'double_optin' );
+		$this->display_opt_in = $this->get_option( 'display_opt_in' );
+		$this->opt_in_label   = $this->get_option( 'opt_in_label' );
 		$this->interest_groupings = $this->get_option( 'interest_groupings' );
 		$this->groups       = $this->get_option( 'groups' );
 
@@ -53,6 +55,11 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		// hook into woocommerce order status changed hook to handle the desired subscription event trigger
 		add_action( 'woocommerce_order_status_changed', array( &$this, 'status_changed' ), 10, 3 );
 
+		// Maybe add an "opt-in" field to the checkout
+		add_filter( 'woocommerce_checkout_fields', array( &$this, 'maybe_add_checkout_fields' ) );
+
+		// Maybe save the "opt-in" field on the checkout
+		add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'maybe_save_checkout_fields' ) );
 	}
 
 	/**
@@ -191,6 +198,19 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 							'description' => __( 'If enabled, customers will receive an email prompting them to confirm their subscription to the list above.', 'ss_wc_mailchimp' ),
 							'default' => 'no'
 						),
+			'display_opt_in' => array(
+							'title'       => __( 'Display Opt-In Field', 'ss_wc_mailchimp' ),
+							'label'       => __( 'Display an Opt-In Field on Checkout', 'ss_wc_mailchimp' ),
+							'type'        => 'checkbox',
+							'description' => __( 'If enabled, customers will be presented with a "Opt-in" checkbox during checkout and will only be added to the list above if they opt-in.', 'ss_wc_mailchimp' ),
+							'default'     => 'no'
+						),
+			'opt_in_label' => array(
+							'title'       => __( 'Opt-In Field Label', 'ss_wc_mailchimp' ),
+							'type'        => 'text',
+							'description' => __( 'Optional: customise the label displayed next to the opt-in checkbox.', 'ss_wc_mailchimp' ),
+							'default'     => __( 'Add me to the newsletter (we will never share your email).', 'ss_wc_mailchimp' ),
+						),
 		);
 
 	} // End init_form_fields()
@@ -325,4 +345,34 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		<?php
 	}
 
+	/**
+	 * Add the opt-in checkbox to the checkout fields (to be displayed on checkout).
+	 *
+	 * @since 1.1
+	 */
+	function maybe_add_checkout_fields( $checkout_fields ) {
+
+		if ( 'yes' == $this->display_opt_in ) {
+			$checkout_fields['order']['ss_wc_mailchimp_opt_in'] = array(
+				'type'    => 'checkbox',
+				'label'   => esc_attr( $this->opt_in_label ),
+				'default' => true,
+			);
+		}
+
+		return $checkout_fields;
+	}
+
+	/**
+	 * When the checkout form is submitted, save opt-in value.
+	 *
+	 * @version 1.1
+	 */
+	function maybe_save_checkout_fields( $order_id ) {
+
+		if ( 'yes' == $this->display_opt_in ) {
+			$opt_in = isset( $_POST['ss_wc_mailchimp_opt_in'] ) ? 'yes' : 'no';
+			update_post_meta( $order_id, 'ss_wc_mailchimp_opt_in', $opt_in );
+		}
+	}
 }
