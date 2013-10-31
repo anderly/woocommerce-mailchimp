@@ -35,13 +35,13 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		$this->init_settings();
 
 		// Get setting values
-		$this->enabled 		= $this->settings['enabled'];
-		$this->occurs 		= $this->settings['occurs'];
-		$this->api_key 		= $this->settings['api_key'];
-		$this->list    		= $this->settings['list'];
-		$this->double_optin = $this->settings['double_optin'];
-		$this->interest_groupings = $this->settings['interest_groupings'];
-		$this->groups 		= $this->settings['groups'];
+		$this->enabled      = $this->get_option( 'enabled' );
+		$this->occurs       = $this->get_option( 'occurs' );
+		$this->api_key      = $this->get_option( 'api_key' );
+		$this->list         = $this->get_option( 'list' );
+		$this->double_optin = $this->get_option( 'double_optin' );
+		$this->interest_groupings = $this->get_option( 'interest_groupings' );
+		$this->groups       = $this->get_option( 'groups' );
 
 		$this->init_form_fields();
 
