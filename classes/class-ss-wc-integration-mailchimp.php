@@ -34,18 +34,20 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		// Load the settings.
 		$this->init_settings();
 
+		// We need the API key to set up for the lists in teh form fields
+		$this->api_key = $this->get_option( 'api_key' );
+
+		$this->init_form_fields();
+
 		// Get setting values
-		$this->enabled      = $this->get_option( 'enabled' );
-		$this->occurs       = $this->get_option( 'occurs' );
-		$this->api_key      = $this->get_option( 'api_key' );
-		$this->list         = $this->get_option( 'list' );
-		$this->double_optin = $this->get_option( 'double_optin' );
+		$this->enabled        = $this->get_option( 'enabled' );
+		$this->occurs         = $this->get_option( 'occurs' );
+		$this->list           = $this->get_option( 'list' );
+		$this->double_optin   = $this->get_option( 'double_optin' );
+		$this->groups         = $this->get_option( 'groups' );
 		$this->display_opt_in = $this->get_option( 'display_opt_in' );
 		$this->opt_in_label   = $this->get_option( 'opt_in_label' );
 		$this->interest_groupings = $this->get_option( 'interest_groupings' );
-		$this->groups       = $this->get_option( 'groups' );
-
-		$this->init_form_fields();
 
 		// Hooks
 		add_action( 'admin_notices', array( &$this, 'checks' ) );
