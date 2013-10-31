@@ -27,9 +27,9 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			include_once( 'api/class-MCAPI.php' );
 		}
 
-        $this->id					= 'mailchimp';
-        $this->method_title     	= __( 'MailChimp', 'ss_wc_mailchimp' );
-        $this->method_description	= __( 'MailChimp is a popular email marketing service.', 'ss_wc_mailchimp' );
+		$this->id					= 'mailchimp';
+		$this->method_title     	= __( 'MailChimp', 'ss_wc_mailchimp' );
+		$this->method_description	= __( 'MailChimp is a popular email marketing service.', 'ss_wc_mailchimp' );
 
 		// Load the settings.
 		$this->init_settings();
@@ -52,27 +52,27 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		// hook into woocommerce order status changed hook to handle the desired subscription event trigger
 		add_action( 'woocommerce_order_status_changed', array( &$this, 'status_changed' ), 10, 3 );
-  	}
 
-  	/**
- 	* Check if the user has enabled the plugin functionality, but hasn't provided an api key
- 	**/
+	}
+
+	/**
+	 * Check if the user has enabled the plugin functionality, but hasn't provided an api key
+	 **/
 	function checks() {
-	    global $woocommerce;
-		
-	    if ( $this->enabled == 'yes' ) {
-	     		
-	    	// Check required fields
-	     	if ( ! $this->api_key ) {
+		global $woocommerce;
+
+		if ( $this->enabled == 'yes' ) {
+
+			// Check required fields
+			if ( ! $this->api_key ) {
 
 				echo '<div class="error"><p>' . sprintf( __('MailChimp error: Please enter your api key <a href="%s">here</a>', 'ss_wc_mailchimp'), admin_url('admin.php?page=woocommerce&tab=integration&section=mailchimp' ) ) . '</p></div>';
 
-		     	return;
+				return;
 
-	    	}
+			}
 
-	    }
-     		
+		}
 	}
 
 	/**
@@ -130,18 +130,18 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		return false;
 	}
 	
-    /**
-     * Initialize Settings Form Fields
-     *
-     * @access public
-     * @return void
-     */
-    function init_form_fields() {
+	/**
+	 * Initialize Settings Form Fields
+	 *
+	 * @access public
+	 * @return void
+	 */
+	function init_form_fields() {
 
-    	$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'ss_wc_mailchimp' ) ), $this->get_lists() ) : array( '' => __( 'Enter your key and save to see your lists', 'ss_wc_mailchimp' ) );
-    	//$mailchimp_interest_groupings = $this->has_list() ? array_merge( array( '' => __('Select an interest grouping...', 'ss_wc_mailchimp' ) ), $this->get_interest_groupings( $this->list ) ) : array( '' => __( 'Please select a list to see your interest groupings.', 'ss_wc_mailchimp' ) );
+		$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'ss_wc_mailchimp' ) ), $this->get_lists() ) : array( '' => __( 'Enter your key and save to see your lists', 'ss_wc_mailchimp' ) );
+		//$mailchimp_interest_groupings = $this->has_list() ? array_merge( array( '' => __('Select an interest grouping...', 'ss_wc_mailchimp' ) ), $this->get_interest_groupings( $this->list ) ) : array( '' => __( 'Please select a list to see your interest groupings.', 'ss_wc_mailchimp' ) );
 
-    	$this->form_fields = array(
+		$this->form_fields = array(
 			'enabled' => array(
 							'title' => __( 'Enable/Disable', 'ss_wc_mailchimp' ),
 							'label' => __( 'Enable MailChimp', 'ss_wc_mailchimp' ),
@@ -192,9 +192,9 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 						),
 		);
 
-    } // End init_form_fields()
+	} // End init_form_fields()
 
-   	/**
+	/**
 	 * get_lists function.
 	 *
 	 * @access public
@@ -311,7 +311,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		}
 	}
 
-  	/**
+	/**
 	 * Admin Panel Options
 	 */
 	function admin_options() {
