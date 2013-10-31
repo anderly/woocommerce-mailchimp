@@ -65,7 +65,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	    	// Check required fields
 	     	if ( ! $this->api_key ) {
 
-		     	echo '<div class="error"><p>' . sprintf( __('MailChimp error: Please enter your api key <a href="%s">here</a>', 'wc_mailchimp'), admin_url('admin.php?page=woocommerce&tab=integration&section=mailchimp' ) ) . '</p></div>';
+				echo '<div class="error"><p>' . sprintf( __('MailChimp error: Please enter your api key <a href="%s">here</a>', 'ss_wc_mailchimp'), admin_url('admin.php?page=woocommerce&tab=integration&section=mailchimp' ) ) . '</p></div>';
 
 		     	return;
 
@@ -316,7 +316,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 */
 	function admin_options() {
     	?>
-    	<h3><?php _e( 'MailChimp', 'wc_mailchimp' ); ?></h3>
+		<h3><?php _e( 'MailChimp', 'ss_wc_mailchimp' ); ?></h3>
     	<p><?php _e( 'Enter your MailChimp settings below to control how WooCommerce integrates with your MailChimp lists.', 'ss_wc_mailchimp' ); ?></p>
     		<table class="form-table">
 	    		<?php $this->generate_settings_html(); ?>
