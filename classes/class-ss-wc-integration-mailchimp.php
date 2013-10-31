@@ -90,12 +90,12 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 */
 	public function status_changed( $id, $status, $new_status ) {
 
-		if ( $this->is_valid() ) {
+		if ( $this->is_valid() && $new_status == $this->occurs ) {
 
-			if ( $new_status == $this->occurs ) {
+			$order = new WC_Order( $id );
 
-				$order = new WC_Order( $id );
-
+			// If the 'ss_wc_mailchimp_opt_in' meta value isn't set (because 'display_opt_in' wasn't enabled at the time the order was placed) or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
+			if ( ! isset( $order->order_custom_fields['ss_wc_mailchimp_opt_in'][0] ) || 'yes' == $order->order_custom_fields['ss_wc_mailchimp_opt_in'][0] ) {
 				$this->subscribe( $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->list );
 			}
 
