@@ -147,73 +147,77 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 */
 	function init_form_fields() {
 
-		$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'ss_wc_mailchimp' ) ), $this->get_lists() ) : array( '' => __( 'Enter your key and save to see your lists', 'ss_wc_mailchimp' ) );
-		//$mailchimp_interest_groupings = $this->has_list() ? array_merge( array( '' => __('Select an interest grouping...', 'ss_wc_mailchimp' ) ), $this->get_interest_groupings( $this->list ) ) : array( '' => __( 'Please select a list to see your interest groupings.', 'ss_wc_mailchimp' ) );
+		if ( is_admin() ) {
 
-		$this->form_fields = array(
-			'enabled' => array(
-							'title' => __( 'Enable/Disable', 'ss_wc_mailchimp' ),
-							'label' => __( 'Enable MailChimp', 'ss_wc_mailchimp' ),
-							'type' => 'checkbox',
-							'description' => '',
-							'default' => 'no'
-						),
-			'occurs' => array(
-							'title' => __( 'Subscribe Event', 'ss_wc_mailchimp' ),
-							'type' => 'select',
-							'description' => __( 'When should customers be subscribed to lists?', 'ss_wc_mailchimp' ),
-							'default' => 'completed',
-							'options' => array(
-								'completed'  => __( 'Order Completed', 'ss_wc_mailchimp' ),
-								'processing' => __( 'Order Created', 'ss_wc_mailchimp' ),
+			$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'ss_wc_mailchimp' ) ), $this->get_lists() ) : array( '' => __( 'Enter your key and save to see your lists', 'ss_wc_mailchimp' ) );
+			//$mailchimp_interest_groupings = $this->has_list() ? array_merge( array( '' => __('Select an interest grouping...', 'ss_wc_mailchimp' ) ), $this->get_interest_groupings( $this->list ) ) : array( '' => __( 'Please select a list to see your interest groupings.', 'ss_wc_mailchimp' ) );
+
+			$this->form_fields = array(
+				'enabled' => array(
+								'title' => __( 'Enable/Disable', 'ss_wc_mailchimp' ),
+								'label' => __( 'Enable MailChimp', 'ss_wc_mailchimp' ),
+								'type' => 'checkbox',
+								'description' => '',
+								'default' => 'no'
 							),
-						),
-			'api_key' => array(
-							'title' => __( 'API Key', 'ss_wc_mailchimp' ),
-							'type' => 'text',
-							'description' => __( '<a href="https://us2.admin.mailchimp.com/account/api/" target="_blank">Login to mailchimp</a> to look up your api key.', 'ss_wc_mailchimp' ),
-							'default' => ''
-						),
-			'list' => array(
-							'title' => __( 'Main List', 'ss_wc_mailchimp' ),
-							'type' => 'select',
-							'description' => __( 'All customers will be added to this list.', 'ss_wc_mailchimp' ),
-							'default' => '',
-							'options' => $mailchimp_lists,
-						),
-			'interest_groupings' => array(
-							'title' => __( 'Group Name', 'ss_wc_mailchimp' ),
-							'type' => 'text',
-							'description' => __( 'Optional: Enter the name of the group. Learn more about <a href="http://mailchimp.com/features/groups" target="_blank">Groups</a>', 'ss_wc_mailchimp' ),
-							'default' => '',
-						),
-			'groups' => array(
-							'title' => __( 'Groups', 'ss_wc_mailchimp' ),
-							'type' => 'text',
-							'description' => __( 'Optional: Comma delimited list of interest groups to add the email to.', 'ss_wc_mailchimp' ),
-							'default' => '',
-						),
-			'double_optin' => array(
-							'title' => __( 'Double Opt-In', 'ss_wc_mailchimp' ),
-							'label' => __( 'Enable Double Opt-In', 'ss_wc_mailchimp' ),
-							'type' => 'checkbox',
-							'description' => __( 'If enabled, customers will receive an email prompting them to confirm their subscription to the list above.', 'ss_wc_mailchimp' ),
-							'default' => 'no'
-						),
-			'display_opt_in' => array(
-							'title'       => __( 'Display Opt-In Field', 'ss_wc_mailchimp' ),
-							'label'       => __( 'Display an Opt-In Field on Checkout', 'ss_wc_mailchimp' ),
-							'type'        => 'checkbox',
-							'description' => __( 'If enabled, customers will be presented with a "Opt-in" checkbox during checkout and will only be added to the list above if they opt-in.', 'ss_wc_mailchimp' ),
-							'default'     => 'no'
-						),
-			'opt_in_label' => array(
-							'title'       => __( 'Opt-In Field Label', 'ss_wc_mailchimp' ),
-							'type'        => 'text',
-							'description' => __( 'Optional: customise the label displayed next to the opt-in checkbox.', 'ss_wc_mailchimp' ),
-							'default'     => __( 'Add me to the newsletter (we will never share your email).', 'ss_wc_mailchimp' ),
-						),
-		);
+				'occurs' => array(
+								'title' => __( 'Subscribe Event', 'ss_wc_mailchimp' ),
+								'type' => 'select',
+								'description' => __( 'When should customers be subscribed to lists?', 'ss_wc_mailchimp' ),
+								'default' => 'completed',
+								'options' => array(
+									'completed'  => __( 'Order Completed', 'ss_wc_mailchimp' ),
+									'processing' => __( 'Order Created', 'ss_wc_mailchimp' ),
+								),
+							),
+				'api_key' => array(
+								'title' => __( 'API Key', 'ss_wc_mailchimp' ),
+								'type' => 'text',
+								'description' => __( '<a href="https://us2.admin.mailchimp.com/account/api/" target="_blank">Login to mailchimp</a> to look up your api key.', 'ss_wc_mailchimp' ),
+								'default' => ''
+							),
+				'list' => array(
+								'title' => __( 'Main List', 'ss_wc_mailchimp' ),
+								'type' => 'select',
+								'description' => __( 'All customers will be added to this list.', 'ss_wc_mailchimp' ),
+								'default' => '',
+								'options' => $mailchimp_lists,
+							),
+				'interest_groupings' => array(
+								'title' => __( 'Group Name', 'ss_wc_mailchimp' ),
+								'type' => 'text',
+								'description' => __( 'Optional: Enter the name of the group. Learn more about <a href="http://mailchimp.com/features/groups" target="_blank">Groups</a>', 'ss_wc_mailchimp' ),
+								'default' => '',
+							),
+				'groups' => array(
+								'title' => __( 'Groups', 'ss_wc_mailchimp' ),
+								'type' => 'text',
+								'description' => __( 'Optional: Comma delimited list of interest groups to add the email to.', 'ss_wc_mailchimp' ),
+								'default' => '',
+							),
+				'double_optin' => array(
+								'title' => __( 'Double Opt-In', 'ss_wc_mailchimp' ),
+								'label' => __( 'Enable Double Opt-In', 'ss_wc_mailchimp' ),
+								'type' => 'checkbox',
+								'description' => __( 'If enabled, customers will receive an email prompting them to confirm their subscription to the list above.', 'ss_wc_mailchimp' ),
+								'default' => 'no'
+							),
+				'display_opt_in' => array(
+								'title'       => __( 'Display Opt-In Field', 'ss_wc_mailchimp' ),
+								'label'       => __( 'Display an Opt-In Field on Checkout', 'ss_wc_mailchimp' ),
+								'type'        => 'checkbox',
+								'description' => __( 'If enabled, customers will be presented with a "Opt-in" checkbox during checkout and will only be added to the list above if they opt-in.', 'ss_wc_mailchimp' ),
+								'default'     => 'no'
+							),
+				'opt_in_label' => array(
+								'title'       => __( 'Opt-In Field Label', 'ss_wc_mailchimp' ),
+								'type'        => 'text',
+								'description' => __( 'Optional: customize the label displayed next to the opt-in checkbox.', 'ss_wc_mailchimp' ),
+								'default'     => __( 'Add me to the newsletter (we will never share your email).', 'ss_wc_mailchimp' ),
+							),
+			);
+
+		}
 
 	} // End init_form_fields()
 
