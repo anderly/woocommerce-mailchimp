@@ -171,7 +171,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			'api_key' => array(
 							'title' => __( 'API Key', 'ss_wc_mailchimp' ),
 							'type' => 'text',
-							'description' => __( '<a href="https://login.mailchimp.com/" target="_blank">Login to mailchimp</a> to look up your api key.', 'ss_wc_mailchimp' ),
+							'description' => __( '<a href="https://us2.admin.mailchimp.com/account/api/" target="_blank">Login to mailchimp</a> to look up your api key.', 'ss_wc_mailchimp' ),
 							'default' => ''
 						),
 			'list' => array(
