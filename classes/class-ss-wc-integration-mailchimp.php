@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.0
+ * @version		1.1.1
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -167,7 +167,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 								'default' => 'completed',
 								'options' => array(
 									'completed'  => __( 'Order Completed', 'ss_wc_mailchimp' ),
-									'processing' => __( 'Order Created', 'ss_wc_mailchimp' ),
+									'pending' => __( 'Order Created', 'ss_wc_mailchimp' ),
 								),
 							),
 				'api_key' => array(

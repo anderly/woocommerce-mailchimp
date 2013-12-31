@@ -53,6 +53,9 @@ Thanks in advance for your help on any translation efforts!
 
 ### Changelog
 
+##### 1.1.1
+* Update to address issue with subscriptions not occurring on order create "pending"
+
 ##### 1.1
 * Add the option to display an opt-in field on checkout
 
