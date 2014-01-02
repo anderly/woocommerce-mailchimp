@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.1.1
+ * @version		1.1.3
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -54,8 +54,11 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		add_action( 'woocommerce_update_options_integration', array( $this, 'process_admin_options') );
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options') );
 
+		// We would use the 'woocommerce_new_order' action but first name, last name and email address (order meta) is not yet available, 
+		// so instead we use the 'woocommerce_checkout_update_order_meta' action hook which fires at the end of the checkout process after the order meta has been saved
+		add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'order_status_changed' ), 10, 1 );
+
 		// hook into woocommerce order status changed hook to handle the desired subscription event trigger
-		add_action( 'woocommerce_new_order', array( &$this, 'order_status_changed' ), 10, 1 );
 		add_action( 'woocommerce_order_status_changed', array( &$this, 'order_status_changed' ), 10, 3 );
 
 		// Maybe add an "opt-in" field to the checkout
@@ -165,10 +168,10 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 								'title' => __( 'Subscribe Event', 'ss_wc_mailchimp' ),
 								'type' => 'select',
 								'description' => __( 'When should customers be subscribed to lists?', 'ss_wc_mailchimp' ),
-								'default' => 'completed',
+								'default' => 'pending',
 								'options' => array(
-									'completed'  => __( 'Order Completed', 'ss_wc_mailchimp' ),
 									'pending' => __( 'Order Created', 'ss_wc_mailchimp' ),
+									'completed'  => __( 'Order Completed', 'ss_wc_mailchimp' ),
 								),
 							),
 				'api_key' => array(
