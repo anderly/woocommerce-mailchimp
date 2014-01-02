@@ -55,7 +55,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options') );
 
 		// hook into woocommerce order status changed hook to handle the desired subscription event trigger
-		add_action( 'woocommerce_order_status_changed', array( &$this, 'status_changed' ), 10, 3 );
+		add_action( 'woocommerce_new_order', array( &$this, 'order_status_changed' ), 10, 1 );
+		add_action( 'woocommerce_order_status_changed', array( &$this, 'order_status_changed' ), 10, 3 );
 
 		// Maybe add an "opt-in" field to the checkout
 		add_filter( 'woocommerce_checkout_fields', array( &$this, 'maybe_add_checkout_fields' ) );
@@ -85,12 +86,12 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	}
 
 	/**
-	 * status_changed function.
+	 * order_status_changed function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function status_changed( $id, $status, $new_status ) {
+	public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) {
 
 		if ( $this->is_valid() && $new_status == $this->occurs ) {
 

@@ -3,7 +3,7 @@ Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.6
 Tested up to: 3.8
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv3
 
 Simple MailChimp integration for WooCommerce.
@@ -66,6 +66,9 @@ Thanks in advance for your help on any translation efforts!
 1. WooCommerce MailChimp options screen.
 
 == Changelog ==
+
+= 1.1.2 =
+* Update to REALLY address issue with subscriptions not occurring on order create "pending"
 
 = 1.1.1 =
 * Update to address issue with subscriptions not occurring on order create "pending"
