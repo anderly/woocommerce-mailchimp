@@ -3,7 +3,7 @@ Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.6
 Tested up to: 3.8
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv3
 
 Simple MailChimp integration for WooCommerce.
