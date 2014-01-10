@@ -1,18 +1,20 @@
 <?php
-/*
-Plugin Name: WooCommerce MailChimp
-Plugin URI: http://anderly.com/woocommerce-mailchimp
-Description: WooCommerce MailChimp provides simple MailChimp integration for WooCommerce.
-Version: 1.1.3
-Author: Adam Anderly
-Author URI: http://anderly.com
-
-	Copyright: © 2013 Adam Anderly
-	License: GNU General Public License v3.0
-	License URI: http://www.gnu.org/licenses/gpl-3.0.html
-
-	MailChimp Docs: http://apidocs.mailchimp.com/
-*/
+/**
+ * Plugin Name: WooCommerce MailChimp
+ * Plugin URI: http://anderly.com/woocommerce-mailchimp
+ * Description: WooCommerce MailChimp provides simple MailChimp integration for WooCommerce.
+ * Author: Adam Anderly
+ * Author URI: http://anderly.com
+ * Version: 1.2
+ * Text Domain: ss_wc_mailchimp
+ * Domain Path: languages
+ * 
+ * Copyright: © 2013 Adam Anderly
+ * License: GNU General Public License v3.0
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * MailChimp Docs: http://apidocs.mailchimp.com/
+ */
 
 add_action( 'plugins_loaded', 'woocommerce_mailchimp_init', 0 );
 

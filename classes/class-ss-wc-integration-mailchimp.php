@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.1.3
+ * @version		1.2
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -47,6 +47,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		$this->groups         = $this->get_option( 'groups' );
 		$this->display_opt_in = $this->get_option( 'display_opt_in' );
 		$this->opt_in_label   = $this->get_option( 'opt_in_label' );
+		$this->opt_in_checkbox_default_status = $this->get_option( 'opt_in_checkbox_default_status' );
+		$this->opt_in_checkbox_display_location = $this->get_option( 'opt_in_checkbox_display_location' );
 		$this->interest_groupings = $this->get_option( 'interest_groupings' );
 
 		// Hooks
@@ -55,8 +57,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options') );
 
 		// We would use the 'woocommerce_new_order' action but first name, last name and email address (order meta) is not yet available, 
-		// so instead we use the 'woocommerce_checkout_update_order_meta' action hook which fires at the end of the checkout process after the order meta has been saved
-		add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'order_status_changed' ), 10, 1 );
+		// so instead we use the 'woocommerce_thankyou' action hook which fires after the checkout process on the "thank you" page
+		add_action( 'woocommerce_thankyou', array( &$this, 'order_status_changed' ), 10, 1 );
 
 		// hook into woocommerce order status changed hook to handle the desired subscription event trigger
 		add_action( 'woocommerce_order_status_changed', array( &$this, 'order_status_changed' ), 10, 3 );
@@ -150,6 +152,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 * @return void
 	 */
 	function init_form_fields() {
+		global $woocommerce;
 
 		if ( is_admin() ) {
 
@@ -196,7 +199,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 				'groups' => array(
 								'title' => __( 'Groups', 'ss_wc_mailchimp' ),
 								'type' => 'text',
-								'description' => __( 'Optional: Comma delimited list of interest groups to add the email to.', 'ss_wc_mailchimp' ),
+								'description' => __( 'Optional: Comma separated list of interest groups to which subscribers should be added.', 'ss_wc_mailchimp' ),
 								'default' => '',
 							),
 				'double_optin' => array(
@@ -211,7 +214,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 								'label'       => __( 'Display an Opt-In Field on Checkout', 'ss_wc_mailchimp' ),
 								'type'        => 'checkbox',
 								'description' => __( 'If enabled, customers will be presented with a "Opt-in" checkbox during checkout and will only be added to the list above if they opt-in.', 'ss_wc_mailchimp' ),
-								'default'     => 'no'
+								'default'     => 'no',
 							),
 				'opt_in_label' => array(
 								'title'       => __( 'Opt-In Field Label', 'ss_wc_mailchimp' ),
@@ -219,7 +222,35 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 								'description' => __( 'Optional: customize the label displayed next to the opt-in checkbox.', 'ss_wc_mailchimp' ),
 								'default'     => __( 'Add me to the newsletter (we will never share your email).', 'ss_wc_mailchimp' ),
 							),
+				'opt_in_checkbox_default_status' => array(
+								'title'       => __( 'Opt-In Checkbox Default Status', 'ss_wc_mailchimp' ),
+								'type'        => 'select',
+								'description' => __( 'The default state of the opt-in checkbox.', 'ss_wc_mailchimp' ),
+								'default'     => 'checked',
+								'options'	=> array( 'checked' => __( 'Checked', 'ss_wc_mailchimp' ), 'unchecked' => __( 'Unchecked', 'ss_wc_mailchimp' ) )
+							),
+				'opt_in_checkbox_display_location' => array(
+								'title'       => __( 'Opt-In Checkbox Display Location', 'ss_wc_mailchimp' ),
+								'type'        => 'select',
+								'description' => __( 'Where to display the opt-in checkbox on the checkout page (under Billing info or Order info).', 'ss_wc_mailchimp' ),
+								'default'     => 'billing',
+								'options'	=> array( 'billing' => __( 'Billing', 'ss_wc_mailchimp' ), 'order' => __( 'Order', 'ss_wc_mailchimp' ) )
+							),
 			);
+
+			$woocommerce->add_inline_js("
+				jQuery('#woocommerce_mailchimp_display_opt_in').change(function(){
+
+					jQuery('#mainform [id^=woocommerce_mailchimp_opt_in]').closest('tr').hide('fast');
+
+					if ( jQuery(this).prop('checked') == true ) {
+						jQuery('#mainform [id^=woocommerce_mailchimp_opt_in]').closest('tr').show('fast');
+					} else {
+						jQuery('#mainform [id^=woocommerce_mailchimp_opt_in]').closest('tr').hide('fast');
+					}
+
+				}).change();
+			");
 
 		}
 
@@ -330,15 +361,21 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 				);
 		}
 
-		$vars = apply_filters( 'wc_mailchimp_subscribe_vars', $merge_vars );
+		$vars = apply_filters( 'ss_wc_mailchimp_subscribe_merge_vars', $merge_vars );
 
-		$retval = $api->listSubscribe( $listid, $email, $vars, 'html', ( $this->double_optin == 'no' ? false : true ) );
+		$email_type = 'html';
+		$double_optin = ( $this->double_optin == 'no' ? false : true );
+		$update_existing = true;
+		$replace_interests = false;
+		$send_welcome = false;
+
+		$retval = $api->listSubscribe( $listid, $email, $vars, $email_type, $double_optin, $update_existing, $replace_interests, $send_welcome );
 
 		if ( $api->errorCode && $api->errorCode != 214 ) {
-			do_action( 'wc_mailchimp_subscribe', $email );
+			do_action( 'ss_wc_mailchimp_subscribed', $email );
 
 			// Email admin
-			wp_mail( get_option('admin_email'), __( 'Email subscription failed (Mailchimp)', 'ss_wc_mailchimp' ), '(' . $api->errorCode . ') ' . $api->errorMessage );
+			wp_mail( get_option('admin_email'), __( 'WooCommerce MailChimp subscription failed', 'ss_wc_mailchimp' ), '(' . $api->errorCode . ') ' . $api->errorMessage );
 		}
 	}
 
@@ -362,11 +399,17 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 */
 	function maybe_add_checkout_fields( $checkout_fields ) {
 
+		$opt_in_checkbox_display_location = $this->opt_in_checkbox_display_location;
+
+		if ( empty( $opt_in_checkbox_display_location ) ) {
+			$opt_in_checkbox_display_location = 'billing';
+		}
+
 		if ( 'yes' == $this->display_opt_in ) {
-			$checkout_fields['order']['ss_wc_mailchimp_opt_in'] = array(
+			$checkout_fields[$opt_in_checkbox_display_location]['ss_wc_mailchimp_opt_in'] = array(
 				'type'    => 'checkbox',
 				'label'   => esc_attr( $this->opt_in_label ),
-				'default' => true,
+				'default' => ( $this->opt_in_checkbox_default_status == 'checked' ? true : false ),
 			);
 		}
 

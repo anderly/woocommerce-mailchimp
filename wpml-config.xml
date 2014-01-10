@@ -1,0 +1,7 @@
+<wpml-config>
+	<admin-texts>
+		<key name="woocommerce_mailchimp_settings">
+  			<key name="opt_in_label" />
+ 		</key>
+	</admin-texts>
+</wpml-config>

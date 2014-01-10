@@ -1,10 +1,8 @@
 ## WooCommerce MailChimp ##
 
-WooCommerce MailChimp provides simple MailChimp integration for WooCommerce.
+WooCommerce MailChimp provides simple and flexible MailChimp integration for WooCommerce.
 
-Easily add customers to a designated MailChimp list and, optionally, MailChimp interest groups upon order creation or order completion.
-
-Double opt-in option for anti-spam compliance.
+Automatically subscribe customers to a designated MailChimp list and, optionally, MailChimp interest groups upon order creation or order completion. This can be done quietly or based on the user's consent with several opt-in settings that support international opt-in laws.
 
 ### Features
 
@@ -16,6 +14,14 @@ Double opt-in option for anti-spam compliance.
 #### Works with MailChimp Interest Groups
 
 - Set one or more interest groups to add users to based on the selected MailChimp list.
+
+#### Opt-In Settings
+
+- MailChimp double opt-in support (control whether a double opt-in email is sent to the customer)
+- Optionally, display an opt-in checkbox on the checkout page (this is required in some countries)
+- Control the label displayed next to the opt-in checkbox
+- Control whether or not the opt-in checkbox is checked or unchecked by default
+- Control the placement of the opt-in checkbox on the checkout page (under billing info or order info)
 
 #### Multisite
 
@@ -52,6 +58,12 @@ Thanks in advance for your help on any translation efforts!
 5. That's it, now customers who purchase products from your WooCommerce store will automatically be subscribed to the selected list (and optional interest groups) in MailChimp!
 
 ### Changelog
+
+##### 1.2
+* Added new setting to control whether or not the double opt-in checkbox is checked/unchecked by default on the checkout page.
+* Added new setting to control display location of the double opt-in checkbox (under billing info or order info)
+* Small modification to append to MailChimp interest groups for existing users so that group settings are not lost for users who were already subscribed.
+* Preparations for i18n (Internationalization) support. Several users have already asked and offered to translate the plugin into other languages. We had always planned on that, but now are making that a reality.
 
 ##### 1.1.3
 * Minor action hook change since order meta (needed for MailChimp API call) is not yet available on 'woocommerce_new_order' hook
