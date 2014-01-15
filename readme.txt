@@ -25,7 +25,7 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 
 - Set one or more interest groups to add users to based on the selected MailChimp list.
 
-#### Opt-In Settings
+#### Opt-In Settings ####
 
 - MailChimp double opt-in support (control whether a double opt-in email is sent to the customer)
 - Optionally, display an opt-in checkbox on the checkout page (this is required in some countries)
@@ -33,7 +33,7 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 - Control whether or not the opt-in checkbox is checked or unchecked by default
 - Control the placement of the opt-in checkbox on the checkout page (under billing info or order info)
 
-### Translation Support ###
+#### Translation Support ####
 
 - i18n ready with included woocommerce-mailchimp.pot file
 - WPML support via wpml-config.xml

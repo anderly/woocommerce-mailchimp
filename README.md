@@ -23,7 +23,7 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 - Control whether or not the opt-in checkbox is checked or unchecked by default
 - Control the placement of the opt-in checkbox on the checkout page (under billing info or order info)
 
-### Translation Support
+#### Translation Support
 
 - i18n ready with included woocommerce-mailchimp.pot file
 - WPML support via wpml-config.xml
