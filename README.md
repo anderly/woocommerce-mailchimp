@@ -29,8 +29,9 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 - WPML support via wpml-config.xml
 
 **Included Translations:**
-* English (default)
-* No other translations yet.
+
+- English (default)
+- No other translations yet.
 
 Thanks in advance for your help on any translation efforts!
 
