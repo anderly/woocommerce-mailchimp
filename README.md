@@ -64,6 +64,10 @@ If you need help, have problems, want to leave feedback or want to provide const
 
 ### Changelog
 
+##### 1.2.1
+* WooCommerce 2.1 integration: Change to use wc_enqueue_js instead of add_inline_js
+* WooCommerce 2.1 integration: Change to support new default checkout field filter for default opt-in checkbox status
+
 ##### 1.2
 * Added new setting to control whether or not the double opt-in checkbox is checked/unchecked by default on the checkout page.
 * Added new setting to control display location of the double opt-in checkbox (under billing info or order info)

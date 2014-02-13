@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.2
+ * @version		1.2.1
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -65,6 +65,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		// Maybe add an "opt-in" field to the checkout
 		add_filter( 'woocommerce_checkout_fields', array( &$this, 'maybe_add_checkout_fields' ) );
+		add_filter( 'default_checkout_ss_wc_mailchimp_opt_in', array( &$this, 'checkbox_default_status' ) );
 
 		// Maybe save the "opt-in" field on the checkout
 		add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'maybe_save_checkout_fields' ) );
@@ -152,7 +153,6 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 * @return void
 	 */
 	function init_form_fields() {
-		global $woocommerce;
 
 		if ( is_admin() ) {
 
@@ -238,7 +238,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 							),
 			);
 
-			$woocommerce->add_inline_js("
+			$this->wc_enqueue_js("
 				jQuery('#woocommerce_mailchimp_display_opt_in').change(function(){
 
 					jQuery('#mainform [id^=woocommerce_mailchimp_opt_in]').closest('tr').hide('fast');
@@ -255,6 +255,26 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		}
 
 	} // End init_form_fields()
+
+	/**
+	 * WooCommerce 2.1 support for wc_enqueue_js
+	 *
+	 * @since 1.2.1
+	 *
+	 * @access private
+	 * @param string $code
+	 * @return void
+	 */
+	private function wc_enqueue_js( $code ) {
+
+		if ( function_exists( 'wc_enqueue_js' ) ) {
+			wc_enqueue_js( $code );
+		} else {
+			global $woocommerce;
+			$woocommerce->add_inline_js( $code );
+		}
+
+	}
 
 	/**
 	 * get_lists function.
@@ -409,11 +429,21 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			$checkout_fields[$opt_in_checkbox_display_location]['ss_wc_mailchimp_opt_in'] = array(
 				'type'    => 'checkbox',
 				'label'   => esc_attr( $this->opt_in_label ),
-				'default' => ( $this->opt_in_checkbox_default_status == 'checked' ? true : false ),
+				'default' => ( $this->opt_in_checkbox_default_status == 'checked' ? 1 : 0 ),
 			);
 		}
 
 		return $checkout_fields;
+	}
+
+	/**
+	 * Opt-in checkbox default support for WooCommerce 2.1
+	 *
+	 * @since 1.2.1
+	 */
+	function checkbox_default_status( $input ) {
+
+		return $this->opt_in_checkbox_default_status == 'checked' ? 1 : 0;
 	}
 
 	/**

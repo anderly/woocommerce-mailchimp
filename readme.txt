@@ -2,8 +2,8 @@
 Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.6
-Tested up to: 3.8
-Stable tag: 1.2
+Tested up to: 3.8.1
+Stable tag: 1.2.1
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -77,6 +77,10 @@ If you need help, have problems, want to leave feedback or want to provide const
 1. WooCommerce MailChimp options screen.
 
 == Changelog ==
+
+= 1.2.1 =
+* WooCommerce 2.1 integration: Change to use wc_enqueue_js instead of add_inline_js
+* WooCommerce 2.1 integration: Change to support new default checkout field filter for default opt-in checkbox status
 
 = 1.2 =
 * Added new setting to control whether or not the double opt-in checkbox is checked/unchecked by default on the checkout page.
