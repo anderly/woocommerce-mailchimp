@@ -64,6 +64,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 
 ### Changelog
 
+##### 1.2.2
+* WooCommerce 2.1 fix for order custom fields
+
 ##### 1.2.1
 * WooCommerce 2.1 integration: Change to use wc_enqueue_js instead of add_inline_js
 * WooCommerce 2.1 integration: Change to support new default checkout field filter for default opt-in checkbox status

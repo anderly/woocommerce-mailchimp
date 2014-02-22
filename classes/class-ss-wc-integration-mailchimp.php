@@ -101,10 +101,13 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		if ( $this->is_valid() && $new_status == $this->occurs ) {
 
-			$order = new WC_Order( $id );
+			// get the ss_wc_mailchimp_opt_in value from the post meta. "order_custom_fields" was removed with WooCommerce 2.1
+			$ss_wc_mailchimp_opt_in = get_post_meta( $id, 'ss_wc_mailchimp_opt_in', true );
+			self::log( '$ss_wc_mailchimp_opt_in: ' . $ss_wc_mailchimp_opt_in );
 
 			// If the 'ss_wc_mailchimp_opt_in' meta value isn't set (because 'display_opt_in' wasn't enabled at the time the order was placed) or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
-			if ( ! isset( $order->order_custom_fields['ss_wc_mailchimp_opt_in'][0] ) || 'yes' == $order->order_custom_fields['ss_wc_mailchimp_opt_in'][0] ) {
+			if ( ! isset( $ss_wc_mailchimp_opt_in ) || 'yes' == $ss_wc_mailchimp_opt_in ) {
+				self::log( 'Subscribing user (' . $order->billing_email . ') to list(' . $this->list . ') ' );
 				$this->subscribe( $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->list );
 			}
 
@@ -458,4 +461,20 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			update_post_meta( $order_id, 'ss_wc_mailchimp_opt_in', $opt_in );
 		}
 	}
+
+	/**
+	 * Helper log function for debugging
+	 *
+	 * @since 1.2.2
+	 */
+	static function log( $message ) {
+		if ( WP_DEBUG === true ) {
+			if ( is_array( $message ) || is_object( $message ) ) {
+				error_log( print_r( $message, true ) );
+			} else {
+				error_log( $message );
+			}
+		}
+	}
+
 }

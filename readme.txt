@@ -3,7 +3,7 @@ Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.6
 Tested up to: 3.8.1
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -77,6 +77,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 1. WooCommerce MailChimp options screen.
 
 == Changelog ==
+
+= 1.2.2 =
+* WooCommerce 2.1 fix for order custom fields
 
 = 1.2.1 =
 * WooCommerce 2.1 integration: Change to use wc_enqueue_js instead of add_inline_js
