@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.2.1
+ * @version		1.2.3
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
