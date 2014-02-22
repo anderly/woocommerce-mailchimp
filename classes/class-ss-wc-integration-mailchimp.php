@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.2.3
+ * @version		1.2.4
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -100,6 +100,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) {
 
 		if ( $this->is_valid() && $new_status == $this->occurs ) {
+
+			$order = new WC_Order( $id );
 
 			// get the ss_wc_mailchimp_opt_in value from the post meta. "order_custom_fields" was removed with WooCommerce 2.1
 			$ss_wc_mailchimp_opt_in = get_post_meta( $id, 'ss_wc_mailchimp_opt_in', true );

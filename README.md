@@ -64,6 +64,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 
 ### Changelog
 
+##### 1.2.4
+* Bug fix for subscribe
+
 ##### 1.2.3
 * Fixed plugin settings link for WooCommerce 2.1
 
