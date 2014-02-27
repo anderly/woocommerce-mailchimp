@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.2.4
+ * @version		1.2.5
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -108,7 +108,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			self::log( '$ss_wc_mailchimp_opt_in: ' . $ss_wc_mailchimp_opt_in );
 
 			// If the 'ss_wc_mailchimp_opt_in' meta value isn't set (because 'display_opt_in' wasn't enabled at the time the order was placed) or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
-			if ( ! isset( $ss_wc_mailchimp_opt_in ) || 'yes' == $ss_wc_mailchimp_opt_in ) {
+			if ( ! isset( $ss_wc_mailchimp_opt_in ) || empty( $ss_wc_mailchimp_opt_in ) || 'yes' == $ss_wc_mailchimp_opt_in ) {
 				self::log( 'Subscribing user (' . $order->billing_email . ') to list(' . $this->list . ') ' );
 				$this->subscribe( $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->list );
 			}
@@ -161,7 +161,12 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		if ( is_admin() ) {
 
-			$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'ss_wc_mailchimp' ) ), $this->get_lists() ) : array( '' => __( 'Enter your key and save to see your lists', 'ss_wc_mailchimp' ) );
+			$lists = $this->get_lists();
+ 			if ($lists === false ) {
+ 				$lists = array ();
+ 			}
+ 			
+ 			$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'ss_wc_mailchimp' ) ), $lists ) : array( '' => __( 'Enter your key and save to see your lists', 'ss_wc_mailchimp' ) );
 			//$mailchimp_interest_groupings = $this->has_list() ? array_merge( array( '' => __('Select an interest grouping...', 'ss_wc_mailchimp' ) ), $this->get_interest_groupings( $this->list ) ) : array( '' => __( 'Please select a list to see your interest groupings.', 'ss_wc_mailchimp' ) );
 
 			$this->form_fields = array(
