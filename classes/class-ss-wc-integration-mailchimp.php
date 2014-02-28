@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.2.5
+ * @version		1.2.6
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -399,9 +399,24 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		$replace_interests = false;
 		$send_welcome = false;
 
+		self::log( 'Calling MailChimp API listSubscribe method with the following: ' .
+			'listid=' . $listid .
+			', email=' . $email .
+			', vars=' . print_r( $vars, true ) . 
+			', email_type=' . $email_type . 
+			', double_optin=' . $double_optin .
+			', update_existing=' . $update_existing .
+			', replace_interests=' . $replace_interests .
+			', send_welcome=' . $send_welcome
+		);
+
 		$retval = $api->listSubscribe( $listid, $email, $vars, $email_type, $double_optin, $update_existing, $replace_interests, $send_welcome );
 
+		self::log( 'MailChimp return value:' . $retval );
+
 		if ( $api->errorCode && $api->errorCode != 214 ) {
+			self::log( 'WooCommerce MailChimp subscription failed: (' . $api->errorCode . ') ' . $api->errorMessage );
+
 			do_action( 'ss_wc_mailchimp_subscribed', $email );
 
 			// Email admin

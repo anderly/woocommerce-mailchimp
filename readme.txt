@@ -3,7 +3,7 @@ Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.6
 Tested up to: 3.8.1
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -77,6 +77,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 1. WooCommerce MailChimp options screen.
 
 == Changelog ==
+
+= 1.2.6 =
+* Added additional debug logging when WP_DEBUG is enabled
 
 = 1.2.5 =
 * Bug fix for subscribe when not using opt-in display field

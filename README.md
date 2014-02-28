@@ -64,6 +64,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 
 ### Changelog
 
+#### 1.2.6
+* Added additional debug logging when WP_DEBUG is enabled
+
 #### 1.2.5
 * Bug fix for subscribe when not using opt-in display field
 
