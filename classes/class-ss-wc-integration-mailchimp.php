@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.2.6
+ * @version		1.3
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -57,8 +57,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options') );
 
 		// We would use the 'woocommerce_new_order' action but first name, last name and email address (order meta) is not yet available, 
-		// so instead we use the 'woocommerce_thankyou' action hook which fires after the checkout process on the "thank you" page
-		add_action( 'woocommerce_thankyou', array( &$this, 'order_status_changed' ), 10, 1 );
+		// so instead we use the 'woocommerce_checkout_update_order_meta' action hook which fires after the checkout process on the "thank you" page
+		add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'order_status_changed' ), 1000, 1 );
 
 		// hook into woocommerce order status changed hook to handle the desired subscription event trigger
 		add_action( 'woocommerce_order_status_changed', array( &$this, 'order_status_changed' ), 10, 3 );
@@ -110,7 +110,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			// If the 'ss_wc_mailchimp_opt_in' meta value isn't set (because 'display_opt_in' wasn't enabled at the time the order was placed) or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
 			if ( ! isset( $ss_wc_mailchimp_opt_in ) || empty( $ss_wc_mailchimp_opt_in ) || 'yes' == $ss_wc_mailchimp_opt_in ) {
 				self::log( 'Subscribing user (' . $order->billing_email . ') to list(' . $this->list . ') ' );
-				$this->subscribe( $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->list );
+				$this->subscribe( $id, $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->list );
 			}
 
 		}
@@ -367,13 +367,14 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 * subscribe function.
 	 *
 	 * @access public
+	 * @param int $order_id
 	 * @param mixed $first_name
 	 * @param mixed $last_name
 	 * @param mixed $email
 	 * @param string $listid (default: 'false')
 	 * @return void
 	 */
-	public function subscribe( $first_name, $last_name, $email, $listid = 'false' ) {
+	public function subscribe( $order_id, $first_name, $last_name, $email, $listid = 'false' ) {
 
 		if ( ! $email )
 			return; // Email is required
@@ -391,7 +392,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 				);
 		}
 
-		$vars = apply_filters( 'ss_wc_mailchimp_subscribe_merge_vars', $merge_vars );
+		$vars = apply_filters( 'ss_wc_mailchimp_subscribe_merge_vars', $order_id, $merge_vars );
 
 		$email_type = 'html';
 		$double_optin = ( $this->double_optin == 'no' ? false : true );
