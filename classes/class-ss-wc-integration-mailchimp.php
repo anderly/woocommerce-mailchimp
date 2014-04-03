@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.3
+ * @version		1.3.1
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -392,7 +392,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 				);
 		}
 
-		$vars = apply_filters( 'ss_wc_mailchimp_subscribe_merge_vars', $order_id, $merge_vars );
+		$vars = apply_filters( 'ss_wc_mailchimp_subscribe_merge_vars', $merge_vars, $order_id );
 
 		$email_type = 'html';
 		$double_optin = ( $this->double_optin == 'no' ? false : true );

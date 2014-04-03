@@ -3,7 +3,7 @@ Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 3.8.1
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -77,6 +77,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 1. WooCommerce MailChimp options screen.
 
 == Changelog ==
+
+= 1.3.1 =
+* Fix for MailChimp merge vars bug introduced in v1.3
 
 = 1.3 =
 * Breaking Change: 'ss_wc_mailchimp_subscribe_merge_vars' action filter now passes $order_id param to enable retrieving additional order info/meta to use in MailChimp merge vars
