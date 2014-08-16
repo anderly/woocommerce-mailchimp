@@ -320,7 +320,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 
 	/**
-	 * Display message to user if the main SWS WPSL plugin is not available
+	 * Display message to user if there is an issue with the MailChimp API call is not available
 	 *
 	 * @since 1.0
 	 * @param void
