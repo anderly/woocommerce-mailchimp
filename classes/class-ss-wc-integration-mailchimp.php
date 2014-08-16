@@ -301,7 +301,6 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 			if ( $this->mailchimp->errorCode ) {
 
-				//echo '<div class="error"><p>' . sprintf( __( 'Unable to load lists() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $mailchimp->errorCode, $mailchimp->errorMessage ) . '</p></div>';
 				add_action( 'admin_notices', array( $this, 'missing_activation_key' ) );
 				add_action( 'network_admin_notices', array( $this, 'missing_activation_key' ) );
 
