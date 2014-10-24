@@ -36,6 +36,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		// We need the API key to set up for the lists in teh form fields
 		$this->api_key = $this->get_option( 'api_key' );
+		$this->mailchimp = new MCAPI( $this->api_key );
 
 		$this->init_form_fields();
 
@@ -296,12 +297,12 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		if ( ! $mailchimp_lists = get_transient( 'ss_wc_mailchimp_list_' . md5( $this->api_key ) ) ) {
 
 			$mailchimp_lists = array();
-			$mailchimp       = new MCAPI( $this->api_key );
-			$retval          = $mailchimp->lists();
+			$retval          = $this->mailchimp->lists();
 
-			if ( $mailchimp->errorCode ) {
+			if ( $this->mailchimp->errorCode ) {
 
-				echo '<div class="error"><p>' . sprintf( __( 'Unable to load lists() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $mailchimp->errorCode, $mailchimp->errorMessage ) . '</p></div>';
+				add_action( 'admin_notices', array( $this, 'mailchimp_api_error_msg' ) );
+				add_action( 'network_admin_notices', array( $this, 'mailchimp_api_error_msg' ) );
 
 				return false;
 
@@ -316,6 +317,24 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		return $mailchimp_lists;
 	}
+
+
+	/**
+	 * Display message to user if there is an issue with the MailChimp API call
+	 *
+	 * @since 1.0
+	 * @param void
+	 * @return html the message for the user
+	 */
+	public function mailchimp_api_error_msg() {
+
+		$html  = '<div class="error">';
+		$html .= '<p>' . sprintf( __( 'Unable to load lists() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $this->mailchimp->errorCode, $this->mailchimp->errorMessage ) . '</p>';
+		$html .= '</div>';
+		echo $html;
+
+	}
+
 
 	/**
 	 * get_interest_groupings function.
