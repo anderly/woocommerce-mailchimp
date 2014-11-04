@@ -1,5 +1,6 @@
 ## WooCommerce MailChimp ##
 [![WordPress Plugin version](http://img.shields.io/badge/plugin-v1.3.2-blue.svg?style=flat)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![WordPress 4.0 tested](http://img.shields.io/badge/wordpress-4.0_tested-brightgreen.svg?style=flat)](https://wordpress.org/plugins/woocommerce-mailchimp/)
 [![License](http://img.shields.io/badge/license-GPLv3-red.svg?style=flat)](http://opensource.org/licenses/GPL-3.0)
 
 WooCommerce MailChimp provides simple and flexible MailChimp integration for WooCommerce.
