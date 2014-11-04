@@ -329,7 +329,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	public function mailchimp_api_error_msg() {
 
 		$html  = '<div class="error">';
-		$html .= '<p>' . sprintf( __( 'Unable to load lists() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $this->mailchimp->errorCode, $this->mailchimp->errorMessage ) . '</p>';
+		$html .= '<p>' . sprintf( __( 'Unable to load lists() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $this->mailchimp->errorCode, $this->mailchimp->errorMessage ) . sprintf( __( 'Please check your <a href="' . $settings_url . '">settings' . '</a>', 'ss_wc_mailchimp' ) . '</p>';
 		$html .= '</div>';
 		echo $html;
 
