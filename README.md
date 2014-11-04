@@ -1,5 +1,5 @@
 ## WooCommerce MailChimp ##
-[![WordPress Plugin version](http://img.shields.io/badge/plugin-v1.3.1-blue.svg?style=flat)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![WordPress Plugin version](http://img.shields.io/badge/plugin-v1.3.2-blue.svg?style=flat)](https://wordpress.org/plugins/woocommerce-mailchimp/)
 [![License](http://img.shields.io/badge/license-GPLv3-red.svg?style=flat)](http://opensource.org/licenses/GPL-3.0)
 
 WooCommerce MailChimp provides simple and flexible MailChimp integration for WooCommerce.
@@ -65,6 +65,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 5. That's it, now customers who purchase products from your WooCommerce store will automatically be subscribed to the selected list (and optional interest groups) in MailChimp!
 
 ### Changelog
+
+#### 1.3.2
+* Fix for headers already sent message. Tested with WordPress 4.0 and WooCommerce 2.2.*
 
 #### 1.3.1
 * Fix for MailChimp merge vars bug introduced in v1.3

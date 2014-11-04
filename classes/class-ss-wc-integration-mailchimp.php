@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.3.1
+ * @version		1.3.2
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -34,14 +34,14 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		// Load the settings.
 		$this->init_settings();
 
-		// We need the API key to set up for the lists in teh form fields
+		// We need the API key to set up for the lists in the form fields
 		$this->api_key = $this->get_option( 'api_key' );
 		$this->mailchimp = new MCAPI( $this->api_key );
+		$this->enabled = $this->get_option( 'enabled' );
 
 		$this->init_form_fields();
 
 		// Get setting values
-		$this->enabled        = $this->get_option( 'enabled' );
 		$this->occurs         = $this->get_option( 'occurs' );
 		$this->list           = $this->get_option( 'list' );
 		$this->double_optin   = $this->get_option( 'double_optin' );
@@ -83,7 +83,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			// Check required fields
 			if ( ! $this->api_key ) {
 
-				echo '<div class="error"><p>' . sprintf( __('MailChimp error: Please enter your api key <a href="%s">here</a>', 'ss_wc_mailchimp'), admin_url('admin.php?page=woocommerce&tab=integration&section=mailchimp' ) ) . '</p></div>';
+				echo '<div class="error"><p>' . sprintf( __('WooCommerce MailChimp error: Plugin is enabled but no api key provided. Please enter your api key <a href="%s">here</a>.', 'ss_wc_mailchimp'), WOOCOMMERCE_MAILCHIMP_SETTINGS_URL ) . '</p></div>';
 
 				return;
 
@@ -98,7 +98,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 * @access public
 	 * @return void
 	 */
-	public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) {
+	public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) { 
 
 		if ( $this->is_valid() && $new_status == $this->occurs ) {
 
@@ -160,12 +160,14 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 */
 	function init_form_fields() {
 
-		if ( is_admin() ) {
+		if ( is_admin() && !is_ajax() ) {
 
-			$lists = $this->get_lists();
- 			if ($lists === false ) {
- 				$lists = array ();
- 			}
+			if ( $this->enabled && $this->has_api_key() ) {
+				$lists = $this->get_lists();
+	 			if ($lists === false ) {
+	 				$lists = array ();
+	 			}
+	 		}
  			
  			$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'ss_wc_mailchimp' ) ), $lists ) : array( '' => __( 'Enter your key and save to see your lists', 'ss_wc_mailchimp' ) );
 			//$mailchimp_interest_groupings = $this->has_list() ? array_merge( array( '' => __('Select an interest grouping...', 'ss_wc_mailchimp' ) ), $this->get_interest_groupings( $this->list ) ) : array( '' => __( 'Please select a list to see your interest groupings.', 'ss_wc_mailchimp' ) );
@@ -303,7 +305,6 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 				add_action( 'admin_notices', array( $this, 'mailchimp_api_error_msg' ) );
 				add_action( 'network_admin_notices', array( $this, 'mailchimp_api_error_msg' ) );
-
 				return false;
 
 			} else {
@@ -318,7 +319,6 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		return $mailchimp_lists;
 	}
 
-
 	/**
 	 * Display message to user if there is an issue with the MailChimp API call
 	 *
@@ -329,12 +329,11 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	public function mailchimp_api_error_msg() {
 
 		$html  = '<div class="error">';
-		$html .= '<p>' . sprintf( __( 'Unable to load lists() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $this->mailchimp->errorCode, $this->mailchimp->errorMessage ) . sprintf( __( 'Please check your <a href="' . $settings_url . '">settings' . '</a>', 'ss_wc_mailchimp' ) . '</p>';
+		$html .= '<p>' . sprintf( __( 'Unable to load lists from MailChimp: (%s) %s.', 'ss_wc_mailchimp' ), $this->mailchimp->errorCode, $this->mailchimp->errorMessage ) . sprintf( __( ' Please check your <a href="' . WOOCOMMERCE_MAILCHIMP_SETTINGS_URL . '">settings' . '</a>', 'ss_wc_mailchimp' ) ) . '</p>';
 		$html .= '</div>';
 		echo $html;
 
 	}
-
 
 	/**
 	 * get_interest_groupings function.
