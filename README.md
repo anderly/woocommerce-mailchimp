@@ -1,9 +1,9 @@
 ## WooCommerce MailChimp ##
-[![WordPress tested](http://img.shields.io/wordpress/v/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
-[![WordPress Plugin version](http://img.shields.io/wordpress/plugin/v/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
-[![WordPress Plugin Downloads](http://img.shields.io/wordpress/plugin/dt/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
-[![WordPress Plugin Rating](http://img.shields.io/wordpress/plugin/r/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
-[![License](http://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)](http://opensource.org/licenses/GPL-3.0)
+[![WordPress tested](http://img.shields.io/wordpress/v/woocommerce-mailchimp.svg?style=flat)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![WordPress Plugin version](http://img.shields.io/wordpress/plugin/v/woocommerce-mailchimp.svg?style=flat)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![WordPress Plugin Downloads](http://img.shields.io/wordpress/plugin/dt/woocommerce-mailchimp.svg?style=flat)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![WordPress Plugin Rating](http://img.shields.io/wordpress/plugin/r/woocommerce-mailchimp.svg?style=flat)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![License](http://img.shields.io/badge/license-GPLv3-red.svg?style=flat)](http://opensource.org/licenses/GPL-3.0)
 
 WooCommerce MailChimp provides simple and flexible MailChimp integration for WooCommerce.
 
