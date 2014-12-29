@@ -436,10 +436,13 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		if ( $api->errorCode && $api->errorCode != 214 ) {
 			self::log( 'WooCommerce MailChimp subscription failed: (' . $api->errorCode . ') ' . $api->errorMessage );
 
-			do_action( 'ss_wc_mailchimp_subscribed', $email );
+			do_action( 'ss_wc_mailchimp_subscription_failed', $email, array( 'list_id' => $listid, 'order_id' => $order_id ) );
 
 			// Email admin
 			wp_mail( get_option('admin_email'), __( 'WooCommerce MailChimp subscription failed', 'ss_wc_mailchimp' ), '(' . $api->errorCode . ') ' . $api->errorMessage );
+		}
+		else {
+			do_action( 'ss_wc_mailchimp_subscribed', $email, array( 'list_id' => $listid, 'order_id' => $order_id ) );
 		}
 	}
 
