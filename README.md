@@ -69,6 +69,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 
 ### Changelog
 
+#### 1.3.3
+* Fix for transient key length. Tested with WordPress 4.1
+
 #### 1.3.2
 * Fix for headers already sent message. Tested with WordPress 4.0 and WooCommerce 2.2.*
 

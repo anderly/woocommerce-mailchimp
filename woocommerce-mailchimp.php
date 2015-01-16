@@ -5,11 +5,11 @@
  * Description: WooCommerce MailChimp provides simple MailChimp integration for WooCommerce.
  * Author: Adam Anderly
  * Author URI: http://anderly.com
- * Version: 1.3.2
+ * Version: 1.3.3
  * Text Domain: ss_wc_mailchimp
  * Domain Path: languages
  * 
- * Copyright: © 2014 Adam Anderly
+ * Copyright: © 2015 Adam Anderly
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  *
