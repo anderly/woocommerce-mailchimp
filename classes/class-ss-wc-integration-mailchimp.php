@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.3.3
+ * @version		1.3.4
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -162,7 +162,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		if ( is_admin() && !is_ajax() ) {
 
-			if ( $this->enabled && $this->has_api_key() ) {
+			if ( $this->enabled == 'yes' && $this->has_api_key() ) {
 				$lists = $this->get_lists();
 	 			if ($lists === false ) {
 	 				$lists = array ();
@@ -187,6 +187,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 								'default' => 'pending',
 								'options' => array(
 									'pending' => __( 'Order Created', 'ss_wc_mailchimp' ),
+									'processing' => __( 'Order Processing', 'ss_wc_mailchimp' ),
 									'completed'  => __( 'Order Completed', 'ss_wc_mailchimp' ),
 								),
 							),
