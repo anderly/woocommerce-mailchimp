@@ -1,19 +1,19 @@
-# Copyright (C) 2014 WooCommerce MailChimp
+# Copyright (C) 2015 WooCommerce MailChimp
 # This file is distributed under the same license as the WooCommerce MailChimp package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce MailChimp 1.1.3\n"
+"Project-Id-Version: WooCommerce MailChimp 1.3.2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/woocommerce-mailchimp\n"
-"POT-Creation-Date: 2014-01-03 23:17:55+00:00\n"
+"POT-Creation-Date: 2015-01-16 15:51:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
 #: classes/class-ss-wc-integration-mailchimp.php:31
-#: classes/class-ss-wc-integration-mailchimp.php:350
+#: classes/class-ss-wc-integration-mailchimp.php:451
 msgid "MailChimp"
 msgstr ""
 
@@ -21,137 +21,175 @@ msgstr ""
 msgid "MailChimp is a popular email marketing service."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:82
-msgid "MailChimp error: Please enter your api key <a href=\"%s\">here</a>"
+#: classes/class-ss-wc-integration-mailchimp.php:86
+msgid ""
+"WooCommerce MailChimp error: Plugin is enabled but no api key provided. "
+"Please enter your api key <a href=\"%s\">here</a>."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:156
+#: classes/class-ss-wc-integration-mailchimp.php:172
 msgid "Select a list..."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:156
+#: classes/class-ss-wc-integration-mailchimp.php:172
 msgid "Enter your key and save to see your lists"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:161
+#: classes/class-ss-wc-integration-mailchimp.php:177
 msgid "Enable/Disable"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:162
+#: classes/class-ss-wc-integration-mailchimp.php:178
 msgid "Enable MailChimp"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:168
+#: classes/class-ss-wc-integration-mailchimp.php:184
 msgid "Subscribe Event"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:170
+#: classes/class-ss-wc-integration-mailchimp.php:186
 msgid "When should customers be subscribed to lists?"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:173
+#: classes/class-ss-wc-integration-mailchimp.php:189
 msgid "Order Created"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:174
+#: classes/class-ss-wc-integration-mailchimp.php:190
 msgid "Order Completed"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:178
+#: classes/class-ss-wc-integration-mailchimp.php:194
 msgid "API Key"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:180
+#: classes/class-ss-wc-integration-mailchimp.php:196
 msgid ""
 "<a href=\"https://us2.admin.mailchimp.com/account/api/\" target=\"_blank"
 "\">Login to mailchimp</a> to look up your api key."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:184
+#: classes/class-ss-wc-integration-mailchimp.php:200
 msgid "Main List"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:186
+#: classes/class-ss-wc-integration-mailchimp.php:202
 msgid "All customers will be added to this list."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:191
+#: classes/class-ss-wc-integration-mailchimp.php:207
 msgid "Group Name"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:193
+#: classes/class-ss-wc-integration-mailchimp.php:209
 msgid ""
 "Optional: Enter the name of the group. Learn more about <a href=\"http://"
 "mailchimp.com/features/groups\" target=\"_blank\">Groups</a>"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:197
+#: classes/class-ss-wc-integration-mailchimp.php:213
 msgid "Groups"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:199
-msgid "Optional: Comma delimited list of interest groups to add the email to."
+#: classes/class-ss-wc-integration-mailchimp.php:215
+msgid ""
+"Optional: Comma separated list of interest groups to which subscribers "
+"should be added."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:203
+#: classes/class-ss-wc-integration-mailchimp.php:219
 msgid "Double Opt-In"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:204
+#: classes/class-ss-wc-integration-mailchimp.php:220
 msgid "Enable Double Opt-In"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:206
+#: classes/class-ss-wc-integration-mailchimp.php:222
 msgid ""
 "If enabled, customers will receive an email prompting them to confirm their "
 "subscription to the list above."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:210
+#: classes/class-ss-wc-integration-mailchimp.php:226
 msgid "Display Opt-In Field"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:211
+#: classes/class-ss-wc-integration-mailchimp.php:227
 msgid "Display an Opt-In Field on Checkout"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:213
+#: classes/class-ss-wc-integration-mailchimp.php:229
 msgid ""
 "If enabled, customers will be presented with a \"Opt-in\" checkbox during "
 "checkout and will only be added to the list above if they opt-in."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:217
+#: classes/class-ss-wc-integration-mailchimp.php:233
 msgid "Opt-In Field Label"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:219
+#: classes/class-ss-wc-integration-mailchimp.php:235
 msgid "Optional: customize the label displayed next to the opt-in checkbox."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:220
+#: classes/class-ss-wc-integration-mailchimp.php:236
 msgid "Add me to the newsletter (we will never share your email)."
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:243
-msgid "Unable to load lists() from MailChimp: (%s) %s"
+#: classes/class-ss-wc-integration-mailchimp.php:239
+msgid "Opt-In Checkbox Default Status"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:279
+#: classes/class-ss-wc-integration-mailchimp.php:241
+msgid "The default state of the opt-in checkbox."
+msgstr ""
+
+#: classes/class-ss-wc-integration-mailchimp.php:243
+msgid "Checked"
+msgstr ""
+
+#: classes/class-ss-wc-integration-mailchimp.php:243
+msgid "Unchecked"
+msgstr ""
+
+#: classes/class-ss-wc-integration-mailchimp.php:246
+msgid "Opt-In Checkbox Display Location"
+msgstr ""
+
+#: classes/class-ss-wc-integration-mailchimp.php:248
+msgid ""
+"Where to display the opt-in checkbox on the checkout page (under Billing "
+"info or Order info)."
+msgstr ""
+
+#: classes/class-ss-wc-integration-mailchimp.php:250
+msgid "Billing"
+msgstr ""
+
+#: classes/class-ss-wc-integration-mailchimp.php:250
+msgid "Order"
+msgstr ""
+
+#: classes/class-ss-wc-integration-mailchimp.php:332
+msgid "Unable to load lists from MailChimp: (%s) %s."
+msgstr ""
+
+#: classes/class-ss-wc-integration-mailchimp.php:358
 msgid "Unable to load listInterestGroupings() from MailChimp: (%s) %s"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:341
-msgid "Email subscription failed (Mailchimp)"
+#: classes/class-ss-wc-integration-mailchimp.php:442
+msgid "WooCommerce MailChimp subscription failed"
 msgstr ""
 
-#: classes/class-ss-wc-integration-mailchimp.php:351
+#: classes/class-ss-wc-integration-mailchimp.php:452
 msgid ""
 "Enter your MailChimp settings below to control how WooCommerce integrates "
 "with your MailChimp lists."
 msgstr ""
 
-#: woocommerce-mailchimp.php:41
+#: woocommerce-mailchimp.php:55
 msgid "Settings"
 msgstr ""
 
