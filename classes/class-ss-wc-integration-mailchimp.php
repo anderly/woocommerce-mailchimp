@@ -296,7 +296,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 * @return void
 	 */
 	public function get_lists() {
-		if ( ! $mailchimp_lists = get_transient( 'ss_wc_mailchimp_list_' . md5( $this->api_key ) ) ) {
+		if ( ! $mailchimp_lists = get_transient( 'sswcmclist_' . md5( $this->api_key ) ) ) {
 
 			$mailchimp_lists = array();
 			$retval          = $this->mailchimp->lists();
@@ -312,7 +312,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 					$mailchimp_lists[ $list['id'] ] = $list['name'];
 
 				if ( sizeof( $mailchimp_lists ) > 0 )
-					set_transient( 'ss_wc_mailchimp_list_' . md5( $this->api_key ), $mailchimp_lists, 60*60*1 );
+					set_transient( 'sswcmclist_' . md5( $this->api_key ), $mailchimp_lists, 60*60*1 );
 			}
 		}
 
