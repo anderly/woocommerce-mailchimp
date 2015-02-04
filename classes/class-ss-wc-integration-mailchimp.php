@@ -57,7 +57,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		add_action( 'woocommerce_update_options_integration', array( $this, 'process_admin_options') );
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options') );
 
-		// We would use the 'woocommerce_new_order' action but first name, last name and email address (order meta) is not yet available, 
+		// We would use the 'woocommerce_new_order' action but first name, last name and email address (order meta) is not yet available,
 		// so instead we use the 'woocommerce_checkout_update_order_meta' action hook which fires after the checkout process on the "thank you" page
 		add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'order_status_changed' ), 1000, 1 );
 
@@ -98,7 +98,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 * @access public
 	 * @return void
 	 */
-	public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) { 
+	public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) {
 
 		if ( $this->is_valid() && $new_status == $this->occurs ) {
 
@@ -151,7 +151,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Initialize Settings Form Fields
 	 *
@@ -159,16 +159,18 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 * @return void
 	 */
 	function init_form_fields() {
+		$lists = array();
 
 		if ( is_admin() && !is_ajax() ) {
 
 			if ( $this->enabled == 'yes' && $this->has_api_key() ) {
-				$lists = $this->get_lists();
-	 			if ($lists === false ) {
-	 				$lists = array ();
+				$user_lists = $this->get_lists();
+
+	 			if ( is_array( $user_lists ) && ! empty( $user_lists ) ) {
+	 				$lists = $user_lists;
 	 			}
 	 		}
- 			
+
  			$mailchimp_lists = $this->has_api_key() ? array_merge( array( '' => __('Select a list...', 'ss_wc_mailchimp' ) ), $lists ) : array( '' => __( 'Enter your key and save to see your lists', 'ss_wc_mailchimp' ) );
 			//$mailchimp_interest_groupings = $this->has_list() ? array_merge( array( '' => __('Select an interest grouping...', 'ss_wc_mailchimp' ) ), $this->get_interest_groupings( $this->list ) ) : array( '' => __( 'Please select a list to see your interest groupings.', 'ss_wc_mailchimp' ) );
 
@@ -422,8 +424,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		self::log( 'Calling MailChimp API listSubscribe method with the following: ' .
 			'listid=' . $listid .
 			', email=' . $email .
-			', vars=' . print_r( $vars, true ) . 
-			', email_type=' . $email_type . 
+			', vars=' . print_r( $vars, true ) .
+			', email_type=' . $email_type .
 			', double_optin=' . $double_optin .
 			', update_existing=' . $update_existing .
 			', replace_interests=' . $replace_interests .
