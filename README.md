@@ -69,6 +69,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 
 ### Changelog
 
+#### 1.3.6
+* Backout of change to use WC_Logger due to fatal error
+
 #### 1.3.5
 * Fix for undefined variable list and array_merge issue.
 * Change to use WC_Logger instead of error_log

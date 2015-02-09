@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		SS_WC_Integration_MailChimp
  * @extends		WC_Integration
- * @version		1.3.5
+ * @version		1.3.6
  * @package		WooCommerce MailChimp
  * @author 		Saint Systems
  */
@@ -575,13 +575,12 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 */
 	static function log( $message ) {
 		if ( WP_DEBUG === true ) {
-			$logger = new WC_Logger();
 
 			if ( is_array( $message ) || is_object( $message ) ) {
-				$logger->add( $this->id, print_r( $message, true ) );
+				error_log( print_r( $message, true ) );
 			}
 			else {
-				$logger->add( $this->id, $message );
+				error_log( $message );
 			}
 		}
 	}
