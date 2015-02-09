@@ -575,12 +575,13 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 */
 	static function log( $message ) {
 		if ( WP_DEBUG === true ) {
+			$logger = new WC_Logger();
 
 			if ( is_array( $message ) || is_object( $message ) ) {
-				error_log( print_r( $message, true ) );
+				$logger->add( 'mailchimp', print_r( $message, true ) );
 			}
 			else {
-				error_log( $message );
+				$logger->add( 'mailchimp', $message );
 			}
 		}
 	}
