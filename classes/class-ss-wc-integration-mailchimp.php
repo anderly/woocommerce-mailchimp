@@ -486,7 +486,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		$api_response      = $api->listSubscribe( $listid, $email, $vars, $email_type, $double_optin, $update_existing, $replace_interests, $send_welcome );
 
 		// Log api response
-		self::log( __( 'MailChimp API response: %s', $api_response ) );
+		self::log( sprintf( __( 'MailChimp API response: %s', 'ss_wc_mailchimp' ), $api_response ) );
 
 		if ( $api->errorCode && $api->errorCode != 214 ) {
 			// Format error message
