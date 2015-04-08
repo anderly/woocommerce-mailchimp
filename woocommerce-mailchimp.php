@@ -127,10 +127,6 @@ if ( ! function_exists( 'ss_wc_mailchimp_init' ) ) {
 						wp_register_script( 'woocommerce-mailchimp-admin', WOOCOMMERCE_MAILCHIMP_PLUGIN_URL . '/assets/js/woocommerce-mailchimp-admin.js', array( 'jquery' ), WOOCOMMERCE_MAILCHIMP_VERSION );
 						wp_register_style( 'woocommerce-mailchimp', WOOCOMMERCE_MAILCHIMP_PLUGIN_URL . '/assets/css/style.css', array(), WOOCOMMERCE_MAILCHIMP_VERSION );
 
-			            // Select2 scripts and styles
-			            wp_register_script( 'woocommerce-mailchimp-jquery-select2', WOOCOMMERCE_MAILCHIMP_PLUGIN_URL . '/assets/js/select2.min.js', array( 'jquery' ), '1.0.0' );
-			            wp_register_style( 'woocommerce-mailchimp-jquery-select2-css', WOOCOMMERCE_MAILCHIMP_PLUGIN_URL . '/assets/css/select2.min.css', array(), WOOCOMMERCE_MAILCHIMP_VERSION );
-
 			            // Localize javascript messages
 						$translation_array = array(
 							'connecting_to_mailchimp' 		=> __( 'Connecting to MailChimp', 'ss_wc_mailchimp' ),
@@ -142,11 +138,9 @@ if ( ! function_exists( 'ss_wc_mailchimp_init' ) ) {
 						wp_localize_script( 'woocommerce-mailchimp-admin', 'SS_WC_MailChimp_Messages', $translation_array );
 
 			            // Scripts
-			            wp_enqueue_script( 'woocommerce-mailchimp-jquery-select2' );
 						wp_enqueue_script( 'woocommerce-mailchimp-admin' );
 
 						// Styles
-						wp_enqueue_style( 'woocommerce-mailchimp-jquery-select2-css' );
 						wp_enqueue_style( 'woocommerce-mailchimp' );
 
 					} //end function enqueue_scripts

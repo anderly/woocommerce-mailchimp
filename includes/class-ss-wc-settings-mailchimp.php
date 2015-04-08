@@ -58,10 +58,6 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
 			add_action( 'woocommerce_settings_saved', array( $this, 'init' ) );
 
-			if ( is_admin() ) {
-				
-			}
-
 		} //end function ensure_tab
 
 		// /**
@@ -111,17 +107,6 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 			$settings = $this->get_settings( $current_section );
 			WC_Admin_Settings::save_fields( $settings );
-
-			$this->wc_enqueue_js("
-	 			(function($){
-					$(document).ready(function() {
-						var apiKey = $('#woocommerce_mailchimp_api_key').val();
-						if (apiKey === '') {
-							SS_WC_MailChimp.loadLists(apiKey);
-						}
-					});
-	 			})(jQuery);
-			");
 		}
 
 		/**
