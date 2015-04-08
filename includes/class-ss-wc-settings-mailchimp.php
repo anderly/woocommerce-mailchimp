@@ -196,7 +196,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'id'       => 'woocommerce_mailchimp_enabled',
 						'type'     => 'checkbox',
 						'default'  => '0',
-						'desc_tip' => __( 'Enable or disable MailChimp integration.', 'ss_wc_mailchimp' ),
+						'desc_tip' => __( 'Enable or disable WooCommerce MailChimp integration.', 'ss_wc_mailchimp' ),
 					),
 
 					array(
@@ -247,6 +247,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'desc'     => __( '<p>Choose <strong>Automatically</strong> to subscribe customers silently upon checkout. Caution, this is without the customer\'s consent.</p> <p>Choose <strong>Ask for permission</strong> to show an "Opt-in" checkbox during checkout. Customers will only be subscribed to the list above if they opt-in.', 'ss_wc_mailchimp' ),
 						'id'       => 'woocommerce_mailchimp_subscribe_customers',
 						'type'     => 'select',
+						'css'      => 'min-width:300px;',
 						'class'    => 'wc-enhanced-select',
 						'desc_tip' => true,
 						'default'  => 1,

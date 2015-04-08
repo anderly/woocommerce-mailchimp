@@ -134,7 +134,7 @@ var SS_WC_MailChimp = function($) {
 	} //end function initHandlers
 
 	function initLists() {
-		var listsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_lists" class="loading-indicator"><img src="/wp-content/plugins/woocommerce-mailchimp/assets/images/loading.gif" style="margin-bottom: -2px;margin-left: 2px;" /> ' + SS_WC_MailChimp_Messages.connecting_to_mailchimp + '</div>');
+		var listsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_lists" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator"></span>'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</div>');
 		$mainList.after(listsLoadingIndicator.hide());
 
 	} //end function initLists
@@ -173,9 +173,8 @@ var SS_WC_MailChimp = function($) {
 		
 
 		// Add the loading indicator for groups (set to hidden by default)
-		var groupsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_groups"  class="loading-indicator"><img src="/wp-content/plugins/woocommerce-mailchimp/assets/images/loading.gif" style="margin-bottom: -2px;margin-left: 2px;" /> ' + SS_WC_MailChimp_Messages.connecting_to_mailchimp + '</div>');
-		$groups.siblings('.select2-container')
-			.after(groupsLoadingIndicator.hide());
+		var groupsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_groups" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator"></span>'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</div>');
+		$groups.parent().append(groupsLoadingIndicator.hide());
 
 	} //end function reInitGroups
 
@@ -224,10 +223,11 @@ var SS_WC_MailChimp = function($) {
 
 	function loadGroups(apiKey, listId) {
 		/**
-	     * Load service status
+	     * Load interest groups
 	     */
 	    $groups.attr('disabled','disabled');
 
+	    $groups.select2().hide();
 	    $('#ss-wc-mailchimp-groups-msg').hide();
 	    $('#ss_wc_mailchimp_loading_groups').show();
         $.post(
