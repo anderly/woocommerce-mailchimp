@@ -25,12 +25,23 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		 */
 		public function __construct() {
 
-			$this->id   = 'mailchimp';
-			$this->label = __( 'MailChimp', 'ss_wc_mailchimp' );
+			$this->id   	= 'mailchimp';
+			$this->label 	= __( 'MailChimp', 'ss_wc_mailchimp' );
+			
+			$this->init();
 			
 			$this->register_hooks();
 
 		} //end function __construct
+
+		public function init() {
+			$this->api_key  = $this->get_option( 'api_key' );
+			$this->enabled  = $this->get_option( 'enabled' );
+		}
+
+		public function get_option( $option_suffix ) {
+			return get_option( "woocommerce_mailchimp_$option_suffix" );
+		}
 
 		/**
 		 * Register plugin hooks
@@ -45,6 +56,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 			add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
 			add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
 			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
+			add_action( 'woocommerce_settings_saved', array( $this, 'init' ) );
 
 			if ( is_admin() ) {
 				
@@ -52,23 +64,23 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 		} //end function ensure_tab
 
-		/**
-		 * Get sections
-		 *
-		 * @return array
-		 */
-		public function get_sections() {
+		// /**
+		//  * Get sections
+		//  *
+		//  * @return array
+		//  */
+		// public function get_sections() {
 
-			$sections = array(
-				''			=> __( 'General', 'ss_wc_mailchimp' ),
-				'checkout'	=> __( 'Checkout', 'ss_wc_mailchimp' ),
-				'widget' 	=> __( 'Widget', 'ss_wc_mailchimp' ),
-				'shortcode'	=> __( 'ShortCode', 'ss_wc_mailchimp' ),
-				'labels' 	=> __( 'Labels', 'ss_wc_mailchimp' ),
-			);
+		// 	$sections = array(
+		// 		''			=> __( 'General', 'ss_wc_mailchimp' ),
+		// 		'checkout'	=> __( 'Checkout', 'ss_wc_mailchimp' ),
+		// 		'widget' 	=> __( 'Widget', 'ss_wc_mailchimp' ),
+		// 		'shortcode'	=> __( 'ShortCode', 'ss_wc_mailchimp' ),
+		// 		'labels' 	=> __( 'Labels', 'ss_wc_mailchimp' ),
+		// 	);
 
-			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
-		}
+		// 	return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+		// }
 
 		/**
 		 * Output the settings
@@ -158,7 +170,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 				global $SS_WC_MailChimp;
 
-				if ( $SS_WC_MailChimp->load_mailchimp() ) {
+				if ( $SS_WC_MailChimp->load_mailchimp( $this->api_key ) ) {
 					$user_lists = $SS_WC_MailChimp->mailchimp->get_lists();
 					$lists = array();
 					if ( is_array( $user_lists ) && ! empty( $user_lists ) ) {
@@ -187,10 +199,10 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 				$settings = apply_filters( 'ss_wc_mailchimp_settings_general', array(
 
 					array(
-						'title' => __( 'General', 'ss_wc_mailchimp' ),
+						'title' => __( 'MailChimp', 'ss_wc_mailchimp' ),
 						'type' 	=> 'title',
-						'desc' 	=> 'Enter your MailChimp settings below to control how WooCommerce integrates with your MailChimp lists.',
-						'id' 	=> 'general_options'
+						'desc' 	=> __( 'Enter your MailChimp settings below to control how WooCommerce integrates with your MailChimp account.', 'ss_wc_mailchimp' ),
+						'id' 	=> 'general_options',
 					),
 
 					array(
@@ -204,7 +216,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 					array(
 						'title'    => __( 'API Key', 'ss_wc_mailchimp' ),
-						'desc'     => __( '<br/><a href="https://us2.admin.mailchimp.com/account/api/" target="_blank">Login to MailChimp</a> to look up your api key.', 'ss_wc_mailchimp' ),
+						'desc'     => __( '<br/><a href="https://admin.mailchimp.com/account/api/" target="_blank">Login to MailChimp</a> to look up your api key.', 'ss_wc_mailchimp' ),
 						'id'       => 'woocommerce_mailchimp_api_key',
 						'type'     => 'text',
 						'default'  => '',
@@ -216,7 +228,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'title'    => __( 'Main List', 'ss_wc_mailchimp' ),
 						'desc'     => __( 'All customers will be added to this list.', 'ss_wc_mailchimp' ),
 						'id'       => 'woocommerce_mailchimp_main_list',
-						'class'    => '',
+						'class'    => 'wc-enhanced-select',
 						'css'      => 'min-width:300px;',
 						'default'  => '',
 						'type'     => 'select',
@@ -228,7 +240,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'title'    => __( 'Groups', 'ss_wc_mailchimp' ),
 						'desc'     => __( 'Optional: MailChimp Groups to add customers to upon checkout.', 'ss_wc_mailchimp' ),
 						'id'       => 'woocommerce_mailchimp_groups',
-						'class'    => '',
+						'class'    => 'wc-enhanced-select',
 						'css'      => 'min-width:300px;',
 						'default'  => '',
 						'type'     => 'multiselect',
@@ -237,6 +249,120 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 					),
 
 					array( 'type' => 'sectionend', 'id' => 'general_options' ),
+
+					array(
+						'title' => __( 'Checkout Settings', 'ss_wc_mailchimp' ),
+						'type' 	=> 'title',
+						'desc' 	=> '',
+						'id' 	=> 'checkout_settings'
+					),
+
+					array(
+						'title'    => __( 'Subscribe Customers', 'ss_wc_mailchimp' ),
+						'desc'     => __( '<p>Choose <strong>Automatically</strong> to subscribe customers silently upon checkout. Caution, this is without the customer\'s consent.</p> <p>Choose <strong>Ask for permission</strong> to show an "Opt-in" checkbox during checkout. Customers will only be subscribed to the list above if they opt-in.', 'ss_wc_mailchimp' ),
+						'id'       => 'woocommerce_mailchimp_subscribe_customers',
+						'type'     => 'select',
+						'class'    => 'wc-enhanced-select',
+						'desc_tip' => true,
+						'default'  => 1,
+						'options'  => array(
+							'0' => __( 'Disabled', 'ss_wc_mailchimp' ),
+							'1' => __( 'Automatically', 'ss_wc_mailchimp' ),
+							'2' => __( 'Ask for permission', 'ss_wc_mailchimp' )
+						)
+					),
+
+					array(
+						'title'    => __( 'Subscribe on', 'ss_wc_mailchimp' ),
+						'desc'     => __( 'Choose whether to subscribe customers as soon as an order is placed or after the order is processing or completed.', 'ss_wc_mailchimp' ),
+						'id'       => 'woocommerce_mailchimp_subscribe_customers_on',
+						'class'    => 'wc-enhanced-select',
+						'css'      => 'min-width:300px;',
+						'default'  => 'order_created',
+						'type'     => 'select',
+						'options'  => array(
+							'order_created' => 'Order Created',
+							'order_processing' => 'Order Processing',
+							'order_completed' => 'Order Completed'
+						),
+						'desc_tip' =>  true,
+					),
+
+					array(
+						'title'    => __( 'Opt-In Field Label', 'ss_wc_mailchimp' ),
+						'desc'     => __( 'Optional: Customize the label displayed next to the opt-in checkbox.', 'ss_wc_mailchimp' ),
+						'id'       => 'woocommerce_mailchimp_opt_in_label',
+						'class'    => '',
+						'css'      => 'min-width:300px;',
+						'default'  => __( 'Subscribe to our newsletter', 'ss_wc_mailchimp' ),
+						'type'     => 'text',
+						'options'  => $mailchimp_groups,
+						'desc_tip' =>  true,
+					),
+
+					array(
+						'title'    => __( 'Opt-In Checkbox Default', 'ss_wc_mailchimp' ),
+						'desc'     => __( 'The default state of the opt-in checkbox.', 'ss_wc_mailchimp' ),
+						'id'       => 'woocommerce_mailchimp_opt_in_checkbox_default_status',
+						'class'    => 'wc-enhanced-select',
+						'css'      => 'min-width:300px;',
+						'default'  => 'checked',
+						'type'     => 'select',
+						'options'  => array(
+							'checked' => 'Checked',
+							'unchecked' => 'Unchecked',
+						),
+						'desc_tip' =>  true,
+					),
+
+					array(
+						'title'    => __( 'Opt-In Checkbox Location', 'ss_wc_mailchimp' ),
+						'desc'     => __( 'Where to display the opt-in checkbox on the checkout page.', 'ss_wc_mailchimp' ),
+						'id'       => 'woocommerce_mailchimp_opt_in_checkbox_location',
+						'class'    => 'wc-enhanced-select',
+						'css'      => 'min-width:300px;',
+						'default'  => 'woocommerce_checkout_after_customer_details',
+						'type'     => 'select',
+						'options'  => array(
+							'woocommerce_checkout_before_customer_details'  => 'Above customer details',
+							'woocommerce_checkout_after_customer_details' 	=> 'Below customer details',
+							'woocommerce_review_order_before_submit' 		=> 'Order review above submit',
+							'woocommerce_review_order_after_submit' 		=> 'Order review below submit',
+							'woocommerce_review_order_before_order_total' 	=> 'Order review above total',
+							'woocommerce_checkout_billing' 					=> 'Above billing details',
+							'woocommerce_after_checkout_billing_form' 				=> 'Below Checkout billing form',
+						),
+						'desc_tip' =>  true,
+					),
+
+					array(
+						'title'    => __( 'Replace Interest Groups', 'ss_wc_mailchimp' ),
+						'desc'     => __( 'Replace Interest Groups for existing Subscribers', 'ss_wc_mailchimp' ),
+						'id'       => 'woocommerce_mailchimp_replace_interest_groups',
+						'type'     => 'checkbox',
+						'default'  => '0',
+						'desc_tip' => __( 'If enabled, interest groups selected above will replace any interest groups for existing subscribers. Otherwise, interest groups selected above will be merged with existing subscriber interest groups.', 'ss_wc_mailchimp' ),
+					),
+
+					array(
+						'title'    => __( 'Double Opt-In', 'ss_wc_mailchimp' ),
+						'desc'     => __( 'Enable Double Opt-In', 'ss_wc_mailchimp' ),
+						'id'       => 'woocommerce_mailchimp_double_opt_in',
+						'type'     => 'checkbox',
+						'default'  => '0',
+						'desc_tip' => __( 'If enabled, customers will receive an email prompting them to confirm their subscription to the list above.', 'ss_wc_mailchimp' ),
+					),
+
+					array(
+						'title'    => __( 'Send welcome email', 'ss_wc_mailchimp' ),
+						'desc'     => __( 'Send welcome email to user after they are subscribed', 'ss_wc_mailchimp' ),
+						'id'       => 'woocommerce_mailchimp_send_welcome_email',
+						'type'     => 'checkbox',
+						'default'  => '0',
+						'desc_tip' => __( 'If enabled, customers will receive a welcome email (configured in your MailChimp list settings).', 'ss_wc_mailchimp' ),
+					),
+
+					array( 'type' => 'sectionend', 'id' => 'checkout_settings' ),
 
 				));
 			}

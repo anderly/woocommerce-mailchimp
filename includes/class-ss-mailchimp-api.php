@@ -4,7 +4,7 @@
  */
 class SS_MailChimp_API {
 
-	private $api_key;
+	public $api_key;
 	private $api_endpoint = 'https://<dc>.api.mailchimp.com/2.0/';
 	private $verify_ssl   = false;
 
