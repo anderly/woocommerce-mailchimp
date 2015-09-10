@@ -392,11 +392,10 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		$interest_groupings = array();
 		$interest_groups    = array();
-		$api                = new MCAPI( $this->api_key );
-		$retval             = $api->listInterestGroupings( $listid );
+		$retval             = $this->mailchimp->listInterestGroupings( $listid );
 
-		if ( $mailchimp->errorCode ) {
-			echo $this->get_message( sprintf( __( 'Unable to load listInterestGroupings() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $mailchimp->errorCode, $mailchimp->errorMessage ) );
+		if ( $this->mailchimp->errorCode ) {
+			echo $this->get_message( sprintf( __( 'Unable to load listInterestGroupings() from MailChimp: (%s) %s', 'ss_wc_mailchimp' ), $this->mailchimp->errorCode, $this->mailchimp->errorMessage ) );
 
 			return false;
 
@@ -443,7 +442,6 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		if ( 'false' == $listid )
 			$listid = $this->list;
 
-		$api        = new MCAPI( $this->api_key );
 		$merge_vars = array(
 			'FNAME' => $first_name,
 			'LNAME' => $last_name
@@ -483,14 +481,14 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		self::log( sprintf( __( 'Calling MailChimp API listSubscribe method with the following: %s', 'ss_wc_mailchimp' ), print_r( $options, true ) ) );
 
 		// Call API
-		$api_response      = $api->listSubscribe( $listid, $email, $vars, $email_type, $double_optin, $update_existing, $replace_interests, $send_welcome );
+		$api_response      = $this->mailchimp->listSubscribe( $listid, $email, $vars, $email_type, $double_optin, $update_existing, $replace_interests, $send_welcome );
 
 		// Log api response
-		self::log( __( 'MailChimp API response: %s', $api_response ) );
+		self::log( sprintf( __( 'MailChimp API response: %s', 'ss_wc_mailchimp' ), $api_response ) );
 
-		if ( $api->errorCode && $api->errorCode != 214 ) {
+		if ( $this->mailchimp->errorCode && $this->mailchimp->errorCode != 214 ) {
 			// Format error message
-			$error_response = sprintf( __( 'WooCommerce MailChimp subscription failed: %s (%s)', 'ss_wc_mailchimp' ), $api->errorMessage, $api->errorCode );
+			$error_response = sprintf( __( 'WooCommerce MailChimp subscription failed: %s (%s)', 'ss_wc_mailchimp' ), $this->mailchimp->errorMessage, $this->mailchimp->errorCode );
 
 			// Log
 			self::log( $error_response );
