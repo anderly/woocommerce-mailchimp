@@ -33,3 +33,43 @@
     padding-right: 16px;
     margin-right: 5px;
 }
+
+.select2-results .select2-selected {
+	display: block !important;
+	color: #ccc;
+	cursor: pointer !important;
+}
+
+@font-face {
+	font-family: 'woocommerce-mailchimp';
+	src:url('fonts/woocommerce-mailchimp.eot?-c3mqxj');
+	src:url('fonts/woocommerce-mailchimp.eot?#iefix-c3mqxj') format('embedded-opentype'),
+		url('fonts/woocommerce-mailchimp.ttf?-c3mqxj') format('truetype'),
+		url('fonts/woocommerce-mailchimp.woff?-c3mqxj') format('woff'),
+		url('fonts/woocommerce-mailchimp.svg?-c3mqxj#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'woocommerce-mailchimp';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-mailchimp:before {
+	content: "\e600";
+}
+
+#woocommerce-coupon-data ul.wc-tabs li.mailchimp_options a:before, #woocommerce-product-data ul.wc-tabs li.mailchimp_options a:before, .woocommerce ul.wc-tabs li.mailchimp_options a:before {
+    font-family: 'woocommerce-mailchimp';
+    content: "\e600";
+}

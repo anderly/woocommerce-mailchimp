@@ -35,12 +35,17 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		} //end function __construct
 
 		public function init() {
+
 			$this->api_key  = $this->get_option( 'api_key' );
+			
 			$this->enabled  = $this->get_option( 'enabled' );
+
 		}
 
 		public function get_option( $option_suffix ) {
+
 			return get_option( "woocommerce_mailchimp_$option_suffix" );
+
 		}
 
 		/**
@@ -65,23 +70,24 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		//  *
 		//  * @return array
 		//  */
-		// public function get_sections() {
+		public function get_sections() {
 
-		// 	$sections = array(
-		// 		''			=> __( 'General', 'ss_wc_mailchimp' ),
-		// 		'checkout'	=> __( 'Checkout', 'ss_wc_mailchimp' ),
-		// 		'widget' 	=> __( 'Widget', 'ss_wc_mailchimp' ),
-		// 		'shortcode'	=> __( 'ShortCode', 'ss_wc_mailchimp' ),
-		// 		'labels' 	=> __( 'Labels', 'ss_wc_mailchimp' ),
-		// 	);
+			$sections = array(
+				''			=> __( 'General', 'ss_wc_mailchimp' ),
+				'checkout'	=> __( 'Checkout', 'ss_wc_mailchimp' ),
+				//'widget' 	=> __( 'Widget', 'ss_wc_mailchimp' ),
+				'shortcode'	=> __( 'ShortCode', 'ss_wc_mailchimp' ),
+				'labels' 	=> __( 'Labels', 'ss_wc_mailchimp' ),
+			);
 
-		// 	return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
-		// }
+			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+		}
 
 		/**
 		 * Output the settings
 		 */
 		public function output() {
+
 			global $current_section;
 
 			$settings = $this->get_settings( $current_section );
@@ -97,6 +103,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 	 			})(jQuery);
 			");
+
 		}
 
 		/**
@@ -156,29 +163,43 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 				global $SS_WC_MailChimp;
 
 				if ( $SS_WC_MailChimp->load_mailchimp( $this->api_key ) ) {
+
 					$user_lists = $SS_WC_MailChimp->mailchimp->get_lists();
+
 					$lists = array();
+
 					if ( is_array( $user_lists ) && ! empty( $user_lists ) ) {
+
 						$lists = $user_lists;
-					}
-					if ( count( $lists ) > 0 ) {
-						$mailchimp_lists = array_merge( array( '' => __( 'Select a list...', 'ss_wc_mailchimp' ) ), $lists );
-					} else {
-						$mailchimp_lists = array( '' => __( 'Please create a list in your MailChimp account', 'ss_wc_mailchimp' ) );
+
 					}
 
-					$groupings = $SS_WC_MailChimp->mailchimp->get_groups( get_option( 'woocommerce_mailchimp_main_list' ) );
-					$mailchimp_groups = array();
-					if ( is_array( $groupings ) ) {
-						foreach ( $groupings as $grouping ) {
-							foreach ( $grouping->groups as $group ) {
-								$mailchimp_groups[ $grouping->name.':'.$group->name ] = $grouping->name.':'.$group->name;
-							}
-						}
+					if ( count( $lists ) > 0 ) {
+
+						$mailchimp_lists = array_merge( array( '' => __( 'Select a list...', 'ss_wc_mailchimp' ) ), $lists );
+
+					} else {
+
+						$mailchimp_lists = array( '' => __( 'Please create a list in your MailChimp account', 'ss_wc_mailchimp' ) );
+
 					}
+
+					$interest_categories = $SS_WC_MailChimp->mailchimp->get_interest_category_with_interests( get_option( 'woocommerce_mailchimp_main_list' ) );
+
+					$mailchimp_interest_categories = array();
+
+					if ( is_array( $interest_categories ) ) {
+
+						$mailchimp_interest_categories = $interest_categories;
+
+					}
+
 				} else {
+
 					$mailchimp_lists = array( '' => __( 'Enter your api key above to see your lists', 'ss_wc_mailchimp' ) );
-					$mailchimp_groups = array();
+
+					$mailchimp_interest_categories = array();
+
 				}
 
 				$settings = apply_filters( 'ss_wc_mailchimp_settings_general', array(
@@ -222,14 +243,14 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 					),
 
 					array(
-						'title'    => __( 'Groups', 'ss_wc_mailchimp' ),
-						'desc'     => __( 'Optional: MailChimp Groups to add customers to upon checkout.', 'ss_wc_mailchimp' ),
-						'id'       => 'woocommerce_mailchimp_groups',
+						'title'    => __( 'Interest Categories', 'ss_wc_mailchimp' ),
+						'desc'     => __( 'Optional: MailChimp Interest Categories to add customers to upon checkout.', 'ss_wc_mailchimp' ),
+						'id'       => 'woocommerce_mailchimp_interest_categories',
 						'class'    => 'wc-enhanced-select',
 						'css'      => 'min-width:300px;',
 						'default'  => '',
 						'type'     => 'multiselect',
-						'options'  => $mailchimp_groups,
+						'options'  => $mailchimp_interest_categories,
 						'desc_tip' =>  true,
 					),
 
@@ -282,7 +303,6 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'css'      => 'min-width:300px;',
 						'default'  => __( 'Subscribe to our newsletter', 'ss_wc_mailchimp' ),
 						'type'     => 'text',
-						'options'  => $mailchimp_groups,
 						'desc_tip' =>  true,
 					),
 

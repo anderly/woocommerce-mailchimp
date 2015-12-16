@@ -92,7 +92,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) {
 		if ( $this->is_valid() && $new_status == $this->occurs ) {
 			// Get WC order
-			$order = $this->wc_get_order( $id );
+			$order = wc_get_order( $id );
 
 			// get the ss_wc_mailchimp_opt_in value from the post meta. "order_custom_fields" was removed with WooCommerce 2.1
 			$subscribe_customer = get_post_meta( $id, 'ss_wc_mailchimp_opt_in', true );
@@ -266,7 +266,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 				)
 			);
 
-			$this->wc_enqueue_js("
+			wc_enqueue_js("
 				jQuery('#woocommerce_mailchimp_display_opt_in').change(function(){
 					jQuery('#mainform [id^=woocommerce_mailchimp_opt_in]').closest('tr').hide('fast');
 
@@ -282,41 +282,6 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		}
 
 	} // End init_form_fields()
-
-	/**
-	 * WooCommerce 2.1 support for wc_enqueue_js
-	 *
-	 * @since 1.2.1
-	 *
-	 * @access private
-	 * @param string $code
-	 * @return void
-	 */
-	private function wc_enqueue_js( $code ) {
-		if ( function_exists( 'wc_enqueue_js' ) ) {
-			wc_enqueue_js( $code );
-		} else {
-			global $woocommerce;
-			$woocommerce->add_inline_js( $code );
-		}
-	}
-
-	/**
-	 * WooCommerce 2.2 support for wc_get_order
-	 *
-	 * @since 1.2.1
-	 *
-	 * @access private
-	 * @param int $order_id
-	 * @return void
-	 */
-	private function wc_get_order( $order_id ) {
-		if ( function_exists( 'wc_get_order' ) ) {
-			return wc_get_order( $order_id );
-		} else {
-			return new WC_Order( $order_id );
-		}
-	}
 
 	/**
 	 * Get message

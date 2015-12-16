@@ -5,8 +5,10 @@ var SS_WC_MailChimp = function($) {
 
 	var $enabled;
 	var $apiKey;
+	var $listsLoadingIndicator;
 	var $mainList;
-	var $groups;
+	var $interestCategoriesLoadingIndicator;
+	var $interestCategories;
 	var $subscribeCustomers;
 	var $subscribeCustomersOn;
 	var $optInLabel;
@@ -20,22 +22,23 @@ var SS_WC_MailChimp = function($) {
 		init: init,
 		loadLists: loadLists,
 		loadGroups: loadGroups,
-		messages: {}
 	};
 
 	function init() {
 
+		initHandles();
 		initHandlers();
 		initLists();
 		initGroups();
 
 	} //end function init
 
-	function initHandlers() {
+	function initHandles() {
+		// Capture jQuery handles to elements
 		$enabled = $('#woocommerce_mailchimp_enabled');
 		$apiKey = $('#woocommerce_mailchimp_api_key');
 		$mainList = $('#woocommerce_mailchimp_main_list');
-		$groups = $('#woocommerce_mailchimp_groups');
+		$interestCategories = $('#woocommerce_mailchimp_interest_categories');
 		$subscribeCustomers = $('#woocommerce_mailchimp_subscribe_customers');
 		$subscribeCustomersOn = $('#woocommerce_mailchimp_subscribe_customers_on');
 		$optInLabel = $('#woocommerce_mailchimp_opt_in_label');
@@ -44,32 +47,34 @@ var SS_WC_MailChimp = function($) {
 		$replaceInterestGroups = $('#woocommerce_mailchimp_replace_interest_groups');
 		$doubleOptIn = $('#woocommerce_mailchimp_double_opt_in');
 		$sendWelcomeEmail = $('#woocommerce_mailchimp_send_welcome_email');
+	}
 
+	function initHandlers() {
 		$apiKey.closest('tr').hide();
 		$mainList.closest('tr').hide();
 			
 		if ($mainList.val() === '') {
-			$groups.attr('disabled','disabled');
+			$interestCategories.attr('disabled','disabled');
 		}
 		$enabled.change(function() {
 			if ( $enabled.prop('checked') === true ) {
 				$apiKey.closest('tr').fadeIn();
 				$mainList.closest('tr').fadeIn();
-				$groups.closest('tr').fadeIn();
+				$interestCategories.closest('tr').fadeIn();
 			}
 			else {
 				$apiKey.closest('tr').fadeOut();
 				$mainList.closest('tr').fadeOut();
-				$groups.closest('tr').fadeOut();
+				$interestCategories.closest('tr').fadeOut();
 			}
 		}).change();
 
 		$mainList.change(function() {
 			if ($mainList.val()) {
-				$groups.removeAttr('disabled');
+				$interestCategories.removeAttr('disabled');
 			} else {
-				$groups.children().remove();
-				$groups.attr('disabled','disabled');
+				$interestCategories.children().remove();
+				$interestCategories.attr('disabled','disabled');
 			}
 		});
 
@@ -134,57 +139,57 @@ var SS_WC_MailChimp = function($) {
 	} //end function initHandlers
 
 	function initLists() {
-		var listsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_lists" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator"></span>'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</div>');
-		$mainList.after(listsLoadingIndicator.hide());
+		$listsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_lists" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator"></span>'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</div>');
+		$mainList.after($listsLoadingIndicator.hide());
 
 	} //end function initLists
 
 	function initGroups() {
+		//return;
+
 		// Reinitialize the <optgroup> elements by splitting out the option names
 		var currentGroup = '';
 		var lastGroup = '';
 		var grouping;
-		var $options = $groups.children('option').clone();
-		$groups.attr('data-placeholder', SS_WC_MailChimp_Messages.select_groups_placeholder);
-		$groups.children().remove();
+		var $options = $interestCategories.children('option').clone();
+		$interestCategories.attr('data-placeholder', SS_WC_MailChimp_Messages.select_groups_placeholder);
+		$interestCategories.children().remove();
 		for (i = 0; i < $options.length; i++) {
 			item = $options[i];
 			currentGroup = item.text.split(':')[0];
 			if (currentGroup !== lastGroup) {
 				grouping = $('<optgroup>').attr('label', currentGroup);
-				$groups.append(grouping);
+				$interestCategories.append(grouping);
 			}
 			item.text = item.text.split(':')[1];
 			grouping.append(item);
 			lastGroup = currentGroup;
 		}
-		//$groups.chosen({ placeholder_text_multiple: SS_WC_MailChimp_Messages.select_groups_placeholder });
-		$groups.select2('destroy').select2();
+		$interestCategories.select2('destroy').select2();
 		var groupsMessage = $('<div id="ss-wc-mailchimp-groups-msg" style="display: inline-block"/>');
-		$groups.after(groupsMessage);
+		$interestCategories.after(groupsMessage);
 		if ($options.length === 0) {
 			groupsMessage.text(SS_WC_MailChimp_Messages.interest_groups_not_enabled);
-			$groups.siblings('.select2-container').remove();
+			$interestCategories.siblings('.select2-container').remove();
 			groupsMessage.show();
 		} else {
-			$groups.siblings('.select2-container').show();
+			$interestCategories.siblings('.select2-container').show();
 			groupsMessage.hide();
 		}
-		
 
 		// Add the loading indicator for groups (set to hidden by default)
-		var groupsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_groups" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator"></span>'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</div>');
-		$groups.parent().append(groupsLoadingIndicator.hide());
+		$interestCategoriesLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_groups" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator"></span>'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</div>');
+		$interestCategories.parent().append($interestCategoriesLoadingIndicator.hide());
 
-	} //end function reInitGroups
+	} //end function initGroups
 
 	function loadLists(apiKey) {
 
 		/**
-	     * Load service status
+	     * Load lists
 	     */
 	    $mainList.attr('disabled','disabled');
-	    $('#ss_wc_mailchimp_loading_lists').show();
+	    $listsLoadingIndicator.show();
         $.post(
             ajaxurl,
             {
@@ -192,7 +197,8 @@ var SS_WC_MailChimp = function($) {
                 'data': { 'api_key': apiKey }
             },
             function(response) {
-            	$('#ss_wc_mailchimp_loading_lists').hide();
+            	console.log(response);
+            	$listsLoadingIndicator.hide();
             	var result = [];
 
                 try {
@@ -201,8 +207,6 @@ var SS_WC_MailChimp = function($) {
                     console.error(err);
                     alert(SS_WC_MailChimp_Messages.error_loading_lists);
                 }
-
-                console.log(result);
 
                 if (result) {
                 	$mainList.select2('destroy');
@@ -222,22 +226,26 @@ var SS_WC_MailChimp = function($) {
 	} //end function loadLists
 
 	function loadGroups(apiKey, listId) {
+
 		/**
 	     * Load interest groups
 	     */
-	    $groups.attr('disabled','disabled');
+	    $interestCategories.attr('disabled','disabled');
 
-	    $groups.select2().hide();
+	    $interestCategories.children().remove();
+
+	    $interestCategories.select2().hide();
 	    $('#ss-wc-mailchimp-groups-msg').hide();
-	    $('#ss_wc_mailchimp_loading_groups').show();
+	    $interestCategoriesLoadingIndicator.show();
         $.post(
             ajaxurl,
             {
-                'action': 'woocommerce_mailchimp_get_groups',
+                'action': 'woocommerce_mailchimp_get_interest_categories',
                 'data': { 'api_key': apiKey, 'list_id': listId }
             },
             function(response) {
-            	$('#ss_wc_mailchimp_loading_groups').hide();
+            	console.log(response);
+            	$interestCategoriesLoadingIndicator.hide();
             	var result = [];
 
                 try {
@@ -247,39 +255,32 @@ var SS_WC_MailChimp = function($) {
                     alert(SS_WC_MailChimp_Messages.error_loading_groups);
                 }
 
-                console.log(result);
-
                 if (result.error) {
-                	//alert(result.error);
                 	$('#ss-wc-mailchimp-groups-msg').text(result.error).show();
-                	$groups.children().remove();
-                	$groups.select2('destroy');
-                	$groups.hide();
+                	$interestCategories.children().remove();
+                	$interestCategories.select2('destroy');
+                	$interestCategories.hide();
                 	return;
                 }
 
                 if (result.length === 0) {
                 	$('#ss-wc-mailchimp-groups-msg').show();
+                	initGroups();
                 	return;
                 }
 
-                $groups.show();
-                $groups.removeAttr('disabled');
-                //$groups.siblings('.select2-container').show();
-            	$groups.children().remove();
-            	$.each(result, function(i, grouping) { 
-            		$grouping = $('<optgroup>');
-            			$groups	
-	                	.append($grouping
-	                		.attr('label', grouping.name));
-            		$.each(grouping.groups, function(j, group) {
-                		$grouping	
-	                		.append($('<option></option>')
-	                			.attr('value',grouping.name + ':' + group.name)
-	                			.text(group.name)); 
-                	});
+                $interestCategories.show();
+                $interestCategories.removeAttr('disabled');
+            	$interestCategories.children().remove();
+            	$.each(result, function(id, grouping) {
+            		$interestCategories.append(
+            			$('<option></option>')
+	                		.attr('value',id)
+	                		.text(grouping)); 
                 });
-                $groups.select2('destroy').select2();
+
+             	initGroups();
+                //$interestCategories.select2('destroy').select2();
             }
         );
 
