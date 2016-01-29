@@ -261,7 +261,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 					'default'     => 'billing',
 					'options'     => array(
 						'billing'   => __( 'Billing', 'ss_wc_mailchimp' ),
-						'order'     => __( 'Order', 'ss_wc_mailchimp' )
+						'order'     => __( 'Order', 'ss_wc_mailchimp' ),
+						'account'   => __( 'Account', 'ss_wc_mailchimp' ),
 					)
 				)
 			);
