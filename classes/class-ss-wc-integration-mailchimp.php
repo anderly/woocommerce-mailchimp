@@ -44,13 +44,13 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		}
 
 		// Hooks
-		add_action( 'admin_notices',                                       array( $this, 'checks' ) );
+		add_action( 'admin_notices', array( $this, 'checks' ) );
 
 		// Update the settings fields
-		add_action( 'woocommerce_update_options_integration',              array( $this, 'process_admin_options') );
+		add_action( 'woocommerce_update_options_integration', array( $this, 'process_admin_options') );
 
 		// Update the settings fields
-		add_action( 'woocommerce_update_options_integration_' . $this->id,              array( $this, 'process_admin_options') );
+		add_action( 'woocommerce_update_options_integration', array( $this, 'refresh_settings'), 10 );
 
 		// Refresh the settings
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'refresh_settings'), 10 );
