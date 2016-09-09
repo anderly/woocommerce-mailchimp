@@ -41,10 +41,10 @@ function woocommerce_mailchimp_init() {
 	/**
 	 * Add the Integration to WooCommerce
 	 */
-	function add_mailchimp_integration($methods) {
-		$methods[] = 'SS_WC_Integration_MailChimp';
+	function add_mailchimp_integration( $integrations ) {
+		$integrations[] = 'SS_WC_Integration_MailChimp';
 
-		return $methods;
+		return $integrations;
 	}
 
 	add_filter( 'woocommerce_integrations', 'add_mailchimp_integration' );
