@@ -64,6 +64,18 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		// Maybe add an "opt-in" field to the checkout
 		$opt_in_checkbox_display_location = ( isset( $this->opt_in_checkbox_display_location ) && !empty( $this->opt_in_checkbox_display_location ) ) ? $this->opt_in_checkbox_display_location : 'woocommerce_review_order_before_submit';
+
+		// Old opt-in checkbox display locations
+		$old_opt_in_checkbox_display_locations = array(
+			'billing' => 'woocommerce_after_checkout_billing_form',
+			'order' => 'woocommerce_review_order_before_submit',
+		);
+
+		// Map old billing/order checkbox display locations to new format
+		if ($opt_in_checkbox_display_location, $old_opt_in_checkbox_display_locations) {
+			$opt_in_checkbox_display_location = $old_opt_in_checkbox_display_locations[$opt_in_checkbox_display_location];
+		}
+		
         add_action( $opt_in_checkbox_display_location, array( $this, 'maybe_add_checkout_fields' ) );
 		add_filter( 'default_checkout_ss_wc_mailchimp_opt_in', array( $this, 'checkbox_default_status' ) );
 
@@ -581,9 +593,9 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	function maybe_add_checkout_fields() {
 		if ( $this->is_valid() ) {
 			if ( 'yes' == $this->display_opt_in ) {
-				do_action( 'woocommerce_mailchimp_before_opt_in_checkbox' );
-				echo '<p class="form-row woocommerce-mailchimp-opt-in"><label for="ss_wc_mailchimp_opt_in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" value="yes"' . ($this->opt_in_checkbox_default_status == 'checked' ? ' checked="checked"' : '') . '/> ' . esc_html( $this->opt_in_label ) . '</label></p>' . "\n";
-				do_action( 'woocommerce_mailchimp_after_opt_in_checkbox' );
+				do_action( 'ss_wc_mailchimp_before_opt_in_checkbox' );
+				echo apply_filters('ss_wc_mailchimp_opt_in_checkbox', '<p class="form-row woocommerce-mailchimp-opt-in"><label for="ss_wc_mailchimp_opt_in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" value="yes"' . ($this->opt_in_checkbox_default_status == 'checked' ? ' checked="checked"' : '') . '/> ' . esc_html( $this->opt_in_label ) . '</label></p>' . "\n", $this->opt_in_checkbox_default_status, $this->opt_in_label);
+				do_action( 'ss_wc_mailchimp_after_opt_in_checkbox' );
 			}
 		}
 	}
