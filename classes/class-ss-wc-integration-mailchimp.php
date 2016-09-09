@@ -428,7 +428,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	public function mailchimp_api_error_msg() {
 		echo $this->get_message(
 			sprintf( __( 'Unable to load lists from MailChimp: (%s) %s. ', 'ss_wc_mailchimp' ), $this->get_api()->errorCode, $this->get_api()->errorMessage ) .
-			sprintf( __( 'Please check your %s <a href="%s">settings</a>.', 'ss_wc_mailchimp' ), WOOCOMMERCE_MAILCHIMP_SETTINGS_URL )
+			sprintf( __( 'Please check your %s <a href="%s">settings</a>.', 'ss_wc_mailchimp' ), __( 'Settings', 'ss_wc_mailchimp' ), WOOCOMMERCE_MAILCHIMP_SETTINGS_URL )
 		);
 	}
 
