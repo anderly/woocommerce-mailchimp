@@ -26,7 +26,7 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 - Optionally, display an opt-in checkbox on the checkout page (this is required in some countries)
 - Control the label displayed next to the opt-in checkbox
 - Control whether or not the opt-in checkbox is checked or unchecked by default
-- Control the placement of the opt-in checkbox on the checkout page (under billing info or order info)
+- Control the placement of the opt-in checkbox on the checkout page
 
 #### Translation Support
 
@@ -68,6 +68,15 @@ If you need help, have problems, want to leave feedback or want to provide const
 5. That's it, now customers who purchase products from your WooCommerce store will automatically be subscribed to the selected list (and optional interest groups) in MailChimp!
 
 ### Changelog
+
+#### 1.3.7
+* WordPress 4.6.x Compatible
+* WooCommerce 2.6.x Compatible
+* More flexible opt_in checkbox placement
+* Pass $order_id to `ss_wc_mailchimp_subscribe_options` hook
+* Use only one instance of MCAPI
+* Fix #14 MCAPI constructor style
+* Fix #15 `mailchimp_api_error_msg`
 
 #### 1.3.7
 * WordPress 4.4 Compatible

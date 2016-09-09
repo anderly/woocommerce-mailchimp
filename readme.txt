@@ -2,8 +2,8 @@
 Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
-Tested up to: 4.4
-Stable tag: 1.3.7
+Tested up to: 4.6.1
+Stable tag: 1.3.8
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -31,7 +31,7 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 - Optionally, display an opt-in checkbox on the checkout page (this is required in some countries)
 - Control the label displayed next to the opt-in checkbox
 - Control whether or not the opt-in checkbox is checked or unchecked by default
-- Control the placement of the opt-in checkbox on the checkout page (under billing info or order info)
+- Control the placement of the opt-in checkbox on the checkout page
 
 #### Translation Support ####
 
@@ -77,6 +77,15 @@ If you need help, have problems, want to leave feedback or want to provide const
 1. WooCommerce MailChimp options screen.
 
 == Changelog ==
+
+= 1.3.8 =
+* Tested up to WordPress 4.6.1
+* Tested up to WooCommerce 2.6.4
+* More flexible opt_in checkbox placement
+* Pass $order_id to `ss_wc_mailchimp_subscribe_options` hook
+* Use only one instance of MCAPI
+* Fix #14 MCAPI constructor style
+* Fix #15 `mailchimp_api_error_msg`
 
 = 1.3.7 =
 * WordPress 4.4 Compatible
