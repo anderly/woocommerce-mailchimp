@@ -69,14 +69,15 @@ If you need help, have problems, want to leave feedback or want to provide const
 
 ### Changelog
 
-#### 1.3.7
+#### 1.3.8
 * WordPress 4.6.x Compatible
 * WooCommerce 2.6.x Compatible
 * More flexible opt_in checkbox placement
 * Pass $order_id to `ss_wc_mailchimp_subscribe_options` hook
 * Use only one instance of MCAPI
-* Fix #14 MCAPI constructor style
-* Fix #15 `mailchimp_api_error_msg`
+* Fixed Issue #14 MCAPI constructor style
+* Fixed Issue #15 `mailchimp_api_error_msg`
+* Fixed Issue #16 where lists wouldn't show up until you saved the settings twice
 
 #### 1.3.7
 * WordPress 4.4 Compatible
