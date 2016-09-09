@@ -72,10 +72,10 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 		);
 
 		// Map old billing/order checkbox display locations to new format
-		if ($opt_in_checkbox_display_location, $old_opt_in_checkbox_display_locations) {
-			$opt_in_checkbox_display_location = $old_opt_in_checkbox_display_locations[$opt_in_checkbox_display_location];
+		if ( array_key_exists( $opt_in_checkbox_display_location, $old_opt_in_checkbox_display_locations ) ) {
+			$opt_in_checkbox_display_location = $old_opt_in_checkbox_display_locations[ $opt_in_checkbox_display_location ];
 		}
-		
+
         add_action( $opt_in_checkbox_display_location, array( $this, 'maybe_add_checkout_fields' ) );
 		add_filter( 'default_checkout_ss_wc_mailchimp_opt_in', array( $this, 'checkbox_default_status' ) );
 
