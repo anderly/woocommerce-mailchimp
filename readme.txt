@@ -14,18 +14,18 @@ WooCommerce MailChimp provides simple and flexible MailChimp integration for Woo
 
 Automatically subscribe customers to a designated MailChimp list and, optionally, MailChimp interest groups upon order creation or order completion. This can be done quietly or based on the user's consent with several opt-in settings that support international opt-in laws.
 
-### Features ###
+= Features =
 
-#### WooCommerce Event Selection ####
+**WooCommerce Event Selection**
 
 - Subscribe customers to MailChimp after order creation
 - Subscribe customers to MailChimp after order completion
 
-#### Works with MailChimp Interest Groups ####
+**Works with MailChimp Interest Groups**
 
 - Set one or more interest groups to add users to based on the selected MailChimp list.
 
-#### Opt-In Settings ####
+**Opt-In Settings**
 
 - MailChimp double opt-in support (control whether a double opt-in email is sent to the customer)
 - Optionally, display an opt-in checkbox on the checkout page (this is required in some countries)
@@ -33,7 +33,7 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 - Control whether or not the opt-in checkbox is checked or unchecked by default
 - Control the placement of the opt-in checkbox on the checkout page
 
-#### Translation Support ####
+= Translation Support =
 
 - i18n ready with included woocommerce-mailchimp.pot file
 - WPML support via wpml-config.xml
@@ -45,19 +45,26 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 
 Thanks in advance for your help on any translation efforts!
 
-#### Multisite ####
+= Multisite =
 
 - All features should work for each blog in multisite installations.
 
-### Feedback ###
+= Requirements =
 
-Feedback is welcome!
+WooCommerce MailChimp requires PHP 5.4+ (PHP 7.0+ recommended). You'll also need to be running WordPress 3.5.1+ and have WooCommerce 2.2+.
 
-If you need help, have problems, want to leave feedback or want to provide constructive criticism, please do so here at the [WooCommerce MailChimp plugin page](http://anderly.com/woocommerce-mailchimp/).
+= Documentation & Support =
 
-#### Twitter ####
+Online documentation and code samples are available via our [Help Center](https://support.saintsystems.com/hc/en-us/sections/201959566). Given the free nature of this plugin, we cannot offer dedicated support via the WordPress.org forums (although we do check them). If you are interested in purchasing dedicated please contact us via our help center to get quote.
 
-[Follow @anderly on Twitter](http://twitter.com/anderly) for updates on this and other plugins.
+= Contribute =
+All development for WooCommerce MailChimp is [handled via GitHub](https://github.com/anderly/woocommerce-mailchimp). Opening new issues and submitting pull requests are welcome.
+
+[Our public roadmap is available on Trello](https://trello.com/b/VWBdLVuI/woocommerce-mailchimp-development). We'd love it if you vote and comment on your favorite ideas.
+
+You can also keep up to date with [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) development by [subscribing to our newsletter](http://eepurl.com/bxcewL).
+
+Also, if you enjoy using the software [we'd love it if you could give us a review](https://wordpress.org/support/plugin/woocommerce-mailchimp/reviews/)!
 
 == Installation ==
 
