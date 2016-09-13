@@ -86,7 +86,6 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	public function load_settings() {
 		// We need the API key to set up for the lists in the form fields
 		$this->api_key   = $this->get_option( 'api_key' );
-		// $this->get_api() = new MCAPI( $this->api_key );
 		$this->enabled   = $this->get_option( 'enabled' );
 
 		// Get setting values
@@ -383,8 +382,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			if ( $this->api_key == '' ) {
 				return false;
 			}
-			require_once( 'api/class-MCAPI.php' );
-			self::$api = new MCAPI( $this->api_key );
+			require_once( 'api/class-ss-wc-mailchimp-api.php' );
+			self::$api = new SS_WC_MailChimp_API( $this->api_key );
 		}
 		return self::$api;
 	}

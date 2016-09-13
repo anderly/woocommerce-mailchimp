@@ -3,7 +3,7 @@ Contributors: anderly, saintsystems
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.6.1
-Stable tag: 1.3.8
+Stable tag: 1.3.9
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -84,6 +84,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 1. WooCommerce MailChimp options screen.
 
 == Changelog ==
+
+= 1.3.9 =
+* Rename MCAPI class to prevent collisions with other plugins using MCAPI
 
 = 1.3.8 =
 * Tested up to WordPress 4.6.1

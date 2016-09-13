@@ -69,6 +69,9 @@ If you need help, have problems, want to leave feedback or want to provide const
 
 ### Changelog
 
+#### 1.3.9
+* Rename MCAPI class to prevent collisions with other plugins using MCAPI
+
 #### 1.3.8
 * WordPress 4.6.x Compatible
 * WooCommerce 2.6.x Compatible
