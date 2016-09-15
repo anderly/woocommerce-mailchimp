@@ -2,8 +2,8 @@
 
 final class SS_WC_MailChimp_Migration extends SS_WC_MailChimp_Migration_Base {
 
-	public function __construct() {
-		parent::__construct();
+	public function __construct( $current_version, $target_version ) {
+		parent::__construct( $current_version, $target_version );
 	}
 
 	/**
@@ -65,7 +65,7 @@ final class SS_WC_MailChimp_Migration extends SS_WC_MailChimp_Migration_Base {
 	 */
 	public function down() {
 
-		throw new Exception('Cannot rollback to versions prior to 1.4.0');
+		throw new Exception('Cannot rollback to versions prior to 2.0');
 
 	}
 
