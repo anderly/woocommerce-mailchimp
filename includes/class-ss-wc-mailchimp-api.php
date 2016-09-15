@@ -49,8 +49,8 @@ class SS_WC_MailChimp_API {
      */
 	public function get( $resource, $args = array() ) {
 
-		if ( $count ) {
-			$resource .= '?count=' . $count;
+		if ( ! array_key_exists( 'count', $args ) ) {
+			$args['count'] = 10;
 		}
 
 		return $this->api_request( 'GET', $resource, $args );
@@ -223,9 +223,14 @@ class SS_WC_MailChimp_API {
 	 * @access public
 	 * @return mixed
 	 */
-	public function get_lists( $count = 100 ) {
+	public function get_lists( $args = array() ) {
 
-		$response = $this->get( 'lists', $count );
+		if ( ! array_key_exists( 'count', $args ) ) {
+			$args['count'] = 100;
+		}
+
+
+		$response = $this->get( 'lists', $args );
 
 		if ( ! $response ) {
 			return false;
