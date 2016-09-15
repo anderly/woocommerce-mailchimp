@@ -6,8 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * Minimal MailChimp API v3.0 wrapper
  *
  * @class       SS_WC_MailChimp_API
- * @extends     WC_Integration
- * @version     1.4.0
+ * @version     2.0
  * @package     WooCommerce MailChimp
  * @author      Saint Systems
  */
@@ -43,80 +42,77 @@ class SS_WC_MailChimp_API {
 	} //end function __construct
 
 	/**
-	 * Returns error code from error property
-	 * @return string error code
-	 */
-	public function get_error_code() {
-
-		return $this->error->get_error_code();
-
-	} //end get_error_code
-
-	/**
-	 * Returns error message from error property
-	 * @return string error message
-	 */
-	public function get_error_message() {
-
-		return $this->error->get_error_message();
-
-	} //end get_error_message
-
-	/**
-	 * Call an API method. Every request needs the API key, so that is added automatically -- you don't need to pass it in.
-	 * @param  string $resource MailChimp API resource to be called
-	 * @param  array  $args   Assoc array of parameters to be passed
-	 * @param  string $method HTTP method (GET|POST|PUT|PATCH|DELETE)
-	 * @return array          Associative array of json decoded API response.
-	 */
-	public function call( $resource, $args = array(), $method = 'GET' ) {
-
-		return $this->api_request( $resource, $args, $method );
-
-	} //end function call
-
-	public function get( $resource, $count = 10 ) {
+     * @param string $resource
+     * @param array $args
+     *
+     * @return mixed
+     */
+	public function get( $resource, $args = array() ) {
 
 		if ( $count ) {
 			$resource .= '?count=' . $count;
 		}
 
-		return $this->api_request( $resource, array(), 'GET' );
+		return $this->api_request( 'GET', $resource, $args );
 
 	} //end function post
 
+	/**
+     * @param string $resource
+     * @param array $args
+     *
+     * @return mixed
+     */
 	public function post( $resource, $args = array() ) {
 
-		return $this->api_request( $resource, $args, 'POST' );
+		return $this->api_request( 'POST', $resource, $args );
 
 	} //end function post
 
+	/**
+     * @param string $resource
+     * @param array $args
+     *
+     * @return mixed
+     */
 	public function put( $resource, $args = array() ) {
 
-		return $this->api_request( $resource, $args, 'PUT' );
+		return $this->api_request( 'PUT', $resource, $args );
 
 	} //end function put
 
+	/**
+     * @param string $resource
+     * @param array $args
+     *
+     * @return mixed
+     */
 	public function patch( $resource, $args = array() ) {
 
-		return $this->api_request( $resource, $args, 'PATCH' );
+		return $this->api_request( 'PATCH', $resource, $args );
 
 	} //end function patch
 
+	/**
+     * @param string $resource
+     * @param array $args
+     *
+     * @return mixed
+     */
 	public function delete( $resource, $args = array() ) {
 
-		return $this->api_request( $resource, $args, 'DELETE' );
+		return $this->api_request( 'DELETE', $resource, $args );
 
 	} //end function delete
 
 	/**
 	 * Performs the underlying HTTP request.
+	 * @param  string $method HTTP method (GET|POST|PUT|PATCH|DELETE)
 	 * @param  string $resource MailChimp API resource to be called
 	 * @param  array  $args   array of parameters to be passed
-	 * @param  string $method HTTP method (GET|POST|PUT|PATCH|DELETE)
 	 * @return array          array of decoded result
 	 */
-	private function api_request( $resource, $args = array(), $method = 'GET' ) {      
+	private function api_request( $method, $resource, $args = array() ) {      
 
 		$url = $this->api_root . $resource;
 
@@ -134,9 +130,12 @@ class SS_WC_MailChimp_API {
 			'user-agent'    => 'SaintSystems-WooCommerce-MailChimp-WordPress-Plugin/' . get_bloginfo( 'url' ),
 		);
 
-		if ( $method !== 'GET' && is_array( $args ) && !empty( $args ) ) {
-			$request_args['body'] = json_encode( $args );
-		}
+		// attach arguments (in body or URL)
+        if ( $method === 'GET' ) {
+            $url = add_query_arg( $args, $url );
+        } else {
+            $request_args['body'] = json_encode( $args );
+        }
 
 		$raw_response = wp_remote_request( $url, $request_args );
 
@@ -228,7 +227,7 @@ class SS_WC_MailChimp_API {
 
 		$response = $this->get( 'lists', $count );
 
-		if ( is_wp_error( $response ) ) {
+		if ( ! $response ) {
 			return false;
 		}
 
@@ -244,7 +243,7 @@ class SS_WC_MailChimp_API {
 
 		return $results;
 
-	} //end functino get_lists
+	} //end function get_lists
 
 	public function subscribe( $list_id, $email_address,  $email_type, $merge_fields, $interests, $double_optin ) {
 
@@ -263,13 +262,13 @@ class SS_WC_MailChimp_API {
 
 		$response = $this->put( "lists/$list_id/members/$subscriber_hash", $args );
 
-		if ( is_wp_error( $response ) ) {
+		if ( ! $response ) {
 			return false;
 		}
 
 		return $response;
 
-	}
+	} //end function subscribe
 
 	/**
 	 * Get merge fields
@@ -282,7 +281,7 @@ class SS_WC_MailChimp_API {
 
 		$response = $this->get( "lists/$list_id/merge-fields" );
 
-		if ( is_wp_error( $response ) ) {
+		if ( ! $response ) {
 			return false;
 		}
 
@@ -298,7 +297,7 @@ class SS_WC_MailChimp_API {
 
 		return $results;
 
-	}
+	} //end function get_merge_fields
 
 	/**
 	 * Get interest categories
@@ -311,7 +310,7 @@ class SS_WC_MailChimp_API {
 
 		$response = $this->get( "lists/$list_id/interest-categories" );
 
-		if ( is_wp_error( $response ) ) {
+		if ( ! $response ) {
 			return false;
 		}
 
@@ -341,7 +340,7 @@ class SS_WC_MailChimp_API {
 
 		$response = $this->get( "lists/$list_id/interest-categories/$interest_category_id/interests" );
 
-		if ( is_wp_error( $response ) ) {
+		if ( ! $response ) {
 			return false;
 		}
 
@@ -370,7 +369,7 @@ class SS_WC_MailChimp_API {
 
 		$categories = $this->get_interest_categories( $list_id );
 
-		if ( is_wp_error( $categories ) ) {
+		if ( ! $categories ) {
 			return false;
 		}
 
@@ -380,7 +379,7 @@ class SS_WC_MailChimp_API {
 
 			$interests = $this->get_interest_category_interests( $list_id, $category_id );
 
-			if ( is_wp_error( $interests ) ) {
+			if ( ! $interests ) {
 				return false;
 			}
 
@@ -395,5 +394,25 @@ class SS_WC_MailChimp_API {
 		return $results;
 
 	} //end function get_interest_categories_with_interests
+
+	/**
+	 * Returns error code from error property
+	 * @return string error code
+	 */
+	public function get_error_code() {
+
+		return $this->error->get_error_code();
+
+	} //end get_error_code
+
+	/**
+	 * Returns error message from error property
+	 * @return string error message
+	 */
+	public function get_error_message() {
+
+		return $this->error->get_error_message();
+
+	} //end get_error_message
 
 } //end class SS_WC_MailChimp_API
