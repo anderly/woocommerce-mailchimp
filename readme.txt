@@ -68,8 +68,8 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Installation ==
 
-1. Upload or extract the `woocommerce-mailchimp` folder to your site's `/wp-content/plugins/` directory. You can also use the *Add new* option found in the *Plugins* menu in WordPress.  
-2. Enable the plugin from the *Plugins* menu in WordPress.
+1. Upload or extract the `woocommerce-mailchimp` folder to your site's `/wp-content/plugins/` directory. You can also use the *Add new- option found in the *Plugins- menu in WordPress.  
+2. Enable the plugin from the *Plugins- menu in WordPress.
 
 = Usage =
 
@@ -85,100 +85,198 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
-= 1.4.0 =
-* WARNING: This release contains breaking changes to the plugins action hooks and filters
-* 
-* Added ability to pick MailChimp Interest Groups from drop-down list.
-* Upgraded MailChimp API to v3.0
-* Changes to prepare for version 2.0
+#### 1.4.0
 
-= 1.3.9 =
-* Rename MCAPI class to prevent collisions with other plugins using MCAPI
+**WARNING:** This release contains breaking changes to the plugins action hooks and filters. If you have custom code that hooks into the plugins action hooks and filters, please review the breaking changes below to know how to update your code appropriately.
 
-= 1.3.8 =
-* Tested up to WordPress 4.6.1
-* Tested up to WooCommerce 2.6.4
-* More flexible opt_in checkbox placement
-* Pass $order_id to `ss_wc_mailchimp_subscribe_options` hook
-* Use only one instance of MCAPI
-* Fixed Issue #14 MCAPI constructor style
-* Fixed Issue #15 `mailchimp_api_error_msg`
-* Fixed Issue #16 where lists wouldn't show up until you saved the settings twice
+**Breaking Changes**
 
-= 1.3.7 =
-* WordPress 4.4 Compatible
-* WooCommerce 2.4.12 Compatible
-* API response not shown in debug log
-* Use only one instance of MCAPI
+- Action filter `ss_wc_mailchimp_subscribe_merge_vars` is now `ss_wc_mailchimp_subscribe_merge_tags`
+    - The filter no longer contains the `GROUPINGS` sub-key for [MailChimp Groups](http://kb.mailchimp.com/groups) due to a change with the MailChimp API v3.0.
+    - The filter now only contains the [MailChimp Merge Tags](http://kb.mailchimp.com/merge-tags).
+- [MailChimp Groups](http://kb.mailchimp.com/groups) now have their own action filter `ss_wc_mailchimp_subscribe_interest_groups`
+- Action filter `ss_wc_mailchimp_subscribe_options` has changed due to changes with the MailChimp API v3.0.
+    - The key `listid` has been changed to `list_id` in the `$subscribe_options` parameter
+    - The `vars` key has been removed from the `$subscribe_options` parameter (this key previously contained the merge tags and groups together).
+    - The `update_existing`, `replace_interests` and `send_welcome` keys have been removed from the `$subscribe_options` parameter since they are no longer supported by the API.
+    - The plugin now always updates existing subscribers if they exist.
+    - The plugin now always appends interest groups and does not affect existing groups on subscribers.
+    - The send welcome email can be configured on the target list and is not required to be sent through the API.
+    - A new key `merge_tags` has been added and includes the `$merge_tags` array to be sent to the MailChimp API
+    - A new key `interest_groups` has been added and includes the `$interest_groups` array to be sent to the MailChimp API
 
-= 1.3.6 =
-* Backout of change to use WC_Logger due to fatal error
 
-= 1.3.5 =
-* Fix for undefined variable list and array_merge issue.
-* Change to use WC_Logger instead of error_log
-* Updated pot file
-* Added French translation
-* General code syntax cleanup
+**Improvements**
 
-= 1.3.4 =
-* Fix enabled check. Issue #6.
+- Added ability to pick MailChimp Interest Groups from drop-down list.
+- Upgraded MailChimp API to v3.0
 
-= 1.3.3 =
-* Fix for transient key length. Tested with WordPress 4.1
+**Additions**
 
-= 1.3.2 =
-* Fix for headers already sent message. Tested with WordPress 4.0 and WooCommerce 2.2.*
+- Added `Debug Log` setting to enable/disable logging for troubleshooting purposes.
+- New action hook `ss_wc_mailchimp_loaded` fired after the plugin has loaded.
+- New action hook `ss_wc_mailchimp_before_opt_in_checkbox` fired before opt in checkbox is rendered.
+- New action filter `ss_wc_mailchimp_opt_in_checkbox` allows for overriding opt in checkbox rendering
+- New action hook `ss_wc_mailchimp_after_opt_in_checkbox` fired after opt in checkbox is rendered.
 
-= 1.3.1 =
-* Fix for MailChimp merge vars bug introduced in v1.3
+#### 1.3.9 - September 13, 2016
 
-= 1.3 =
-* Breaking Change: 'ss_wc_mailchimp_subscribe_merge_vars' action filter now passes $order_id param to enable retrieving additional order info/meta to use in MailChimp merge vars
-* Small fix to order_created subscribe event to work with PayPal Payment Gateway
+**Fixes**
 
-= 1.2.6 =
-* Added additional debug logging when WP_DEBUG is enabled
+- Rename MCAPI class to prevent collisions with other plugins.
 
-= 1.2.5 =
-* Bug fix for subscribe when not using opt-in display field
+#### 1.3.8 - September 9, 2016
 
-= 1.2.4 =
-* Bug fix for subscribe
+**Improvements**
 
-= 1.2.3 =
-* Fixed plugin settings link for WooCommerce 2.1
+- Tested up to WordPress 4.6.1
+- Tested up to WooCommerce 2.6.4
+- More flexible opt_in checkbox placement
+- Pass $order_id to `ss_wc_mailchimp_subscribe_options` hook
 
-= 1.2.2 =
-* WooCommerce 2.1 fix for order custom fields
+**Fixes**
 
-= 1.2.1 =
-* WooCommerce 2.1 integration: Change to use wc_enqueue_js instead of add_inline_js
-* WooCommerce 2.1 integration: Change to support new default checkout field filter for default opt-in checkbox status
+- Use only one instance of MCAPI
+- Fixed Issue #14 MCAPI constructor style
+- Fixed Issue #15 `mailchimp_api_error_msg`
+- Fixed Issue #16 where lists wouldn't show up until you saved the settings twice
 
-= 1.2 =
-* Added new setting to control whether or not the double opt-in checkbox is checked/unchecked by default on the checkout page.
-* Added new setting to control display location of the double opt-in checkbox (under billing info or order info)
-* Small modification to append to MailChimp interest groups for existing users so that group settings are not lost for users who were already subscribed.
-* Preparations for i18n (Internationalization) support. Several users have already asked and offered to translate the plugin into other languages. We had always planned on that, but now are making that a reality.
+#### 1.3.7 - December 16, 2015
 
-= 1.1.3 =
-* Minor action hook change since order meta (needed for MailChimp API call) is not yet available on 'woocommerce_new_order' hook
+**Improvements**
 
-= 1.1.2 =
-* Update to REALLY address issue with subscriptions not occurring on order create "pending"
+- WordPress 4.4 Compatible
+- WooCommerce 2.4.12 Compatible
 
-= 1.1.1 =
-* Update to address issue with subscriptions not occurring on order create "pending"
+**Fixes**
 
-= 1.1 =
-* Add the option to display an opt-in field on checkout
+- API response not shown in debug log
+- Use only one instance of MCAPI
 
-= 1.0.2 =
-* Minor text and comment changes
+#### 1.3.6 - February 9, 2015
 
-= 1.0.1 =
-* Added "Settings" link on the Plugins administration screen
+**Fixes**
 
-= 1.0 =
-* This is the first public release.
+- Backout of change to use WC_Logger due to fatal error
+
+#### 1.3.5 - February 6, 2015
+
+**Improvements**
+
+- Change to use WC_Logger instead of error_log
+- Updated pot file
+- Added French translation
+- General code syntax cleanup
+
+**Fixes**
+
+- Fix for undefined variable list and array_merge issue.
+
+#### 1.3.3 & 1.3.4 - January 16, 2016
+
+**Fixes**
+
+- Fix enabled check. Issue #6.
+- Fix for transient key length.
+
+**Additions**
+
+- Tested with WordPress 4.1
+
+#### 1.3.2 - November 4, 2014
+
+**Fixes*
+
+- Fix for headers already sent message. Tested with WordPress 4.0 and WooCommerce 2.2.*
+
+#### 1.3.1 - April 3, 2014
+
+**Fixes**
+
+- Fix for MailChimp merge vars bug introduced in v1.3
+
+#### 1.3 - April 1, 2014
+
+**Breaking Changes**
+
+- Action filer `ss_wc_mailchimp_subscribe_merge_vars` now passes $order_id param to enable retrieving additional order info/meta to use in MailChimp merge vars
+
+**Fixes**
+
+- Small fix to order_created subscribe event to work with PayPal Payment Gateway
+
+#### 1.2.6 - February 28, 2014
+
+**Additions**
+
+- Added additional debug logging when WP_DEBUG is enabled
+
+#### 1.2.5 - February 27, 2014
+
+**Fixes**
+
+- Bug fix for subscribe when not using opt-in display field
+
+#### 1.2.2, 1.2.3 & 1.2.4 - February 22, 2014
+
+**Fixes**
+
+- WooCommerce 2.1 fix for order custom fields
+- Fixed plugin settings link for WooCommerce 2.1
+- Bug fix for subscribe
+
+#### 1.2.1 - February 13, 2014
+
+**Additions**
+
+- WooCommerce 2.1 integration: Change to use wc_enqueue_js instead of add_inline_js
+- WooCommerce 2.1 integration: Change to support new default checkout field filter for default opt-in checkbox status
+
+#### 1.2 - January 10, 2014
+
+**Additions**
+
+- Added new setting to control whether or not the double opt-in checkbox is checked/unchecked by default on the checkout page.
+- Added new setting to control display location of the double opt-in checkbox (under billing info or order info)
+- Small modification to append to MailChimp interest groups for existing users so that group settings are not lost for users who were already subscribed.
+- Preparations for i18n (Internationalization) support. Several users have already asked and offered to translate the plugin into other languages. We had always planned on that, but now are making that a reality.
+
+### 1.1.3 - January 2, 2014
+
+**Additions**
+
+- Minor action hook change since order meta (needed for MailChimp API call) is not yet available on 'woocommerce_new_order' hook
+
+### 1.1.2 - January 2, 2014
+
+**Fixes**
+
+- Update to REALLY address issue with subscriptions not occurring on order create "pending"
+
+### 1.1.1 - December 31, 2013
+
+**Fixes**
+
+- Update to address issue with subscriptions not occurring on order create "pending"
+
+### 1.1 - November 12, 2013
+
+**Additions**
+
+- Add the option to display an opt-in field on checkout
+
+### 1.0.2 - October 16, 2013
+
+**Additions**
+
+- Minor text and comment changes
+
+### 1.0.1 - October 11, 2013
+
+**Additions**
+
+- Added "Settings" link on the Plugins administration screen
+
+### 1.0 - October 10, 2013
+
+- This is the first public release.
