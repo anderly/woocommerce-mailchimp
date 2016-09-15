@@ -1,0 +1,23 @@
+.loading-indicator {
+	display: inline-block;
+	vertical-align:top;
+	margin-top:5px;
+}
+
+.woocommerce table.form-table .select2-container {
+	display: inline-block !important;
+}
+
+.woocommerce-mailchimp-loading {
+	margin-left: 5px;
+	margin-top: 2px;
+	display: inline-block;
+}
+
+.woocommerce-mailchimp-loading-indicator {
+	background: url(../images/loading.gif) center left no-repeat;
+    background-size: 16px 16px;
+    line-height: 16px;
+    padding-right: 16px;
+    margin-right: 5px;
+}

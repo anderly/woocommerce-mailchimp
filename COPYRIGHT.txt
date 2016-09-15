@@ -1,7 +1,7 @@
 
  WooCommerce MailChimp
  
- Copyright 2015 "anderly" (Adam Anderly) www.anderly.com
+ Copyright 2016 "saintsystems" (Saint Systems) www.saintsystems.com
  
  The files COPYRIGHT.txt and LICENSE.txt as well as ALL NOTICES IN THE
  HEADERS OF ALL FILES MUST BE KEPT INTACT.

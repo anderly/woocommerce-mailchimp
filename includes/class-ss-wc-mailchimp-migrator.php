@@ -9,7 +9,7 @@ final class SS_WC_MailChimp_Migrator {
 
 	const VERSIONS = array(
 		'1.3.X',
-		'1.4.0',
+		'2.0',
 	);
 
 	public static function migrate( $target_version ) {
