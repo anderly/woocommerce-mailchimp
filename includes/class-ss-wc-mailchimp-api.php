@@ -12,19 +12,40 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  */
 class SS_WC_MailChimp_API {
 
+	/**
+     * @var string
+     */
 	public $api_key;
 
+	/**
+     * @var string
+     */
 	public $datacenter = 'us1';
 
-	public $error;
-
+	/**
+     * @var string
+     */
 	private $api_root = 'https://<dc>.api.mailchimp.com/3.0/';
 
+	/**
+     * @var boolean
+     */
 	private $debug = false;
+
+	/**
+     * @var array
+     */
+    private $last_response;
+
+    /**
+     * @var WP_Error
+     */
+	private $last_error;
 
 	/**
 	 * Create a new instance
 	 * @param string $api_key MailChimp API key
+	 * @param boolean $debug  Whether or not to log API calls
 	 */
 	function __construct( $api_key, $debug = false ) {
 
@@ -112,9 +133,13 @@ class SS_WC_MailChimp_API {
 	 * @param  array  $args   array of parameters to be passed
 	 * @return array          array of decoded result
 	 */
-	private function api_request( $method, $resource, $args = array() ) {      
+	private function api_request( $method, $resource, $args = array() ) {
+
+		$this->reset();
 
 		$url = $this->api_root . $resource;
+
+		global $wp_version;
 
 		$request_args = array(
 			'method'        => $method,
@@ -126,8 +151,8 @@ class SS_WC_MailChimp_API {
 				'Content-Type'   => 'application/json',
 				'Accept'         => 'application/json',
 				'Authorization'  => 'apikey ' . $this->api_key,
+				'User-Agent'     => 'woocommerce-mailchimp/' . SS_WC_MailChimp_Plugin::version() . '; WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' ),
 			),
-			'user-agent'    => 'SaintSystems-WooCommerce-MailChimp-WordPress-Plugin/' . get_bloginfo( 'url' ),
 		);
 
 		// attach arguments (in body or URL)
@@ -139,13 +164,15 @@ class SS_WC_MailChimp_API {
 
 		$raw_response = wp_remote_request( $url, $request_args );
 
+		$this->last_response = $raw_response;
+
 		$this->maybe_log( $url, $method, $args, $raw_response );
 
 		if ( is_wp_error( $raw_response ) ) {
 
-			$this->error = new WP_Error( 'ss-wc-mc-api-request-error', $raw_response->get_error_message(), $this->format_error( $resource, $method, $raw_response ) );
+			$this->last_error = new WP_Error( 'ss-wc-mc-api-request-error', $raw_response->get_error_message(), $this->format_error( $resource, $method, $raw_response ) );
 
-			return $this->error;
+			return false;
 
 		} elseif ( is_array( $raw_response ) 
 			&& $raw_response['response']['code'] 
@@ -155,14 +182,11 @@ class SS_WC_MailChimp_API {
 
 			$error = json_decode( $json, true );
 
-			$this->error = new WP_Error( 'ss-wc-mc-api-request-error', $error['detail'], $this->format_error( $resource, $method, $raw_response ) );
+			$this->last_error = new WP_Error( 'ss-wc-mc-api-request-error', $error['detail'], $this->format_error( $resource, $method, $raw_response ) );
 
-			return $this->error;
+			return false;
 
 		} else {
-
-			// Always clear just in case
-			$this->error = null;
 
 			$json = wp_remote_retrieve_body( $raw_response );
 
@@ -173,6 +197,14 @@ class SS_WC_MailChimp_API {
 		}
 
 	} //end function api_request
+
+	/**
+     * Empties all data from previous response
+     */
+    private function reset() {
+        $this->last_response = null;
+        $this->last_error = null;
+    }
 
 	/**
 	 * Conditionally log MailChimp API Call
@@ -218,187 +250,11 @@ class SS_WC_MailChimp_API {
 	} //end function has_api_key
 
 	/**
-	 * Get list
-	 * 
-	 * @access public
-	 * @return mixed
-	 */
-	public function get_lists( $args = array() ) {
-
-		if ( ! array_key_exists( 'count', $args ) ) {
-			$args['count'] = 100;
-		}
-
-
-		$response = $this->get( 'lists', $args );
-
-		if ( ! $response ) {
-			return false;
-		}
-
-		$lists = $response['lists'];
-
-		$results = array();
-
-		foreach ( $lists as $list ) {
-
-			$results[ (string)$list['id'] ] = $list['name'];
-
-		}
-
-		return $results;
-
-	} //end function get_lists
-
-	public function subscribe( $list_id, $email_address,  $email_type, $merge_fields, $interests, $double_optin ) {
-
-		$args = array(
-			'email_address' => $email_address,
-			'status'        => $double_optin ? 'pending' : 'subscribed',
-			'email_type'    => $email_type,
-			'merge_fields'  => $merge_fields,
-		);
-
-		if ( is_array( $interests ) && !empty( $interests ) ) {
-			$args['interests'] = $interests;
-		}
-
-		$subscriber_hash = md5( strtolower( $email_address ) );
-
-		$response = $this->put( "lists/$list_id/members/$subscriber_hash", $args );
-
-		if ( ! $response ) {
-			return false;
-		}
-
-		return $response;
-
-	} //end function subscribe
-
-	/**
-	 * Get merge fields
-	 * 
-	 * @access public
-	 * @param string $list_id
-	 * @return mixed
-	 */
-	public function get_merge_fields( $list_id ) {
-
-		$response = $this->get( "lists/$list_id/merge-fields" );
-
-		if ( ! $response ) {
-			return false;
-		}
-
-		$merge_fields = $response['merge_fields'];
-
-		$results = array();
-
-		foreach ( $merge_fields as $merge_field ) {
-
-			$results[ $merge_field['id'] ] = $merge_field['tag'];
-
-		}
-
-		return $results;
-
-	} //end function get_merge_fields
-
-	/**
-	 * Get interest categories
-	 *
-	 * @access public
-	 * @param string $list_id
-	 * @return mixed
-	 */
-	public function get_interest_categories( $list_id ) {
-
-		$response = $this->get( "lists/$list_id/interest-categories" );
-
-		if ( ! $response ) {
-			return false;
-		}
-
-		$categories = $response['categories'];
-
-		$results = array();
-
-		foreach ( $categories as $category ) {
-
-			$results[ $category['id'] ] = $category['title'];
-
-		}
-
-		return $results;
-
-	} //end function get_interest_categories
-
-	/**
-	 * Get interest category interests
-	 *
-	 * @access public
-	 * @param string $list_id
-	 * * @param string $interest_category_id
-	 * @return mixed
-	 */
-	public function get_interest_category_interests( $list_id, $interest_category_id ) {
-
-		$response = $this->get( "lists/$list_id/interest-categories/$interest_category_id/interests" );
-
-		if ( ! $response ) {
-			return false;
-		}
-
-		$interests = $response['interests'];
-
-		$results = array();
-
-		foreach ( $interests as $interest ) {
-
-			$results[ $interest['id'] ] = $interest['name'];
-
-		}
-
-		return $results;
-
-	} //end function get_interest_category_interests
-
-	/**
-	 * Get interest categories with interests
-	 *
-	 * @access public
-	 * @param string $list_id
-	 * @return mixed
-	 */
-	public function get_interest_categories_with_interests( $list_id ) {
-
-		$categories = $this->get_interest_categories( $list_id );
-
-		if ( ! $categories ) {
-			return false;
-		}
-
-		$results = array();
-
-		foreach ( $categories as $category_id => $category ) {
-
-			$interests = $this->get_interest_category_interests( $list_id, $category_id );
-
-			if ( ! $interests ) {
-				return false;
-			}
-
-			foreach ( $interests as $interest_id => $interest ) {
-
-				$results[ $interest_id ] = $category . ': ' . $interest;
-
-			}
-
-		}
-
-		return $results;
-
-	} //end function get_interest_categories_with_interests
+     * @return array|WP_Error
+     */
+    public function get_last_response() {
+        return $this->last_response;
+    }
 
 	/**
 	 * Returns error code from error property
@@ -406,7 +262,7 @@ class SS_WC_MailChimp_API {
 	 */
 	public function get_error_code() {
 
-		return $this->error->get_error_code();
+		return $this->last_error->get_error_code();
 
 	} //end get_error_code
 
@@ -416,7 +272,7 @@ class SS_WC_MailChimp_API {
 	 */
 	public function get_error_message() {
 
-		return $this->error->get_error_message();
+		return $this->last_error->get_error_message();
 
 	} //end get_error_message
 
