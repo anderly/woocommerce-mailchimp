@@ -176,8 +176,8 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	 * @access public
 	 * @return array
 	 */
-	public function interests() {
-		return $this->get_option( 'interests' );
+	public function interest_groups() {
+		return $this->get_option( 'interest_groups' );
 	}
 
 	/**
@@ -308,9 +308,9 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			if ( $this->has_api_key() && $mailchimp_lists !== false ) {
 
 				if ( $this->has_api_key() && $this->has_list() ) {
-					$interests = $this->get_interests();
+					$interest_groups = $this->get_interest_groups();
 				} else {
-					$interests = array();
+					$interest_groups = array();
 				}
 				
 				$form_fields['enabled'] = array(
@@ -337,12 +337,12 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 					$form_fields['list']['description'] = sprintf( __( 'There are no lists in your MailChimp account. <a href="%s" target="_blank">Click here</a> to create one.', 'ss_wc_mailchimp' ), 'https://admin.mailchimp.com/lists/new-list/' );
 				}
 
-				$form_fields['interests'] = array(
+				$form_fields['interest_groups'] = array(
 						'title'       => __( 'Interest Groups', 'ss_wc_mailchimp' ),
 						'type'        => 'multiselect',
 						'description' => __( 'Optional: Interest groups to assign to subscribers.', 'ss_wc_mailchimp' ),
 						'default'     => '',
-						'options'     => $interests,
+						'options'     => $interest_groups,
 						'class'       => 'wc-enhanced-select',
 						'custom_attributes' => array( 
 							'placeholder' => __( 'Select interest groups...', 'ss_wc_mailchimp' ),
@@ -570,20 +570,20 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 	}
 
 	/**
-	 * get_interests function.
+	 * get_interest_groups function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function get_interests() {
+	public function get_interest_groups() {
 
 		if ( $this->api() && $this->has_list() ) {
-			$interests = $this->api()->get_interest_category_with_interests( $this->list() );
+			$interest_groups = $this->api()->get_interest_categories_with_interests( $this->list() );
 		} else {
 			return false;
 		}
 
-		if ( $interests === false ) {
+		if ( $interest_groups === false ) {
 
 			add_action( 'admin_notices',         array( $this, 'mailchimp_api_error_msg' ) );
 			add_action( 'network_admin_notices', array( $this, 'mailchimp_api_error_msg' ) );
@@ -592,7 +592,7 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 
 		}
 
-		return $interests;
+		return $interest_groups;
 		
 	}
 
@@ -637,27 +637,27 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 			$list_id = $this->list();
 		}
 
-		$merge_fields = array(
+		$merge_tags = array(
 			'FNAME' => $first_name,
 			'LNAME' => $last_name
 		);
 
-		if ( ! empty( $this->interests() ) ) {
-			$interests = array_fill_keys( $this->interests(), true );
+		if ( ! empty( $this->interest_groups() ) ) {
+			$interest_groups = array_fill_keys( $this->interest_groups(), true );
 
 			// Allow hooking into variables
-			$interests = apply_filters( 'ss_wc_mailchimp_subscribe_interests', $interests, $order_id, $email );
+			$interest_groups = apply_filters( 'ss_wc_mailchimp_subscribe_interest_groups', $interest_groups, $order_id, $email );
 		}
 
 		// Allow hooking into variables
-		$merge_fields = apply_filters( 'ss_wc_mailchimp_subscribe_merge_fields', $merge_fields, $order_id, $email );
+		$merge_tags = apply_filters( 'ss_wc_mailchimp_subscribe_merge_tags', $merge_tags, $order_id, $email );
 
 		// Set subscription options
 		$subscribe_options = array(
 			'list_id'           => $list_id,
 			'email'             => $email,
-			'merge_fields'      => $merge_fields,
-			'interests'         => $interests,
+			'merge_tags'      	=> $merge_tags,
+			'interest_groups'   => $interest_groups,
 			'email_type'        => 'html',
 			'double_optin'      => $this->double_optin(),
 		);

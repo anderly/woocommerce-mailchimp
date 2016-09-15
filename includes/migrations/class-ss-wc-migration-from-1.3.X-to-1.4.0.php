@@ -39,9 +39,9 @@ final class SS_WC_MailChimp_Migration extends SS_WC_MailChimp_Migration_Base {
 
 			$selected_interest_category_interests = array_intersect( $interest_category_interests, $groups );
 
-			$interests = array_keys($selected_interest_category_interests);
+			$interest_groups = array_keys($selected_interest_category_interests);
 
-			$this->settings['interests'] = $interests;
+			$this->settings['interest_groups'] = $interest_groups;
 
 			unset($this->settings[$interest_groupings_key]);
 			unset($this->settings[$groups_key]);

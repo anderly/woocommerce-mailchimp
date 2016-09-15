@@ -366,7 +366,7 @@ class SS_WC_MailChimp_API {
 	 * @param string $list_id
 	 * @return mixed
 	 */
-	public function get_interest_category_with_interests( $list_id ) {
+	public function get_interest_categories_with_interests( $list_id ) {
 
 		$categories = $this->get_interest_categories( $list_id );
 
@@ -394,6 +394,6 @@ class SS_WC_MailChimp_API {
 
 		return $results;
 
-	} //end function get_interest_category_with_interests
+	} //end function get_interest_categories_with_interests
 
 } //end class SS_WC_MailChimp_API
