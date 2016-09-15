@@ -87,6 +87,18 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	public function includes() {
 
+		if( ! class_exists( 'SS_WC_MailChimp_Container' ) ) {
+			require_once( 'class-ss-wc-mailchimp-container.php' );
+		}
+
+		if( ! function_exists( 'ss_wc_mailchimp' ) ) {
+			require_once( 'functions.php' );
+		}
+
+		require_once( 'class-ss-wc-mailchimp-api.php' );
+
+		require_once( 'class-ss-wc-mailchimp.php' );
+
 		require_once( 'class-ss-wc-mailchimp-handler.php' );
 
 	}
@@ -99,6 +111,16 @@ final class SS_WC_MailChimp_Plugin {
 
 		if ( ! class_exists( 'WC_Integration' ) )
 			return;
+		
+		global $ss_wc_mailchimp;
+
+		/**
+		 * @global SS_WC_MailChimp_Container $GLOBALS['ss_wc_mailchimp']
+		 * @name $mc4wp
+		 */
+		$ss_wc_mailchimp = ss_wc_mailchimp();
+		$ss_wc_mailchimp['mailchimp'] = 'ss_wc_mailchimp_get_mailchimp';
+		$ss_wc_mailchimp['api'] = 'ss_wc_mailchimp_get_api';
 
 		// Set up localization.
 		$this->load_plugin_textdomain();

@@ -351,8 +351,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				$list_id = $_POST['data']['list_id'];
 
-				$results = array_merge( array('' => 'Select a list...'), $lists );
-
 				$interest_groups = $this->api( $api_key )->get_interest_categories_with_interests( $list_id );
 
 				$results = $interest_groups;
@@ -377,8 +375,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 		} //end function toJSON
 
-		private function namespace_prefixed( $value ) {
-			return $this->namespace . '_' . $value;
+		private function namespace_prefixed( $suffix ) {
+			return $this->namespace . '_' . $suffix;
 		}
 
 		/**
@@ -418,14 +416,23 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @return Object
 		 */
 		public function api( $api_key = null ) {
-			if ( is_null( self::$api_instance ) ) {
-				if ( ! $this->has_api_key() && empty( $api_key ) ) {
-					return false;
-				}
-				require_once( 'class-ss-wc-mailchimp-api.php' );
-				self::$api_instance = new SS_WC_MailChimp_API( ( $api_key ? $api_key : $this->api_key() ), $this->debug_enabled() );
+			// if ( is_null( self::$api_instance ) ) {
+			// 	if ( ! $this->has_api_key() && empty( $api_key ) ) {
+			// 		return false;
+			// 	}
+			// 	require_once( 'class-ss-wc-mailchimp-api.php' );
+			// 	self::$api_instance = new SS_WC_MailChimp_API( ( $api_key ? $api_key : $this->api_key() ), $this->debug_enabled() );
+			// }
+			// return self::$api_instance;
+			if ( ! is_null( $api_key ) ) {
+				global $ss_wc_mailchimp;
+
+				// $ss_wc_mailchimp['api'] = new SS_WC_MailChimp( $api_key , $this->debug_enabled() );
+				$ss_wc_mailchimp['api'] = ss_wc_mailchimp_get_api( $api_key , $this->debug_enabled() );
+
+				delete_transient( 'sswcmc_lists' );
 			}
-			return self::$api_instance;
+			return ss_wc_mailchimp('api');
 		}
 
 		/**

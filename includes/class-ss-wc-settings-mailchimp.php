@@ -212,33 +212,6 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 			}
 		}
 
-		/**
-		 * order_status_changed function.
-		 *
-		 * @access public
-		 * @return void
-		 */
-		public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) {
-			if ( $this->is_valid() && $new_status === $this->occurs() ) {
-				// Get WC order
-				$order = $this->wc_get_order( $id );
-
-				// get the ss_wc_mailchimp_opt_in value from the post meta. "order_custom_fields" was removed with WooCommerce 2.1
-				$subscribe_customer = get_post_meta( $id, $this->namespace_prefixed( 'opt_in' ), true );
-
-				// If the 'ss_wc_mailchimp_opt_in' meta value isn't set 
-				// (because 'display_opt_in' wasn't enabled at the time the order was placed) 
-				// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
-				if ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) {
-					// log
-					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', $this->namespace ), $order->billing_email, $this->list() ) );
-
-					// subscribe
-					$this->subscribe( $order->id, $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->list() );
-				}
-			}
-		}
-
 		public function init() {
 
 			$this->api_key  = $this->get_option( 'api_key' );
@@ -618,14 +591,15 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		 * @return Object
 		 */
 		public function api() {
-			if ( is_null( self::$api_instance ) ) {
-				if ( ! $this->has_api_key() ) {
-					return false;
-				}
-				require_once( 'class-ss-wc-mailchimp-api.php' );
-				self::$api_instance = new SS_WC_MailChimp_API( $this->api_key(), $this->debug_enabled() );
-			}
-			return self::$api_instance;
+			// if ( is_null( self::$api_instance ) ) {
+			// 	if ( ! $this->has_api_key() ) {
+			// 		return false;
+			// 	}
+			// 	require_once( 'class-ss-wc-mailchimp-api.php' );
+			// 	self::$api_instance = new SS_WC_MailChimp_API( $this->api_key(), $this->debug_enabled() );
+			// }
+			// return self::$api_instance;
+			return ss_wc_mailchimp('api');
 		}
 
 		/**
