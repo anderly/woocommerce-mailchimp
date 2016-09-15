@@ -37,8 +37,8 @@ abstract class SS_WC_MailChimp_Migration_Base {
 
 		if ( empty( $this->settings['api_key'] ) ) return;
 
-		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp-api.php' );
-		$this->api = new SS_WC_MailChimp_API( $this->settings['api_key'] );
+		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp.php' );
+		$this->api = new SS_WC_MailChimp( $this->settings['api_key'] );
 	}
 
 	/**

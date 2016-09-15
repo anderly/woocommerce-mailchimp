@@ -1,6 +1,6 @@
 <?php
 
-final class SS_WC_MailChimp_Migration extends SS_WC_MailChimp_Migration_Base {
+final class SS_WC_MailChimp_Migration_From_13X_To_20 extends SS_WC_MailChimp_Migration_Base {
 
 	public function __construct( $current_version, $target_version ) {
 		parent::__construct( $current_version, $target_version );
