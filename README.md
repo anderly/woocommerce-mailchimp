@@ -15,7 +15,7 @@ Here, you can browse the source of the [WooCommerce MailChimp](https://wordpress
 Installation
 ------------
 
-Here's a [guide on how to install the plugin in your WordPress site](https://wordpress.org/plugins/woocommerce-mailchimp/installation/).
+Here's a [guide on how to install the plugin on your WordPress site](https://wordpress.org/plugins/woocommerce-mailchimp/installation/).
 If you want to run the latest development version, you have two options:
 
 * You can download the repository .zip file: [woocommerce-mailchimp.zip](https://github.com/anderly/woocommerce-mailchimp/archive/master.zip)
