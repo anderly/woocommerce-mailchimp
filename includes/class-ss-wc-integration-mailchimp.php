@@ -350,13 +350,13 @@ class SS_WC_Integration_MailChimp extends WC_Integration {
 						'css'         => 'min-width: 350px;',
 					);
 
-				if ( is_array( $interests ) && count( $interests ) == 0 ) {
-					// $form_fields['interests']['description'] = __( 'Optional: Interest groups to assign to subscribers.', 'ss_wc_mailchimp' );
-					$form_fields['interests']['custom_attributes']['placeholder'] = __( 'This list has no interest groups.', 'ss_wc_mailchimp' );
-					$form_fields['interests']['custom_attributes']['disabled'] = 'disabled';
+				if ( is_array( $interest_groups ) && count( $interest_groups ) == 0 ) {
+					// $form_fields['interest_groups']['description'] = __( 'Optional: Interest groups to assign to subscribers.', 'ss_wc_mailchimp' );
+					$form_fields['interest_groups']['custom_attributes']['placeholder'] = __( 'This list has no interest groups.', 'ss_wc_mailchimp' );
+					$form_fields['interest_groups']['custom_attributes']['disabled'] = 'disabled';
 				} elseif ( !$this->has_list() ) {
-					$form_fields['interests']['custom_attributes']['placeholder'] = __( 'Select a list to see interests', 'ss_wc_mailchimp' );
-					$form_fields['interests']['custom_attributes']['disabled'] = 'disabled';
+					$form_fields['interest_groups']['custom_attributes']['placeholder'] = __( 'Select a list to see interests', 'ss_wc_mailchimp' );
+					$form_fields['interest_groups']['custom_attributes']['disabled'] = 'disabled';
 				}
 
 				$form_fields['occurs'] = array(
