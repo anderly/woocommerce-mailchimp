@@ -179,7 +179,7 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 - Fix enabled check. Issue #6.
 - Fix for transient key length.
 
-**Additions**
+**Improvements**
 
 - Tested with WordPress 4.1
 
@@ -207,7 +207,7 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 #### 1.2.6 - February 28, 2014
 
-**Additions**
+**Improvements**
 
 - Added additional debug logging when WP_DEBUG is enabled
 
@@ -227,31 +227,31 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 #### 1.2.1 - February 13, 2014
 
-**Additions**
+**Improvements**
 
 - WooCommerce 2.1 integration: Change to use wc_enqueue_js instead of add_inline_js
 - WooCommerce 2.1 integration: Change to support new default checkout field filter for default opt-in checkbox status
 
 #### 1.2 - January 10, 2014
 
-**Additions**
+**Improvements**
 
 - Added new setting to control whether or not the double opt-in checkbox is checked/unchecked by default on the checkout page.
 - Added new setting to control display location of the double opt-in checkbox (under billing info or order info)
 - Small modification to append to MailChimp interest groups for existing users so that group settings are not lost for users who were already subscribed.
 - Preparations for i18n (Internationalization) support. Several users have already asked and offered to translate the plugin into other languages. We had always planned on that, but now are making that a reality.
 
-### 1.1.3 - January 2, 2014
+### 1.1.2 & 1.1.3 - January 2, 2014
+
+**Fixes**
+
+- Update to REALLY address issue with subscriptions not occurring on order create "pending"
 
 **Additions**
 
 - Minor action hook change since order meta (needed for MailChimp API call) is not yet available on 'woocommerce_new_order' hook
 
-### 1.1.2 - January 2, 2014
-
-**Fixes**
-
-- Update to REALLY address issue with subscriptions not occurring on order create "pending"
+###  - January 2, 2014
 
 ### 1.1.1 - December 31, 2013
 
@@ -261,7 +261,7 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 ### 1.1 - November 12, 2013
 
-**Additions**
+**Improvements**
 
 - Add the option to display an opt-in field on checkout
 
@@ -273,7 +273,7 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 ### 1.0.1 - October 11, 2013
 
-**Additions**
+**Improvements**
 
 - Added "Settings" link on the Plugins administration screen
 
