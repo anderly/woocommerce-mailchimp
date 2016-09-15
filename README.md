@@ -19,14 +19,14 @@ Here's a [guide on how to install the plugin on your WordPress site](https://wor
 If you want to run the latest development version, you have two options:
 
 * You can download the repository .zip file: [woocommerce-mailchimp.zip](https://github.com/anderly/woocommerce-mailchimp/archive/master.zip)
-* You can clone the GitHub repository using Git
+* You can clone the GitHub repository using Git `git clone https://github.com/anderly/woocommerce-mailchimp.git woocommerce-mailchimp
 
 This will download the latest development version of the WooCommerce MailChimp plugin. While this version is usually stable,
 it is not recommended for use in a production environment.
 
 Bugs
 ----
-If you think you've found a bug, [please raise an issue here](https://github.com/anderly/woocommerce-mailchimp/issues?state=open)!
+If you think you've found a bug, [please raise an issue here](https://github.com/anderly/woocommerce-mailchimp/issues?state=open).
 
 Documentation & Support
 -------
