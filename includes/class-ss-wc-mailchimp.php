@@ -175,7 +175,7 @@ class SS_WC_MailChimp {
 	 */
 	public function get_interest_category_interests( $list_id, $interest_category_id ) {
 
-		if ( ! $results = get_transient( "sswcmc_{$list_id}_interest_category_interests" ) ) {
+		if ( ! $results = get_transient( "sswcmc_{$list_id}_{$interest_category_id }_interests" ) ) {
 
 			$resource = "lists/$list_id/interest-categories/$interest_category_id/interests";
 
@@ -195,7 +195,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( "sswcmc_{$list_id}_interest_category_interests", $results, 60*60*1 );
+			set_transient( "sswcmc_{$list_id}_{$interest_category_id }_interests", $results, 60*60*1 );
 
 		}
 
