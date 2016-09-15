@@ -1,69 +1,54 @@
 <?php
 /**
  * Plugin Name: WooCommerce MailChimp
- * Plugin URI: http://anderly.com/woocommerce-mailchimp
+ * Plugin URI: https://www.saintsystems.com/products/woocommerce-mailchimp/
  * Description: WooCommerce MailChimp provides simple MailChimp integration for WooCommerce.
- * Author: Adam Anderly
- * Author URI: http://anderly.com
- * Version: 1.3.9
+ * Author: Saint Systems
+ * Author URI: https://www.saintsystems.com
+ * Version: 1.4.0
  * Text Domain: ss_wc_mailchimp
  * Domain Path: languages
  *
- * Copyright: © 2015 Adam Anderly
+ * Copyright: © 2016 Saint Systems
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
- *
- * MailChimp Docs: http://apidocs.mailchimp.com/
  */
 
-
-function woocommerce_mailchimp_init() {
-
-	if ( ! class_exists( 'WC_Integration' ) )
-		return;
-
-	load_plugin_textdomain( 'ss_wc_mailchimp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-
-	global $woocommerce;
-
-	$settings_url = admin_url( 'admin.php?page=woocommerce_settings&tab=integration&section=mailchimp' );
-
-	if ( $woocommerce->version >= '2.1' ) {
-		$settings_url = admin_url( 'admin.php?page=wc-settings&tab=integration&section=mailchimp' );
-	}
-
-	if ( ! defined( 'WOOCOMMERCE_MAILCHIMP_SETTINGS_URL' ) ) {
-		define( 'WOOCOMMERCE_MAILCHIMP_SETTINGS_URL', $settings_url );
-	}
-
-	include_once( 'classes/class-ss-wc-integration-mailchimp.php' );
-
-	/**
-	 * Add the Integration to WooCommerce
-	 */
-	function add_mailchimp_integration( $integrations ) {
-		$integrations[] = 'SS_WC_Integration_MailChimp';
-
-		return $integrations;
-	}
-
-	add_filter( 'woocommerce_integrations', 'add_mailchimp_integration' );
-
-	/**
-	 * Add Settings link to plugins list
-	 *
-	 * @param  array $links Plugin links
-	 * @return array        Modified plugin links
-	 */
-	function action_links( $links ) {
-		$plugin_links = array(
-			'<a href="' . WOOCOMMERCE_MAILCHIMP_SETTINGS_URL . '">' . __( 'Settings', 'ss_wc_mailchimp' ) . '</a>',
-		);
-
-		return array_merge( $plugin_links, $links );
-	}
-
-	// Add the "Settings" links on the Plugins administration screen
-	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'action_links' );
+/** If this file is called directly, abort. */
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
 }
-add_action( 'plugins_loaded', 'woocommerce_mailchimp_init', 0 );
+
+/** Constants */
+
+/**
+ * Full path to the WooCommerce MailChimp file
+ * @define "SS_WC_MAILCHIMP_FILE" "./woocommmerce-mailchimp.php"
+ */
+define( 'SS_WC_MAILCHIMP_FILE', __FILE__ );
+
+/**
+ * The URL to this file
+ */
+define( 'SS_WC_MAILCHIMP_URL', plugin_dir_url( __FILE__ ) );
+
+/**
+ * The absolute path to the plugin directory
+ * @define "SS_WC_MAILCHIMP_DIR" "./"
+ */
+define( 'SS_WC_MAILCHIMP_DIR', plugin_dir_path( __FILE__ ) );
+
+define( 'SS_WC_MAILCHIMP_PLUGIN_URL', plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) );
+
+/**
+ * The main plugin class (SS_WC_MailChimp_Plugin)
+ */
+require_once( 'includes/class-ss-wc-mailchimp-plugin.php' );
+
+/** Register hooks that are fired when the plugin is activated and deactivated. */
+if ( is_admin() ) {
+	register_activation_hook( __FILE__, array( 'SS_WC_MailChimp_Plugin', 'activate' ) );
+	register_deactivation_hook( __FILE__, array( 'SS_WC_MailChimp_Plugin', 'deactivate' ) );
+}
+
+add_action( 'plugins_loaded', array( 'SS_WC_MailChimp_Plugin', 'get_instance' ), 0 );

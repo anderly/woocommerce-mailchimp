@@ -1,9 +1,9 @@
 === WooCommerce MailChimp ===
-Contributors: anderly, saintsystems
+Contributors: saintsystems, anderly
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.6.1
-Stable tag: 1.3.9
+Stable tag: 1.4.0
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -84,6 +84,13 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 1. WooCommerce MailChimp options screen.
 
 == Changelog ==
+
+= 1.4.0 =
+* WARNING: This release contains breaking changes to the plugins action hooks and filters
+* 
+* Added ability to pick MailChimp Interest Groups from drop-down list.
+* Upgraded MailChimp API to v3.0
+* Changes to prepare for version 2.0
 
 = 1.3.9 =
 * Rename MCAPI class to prevent collisions with other plugins using MCAPI
