@@ -3,7 +3,7 @@ Contributors: saintsystems, anderly
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.6.1
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -42,7 +42,11 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 **Included Translations:**
 
 - English (default)
-- No other translations yet.
+- French.
+
+**Custom Translations**
+- Place custom translations in `/wp-content/languages/woocommerce-mailchimp/woocommerce-mailchim_{locale}.[mo|po]`. This ensures they won't get overwritten by plugin updates.
+- If no custom translations are present, the plugin will load them from `/wp-content/plugins/woocommerce-mailchimp/languages/woocommerce-mailchimp_{locale}.[mo|po]`
 
 Thanks in advance for your help on any translation efforts!
 
@@ -93,7 +97,7 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
-#### 2.0 - 2.0.2 - September 16, 2016
+#### 2.0 - 2.0.3 - September 16, 2016
 
 **WARNING:** This release contains breaking changes to the plugins action hooks and filters. If you have custom code that hooks into the plugins action hooks and filters, please review the breaking changes below to know how to update your code appropriately.
 
@@ -127,6 +131,10 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 - New action hook `ss_wc_mailchimp_before_opt_in_checkbox` fired before opt in checkbox is rendered.
 - New action filter `ss_wc_mailchimp_opt_in_checkbox` allows for overriding opt in checkbox rendering
 - New action hook `ss_wc_mailchimp_after_opt_in_checkbox` fired after opt in checkbox is rendered.
+
+**Fixes**
+
+- Fixed issues with translations and text domains not loading properly.
 
 #### 1.3.9 - September 13, 2016
 
