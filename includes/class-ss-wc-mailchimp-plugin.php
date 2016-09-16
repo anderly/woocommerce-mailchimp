@@ -7,7 +7,7 @@ final class SS_WC_MailChimp_Plugin {
 
 	private static $_instance;
 
-	private static $version = '2.0.1';
+	private static $version = '2.0.2';
 
 	public static function version() {
 		return self::$version;
@@ -237,6 +237,8 @@ final class SS_WC_MailChimp_Plugin {
 	} //end function enqueue_scripts
 
 	public static function update() {
+		require_once( 'class-ss-wc-mailchimp-migrator.php' );
+
 		SS_WC_MailChimp_Migrator::migrate( self::version() );
 	}
 
@@ -249,8 +251,6 @@ final class SS_WC_MailChimp_Plugin {
 	 * @return void
 	 */
 	public static function activate( $network_wide = false ) {
-
-		require_once( 'class-ss-wc-mailchimp-migrator.php' );
 
 		self::update();
 
