@@ -48,7 +48,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			$this->id         = 'mailchimp';
 			$this->namespace  = 'ss_wc_' . $this->id;
-			$this->label      = __( 'MailChimp', $this->namespace );
+			$this->label      = __( 'MailChimp', 'woocommerce-mailchimp' );
 			
 			$this->init();
 			
@@ -214,7 +214,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
 				if ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) {
 					// log
-					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', $this->namespace ), $order->billing_email, $this->list() ) );
+					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order->billing_email, $this->list() ) );
 
 					// subscribe
 					$this->subscribe( $order->id, $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->list() );
@@ -288,7 +288,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
-					return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', $this->namespace ) ) );
+					return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'woocommerce-mailchimp' ) ) );
 
 				}
 
@@ -471,17 +471,17 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			extract( $options );
 
 			// Log
-			$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer to MailChimp: %s', $this->namespace ), print_r( $options, true ) ) );
+			$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer to MailChimp: %s', 'woocommerce-mailchimp' ), print_r( $options, true ) ) );
 
 			// Call API
 			$api_response = $this->api()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_optin );
 
 			// Log api response
-			$this->log( sprintf( __( __METHOD__ . '(): MailChimp API response: %s', $this->namespace ), print_r( $api_response, true ) ) );
+			$this->log( sprintf( __( __METHOD__ . '(): MailChimp API response: %s', 'woocommerce-mailchimp' ), print_r( $api_response, true ) ) );
 
 			if ( $api_response === false ) {
 				// Format error message
-				$error_response = sprintf( __( __METHOD__ . '(): WooCommerce MailChimp subscription failed: %s (%s)', $this->namespace ), $this->api()->get_error_message(), $this->api()->get_error_code() );
+				$error_response = sprintf( __( __METHOD__ . '(): WooCommerce MailChimp subscription failed: %s (%s)', 'woocommerce-mailchimp' ), $this->api()->get_error_message(), $this->api()->get_error_code() );
 
 				// Log
 				$this->log( $error_response );
@@ -490,7 +490,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				do_action( $this->namespace_prefixed( 'subscription_failed' ), $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
 
 				// Email admin
-				wp_mail( get_option( 'admin_email' ), __( 'WooCommerce MailChimp subscription failed', $this->namespace ), $error_response );
+				wp_mail( get_option( 'admin_email' ), __( 'WooCommerce MailChimp subscription failed', 'woocommerce-mailchimp' ), $error_response );
 			} else {
 				// Hook on success
 				do_action( $this->namespace_prefixed( 'subscription_success' ), $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
