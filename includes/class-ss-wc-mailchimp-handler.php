@@ -196,22 +196,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		}
 
 		/**
-		 * Check if the user has enabled the plugin functionality, but hasn't provided an api key
-		 **/
-		function checks() {
-			// Check required fields
-			if ( $this->is_enabled() && ! $this->has_api_key() ) {
-				// Show notice
-				echo $this->get_message( sprintf( '%s <a href="%s">%s</a>.', 
-						__( 'WooCommerce MailChimp error: Plugin is enabled but no api key provided. Please enter your api key', $this->namespace ),
-						WOOCOMMERCE_MAILCHIMP_SETTINGS_URL,
-						__( 'here', $this->namespace ) 
-					)
-				);
-			}
-		}
-
-		/**
 		 * order_status_changed function.
 		 *
 		 * @access public
