@@ -54,6 +54,8 @@ final class SS_WC_MailChimp_Plugin {
 
 		do_action( 'ss_wc_mailchimp_loaded' );
 
+		self::update();
+
 	} //end function __construct
 
 	/**
@@ -234,6 +236,10 @@ final class SS_WC_MailChimp_Plugin {
 
 	} //end function enqueue_scripts
 
+	public static function update() {
+		SS_WC_MailChimp_Migrator::migrate( self::version() );
+	}
+
 	/**
 	 * Plugin activate function.
 	 *
@@ -246,7 +252,7 @@ final class SS_WC_MailChimp_Plugin {
 
 		require_once( 'class-ss-wc-mailchimp-migrator.php' );
 
-		SS_WC_MailChimp_Migrator::migrate( self::version() );
+		self::update();
 
 	} //end function activate
 
