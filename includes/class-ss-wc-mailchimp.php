@@ -62,7 +62,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( 'sswcmc_lists', $results, 60*60*1 );
+			set_transient( 'sswcmc_lists', $results, 60*15*1 );
 
 		}
 
@@ -157,7 +157,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( "sswcmc_{$list_id}_interest_categories", $results, 60*60*1 );
+			set_transient( "sswcmc_{$list_id}_interest_categories", $results, 60*15*1 );
 
 		}
 
@@ -195,7 +195,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( "sswcmc_{$list_id}_{$interest_category_id }_interests", $results, 60*60*1 );
+			set_transient( "sswcmc_{$list_id}_{$interest_category_id }_interests", $results, 60*15*1 );
 
 		}
 
