@@ -7,7 +7,7 @@ final class SS_WC_MailChimp_Plugin {
 
 	private static $_instance;
 
-	private static $version = '2.0';
+	private static $version = '2.0.1';
 
 	public static function version() {
 		return self::$version;
