@@ -203,11 +203,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 			// Check required fields
 			if ( $this->is_enabled() && ! $this->has_api_key() ) {
 				// Show notice
-				echo $this->get_message( sprintf( '%s <a href="%s">%s</a>.', 
-						__( 'WooCommerce MailChimp error: Plugin is enabled but no api key provided. Please enter your api key', $this->namespace ),
-						WOOCOMMERCE_MAILCHIMP_SETTINGS_URL,
-						__( 'here', $this->namespace ) 
-					)
+				echo $this->get_message( sprintf( __( 'WooCommerce MailChimp error: Plugin is enabled but no api key provided. Please enter your api key %shere%s.', $this->namespace ), '<a href="' . WOOCOMMERCE_MAILCHIMP_SETTINGS_URL . '">', '</a>')
 				);
 			}
 		}
@@ -320,9 +316,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 					'id'          => $this->namespace_prefixed( 'api_key' ),
 					'title'       => __( 'API Key', $this->namespace ),
 					'type'        => 'text',
-					'desc' => sprintf( '<br/><a href="https://admin.mailchimp.com/account/api/" target="_blank">%s</a> %s', 
-						__( 'Login to MailChimp', $this->namespace ),
-						__( 'to look up your api key.', $this->namespace )
+					'desc' => sprintf( __( '%sLogin to MailChimp%s to look up your api key.', $this->namespace ), '<br/><a href="https://admin.mailchimp.com/account/api/" target="_blank">', '</a>'
 					),
 					'default'     => '',
 					'css'         => 'min-width:350px;',
@@ -696,7 +690,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		 * Inform the user they don't have any MailChimp lists
 		 */
 		public function mailchimp_no_lists_found() {
-			echo $this->get_message( sprintf( __( 'Oops! There are no lists in your MailChimp account. <a href="%s" target="_blank">Click here</a> to create one.', $this->namespace ), 'https://admin.mailchimp.com/lists/new-list/' ) );
+			echo $this->get_message( sprintf( __( 'Oops! There are no lists in your MailChimp account. %sClick here%s to create one.', $this->namespace ), '<a href="https://admin.mailchimp.com/lists/new-list/" target="_blank">', '</a>' ) );
 		}
 
 		/**
@@ -709,7 +703,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		public function mailchimp_api_error_msg() {
 			echo $this->get_message(
 				sprintf( __( 'Unable to load lists from MailChimp: (%s) %s. ', $this->namespace ), $this->api()->get_error_code(), $this->api()->get_error_message() ) .
-				sprintf( __( 'Please check your %s <a href="%s">settings</a>.', $this->namespace ), __( 'Settings', $this->namespace ), WOOCOMMERCE_MAILCHIMP_SETTINGS_URL )
+				sprintf( __( 'Please check your Settings %ssettings%s.', $this->namespace ), '<a href="' . WOOCOMMERCE_MAILCHIMP_SETTINGS_URL .'">', '</a>' )
 			);
 		} //end function mailchimp_api_error_msg 
 
