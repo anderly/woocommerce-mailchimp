@@ -7,10 +7,13 @@ final class SS_WC_MailChimp_Plugin {
 
 	private static $_instance;
 
+	private static $version = '2.0';
+
 	public static function version() {
-		$plugin_data = get_plugin_data( SS_WC_MAILCHIMP_FILE );
-		$plugin_version = $plugin_data['Version'];
-		return $plugin_version;
+		return self::$version;
+		// $plugin_data = get_plugin_data( SS_WC_MAILCHIMP_FILE );
+		// $plugin_version = $plugin_data['Version'];
+		// return $plugin_version;
 	}
 
 	/**
@@ -68,6 +71,8 @@ final class SS_WC_MailChimp_Plugin {
 
 		$this->define( 'SS_WC_MAILCHIMP_SETTINGS_URL', $this->settings_url );
 
+		$this->define( 'SS_WC_MAILCHIMP_PLUGIN_VERSION', self::version() );
+
 	}
 
 	/**
@@ -87,13 +92,15 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	public function includes() {
 
-		if( ! class_exists( 'SS_WC_MailChimp_Container' ) ) {
+		if ( ! class_exists( 'SS_WC_MailChimp_Container' ) ) {
 			require_once( 'class-ss-wc-mailchimp-container.php' );
 		}
 
-		if( ! function_exists( 'ss_wc_mailchimp' ) ) {
+		if ( ! function_exists( 'ss_wc_mailchimp' ) ) {
 			require_once( 'functions.php' );
 		}
+
+		require_once( 'lib/class-ss-system-info.php' );
 
 		require_once( 'class-ss-wc-mailchimp-api.php' );
 

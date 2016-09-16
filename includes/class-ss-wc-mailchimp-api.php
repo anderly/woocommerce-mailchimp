@@ -151,7 +151,7 @@ class SS_WC_MailChimp_API {
 				'Content-Type'   => 'application/json',
 				'Accept'         => 'application/json',
 				'Authorization'  => 'apikey ' . $this->api_key,
-				'User-Agent'     => 'woocommerce-mailchimp/' . SS_WC_MailChimp_Plugin::version() . '; WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' ),
+				'User-Agent'     => 'woocommerce-mailchimp/' . SS_WC_MAILCHIMP_PLUGIN_VERSION . '; WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' ),
 			),
 		);
 

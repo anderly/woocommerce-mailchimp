@@ -243,6 +243,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 			// Hooks
 			add_action( 'admin_notices', array( $this, 'checks' ) );
+			add_action( 'woocommerce_admin_field_sysinfo', array( $this, 'sysinfo_field' ), 10, 1 );
 
 		} //end function ensure_tab
 
@@ -330,9 +331,9 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 			$mailchimp_lists = $this->get_lists();
 
-			// if ( ! $this->has_api_key() || $mailchimp_lists === false ) {
-			// 	$settings[] = array( 'type' => 'sectionend', 'id' => 'general_options' );
-			// }
+			if ( ! $this->has_api_key() || $mailchimp_lists === false ) {
+				$settings[] = array( 'type' => 'sectionend', 'id' => 'general_options' );
+			}
 			// if ( !$this->has_api_key() ) {
 			// 	$form_fields['api_key']['description'] = sprintf( '%s <strong>%s</strong> %s.<br/>', 
 			// 		__( 'Paste your API key above and click', $this->namespace ),
@@ -411,22 +412,6 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 					);
 
 					$settings[] = array(
-						'id'       => $this->namespace_prefixed( 'display_opt_in' ),
-						'title'    => __( 'Subscribe Customers', $this->namespace ),
-						'desc'     => __( '<p>Choose <strong>Automatically</strong> to subscribe customers silently upon checkout. Caution, this is without the customer\'s consent.</p> <p>Choose <strong>Ask for permission</strong> to show an "Opt-in" checkbox during checkout. Customers will only be subscribed to the list above if they opt-in.', $this->namespace ),
-						'type'     => 'select',
-						'css'      => 'min-width:300px;',
-						'class'    => 'wc-enhanced-select',
-						'desc_tip' => true,
-						'default'  => 1,
-						'options'  => array(
-							// '0' => __( 'Disabled', $this->namespace ),
-							'no' => __( 'Automatically', $this->namespace ),
-							'yes' => __( 'Ask for permission', $this->namespace )
-						)
-					);
-
-					$settings[] = array(
 							'id'          => $this->namespace_prefixed( 'occurs' ),
 							'title'       => __( 'Subscribe Event', $this->namespace ),
 							'type'        => 'select',
@@ -449,6 +434,31 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 							'default'     => 'no',
 							'desc_tip'    => __( 'If enabled, customers will receive an email prompting them to confirm their subscription to the list above.', $this->namespace ),
 						);
+
+					// $settings[] = array(
+					// 	'id'       => $this->namespace_prefixed( 'display_opt_in' ),
+					// 	'title'    => __( 'Display Opt-In Field', $this->namespace ),
+					// 	'desc'     => __( 'Display an Opt-In Field on Checkout', $this->namespace ),
+					// 	'type'     => 'checkbox',
+					// 	'desc_tip' => __( '<p>Choose <strong>Automatically</strong> to subscribe customers silently upon checkout. Caution, this is without the customer\'s consent.</p> <p>Choose <strong>Ask for permission</strong> to show an "Opt-in" checkbox during checkout. Customers will only be subscribed to the list above if they opt-in.' , $this->namespace ),
+					// 	'default'  => no,
+					// );
+
+					$settings[] = array(
+						'id'       => $this->namespace_prefixed( 'display_opt_in' ),
+						'title'    => __( 'Subscribe Customers', $this->namespace ),
+						'desc'     => __( '<p>Choose <strong>Ask for permission</strong> to show an "Opt-in" checkbox during checkout. Customers will only be subscribed to the list above if they opt-in. <p>Choose <strong>Automatically</strong> to subscribe customers silently upon checkout. Caution, this is without the customer\'s consent.</p>', $this->namespace ),
+						'type'     => 'select',
+						'css'      => 'min-width:300px;',
+						'class'    => 'wc-enhanced-select',
+						'desc_tip' => true,
+						'default'  => 'yes',
+						'options'  => array(
+							// '0' => __( 'Disabled', $this->namespace ),
+							'yes' => __( 'Ask for permission', $this->namespace ),
+							'no' => __( 'Automatically', $this->namespace ),
+						)
+					);
 
 					// $settings[] = array(
 					// 		'id'          => $this->namespace_prefixed( 'display_opt_in' ),
@@ -535,6 +545,14 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'type'        => 'checkbox',
 						'default'     => 'no',
 						'desc_tip'    => __( 'Enable logging MailChimp API calls. Only enable for troubleshooting purposes.', $this->namespace ),
+					);
+
+				$settings[]  = array(
+						'id'          => 'sysinfo',
+						'title'       => __( 'System Info', $this->namespace ),
+						'type'        => 'sysinfo',
+						'desc'        => __( 'Copy the information below and send it to us when reporting an issue with the plugin.<p/>', $this->namespace ),
+						'desc_tip'    => '',
 					);
 
 				$settings[] = array( 'type' => 'sectionend', 'id' => 'troubleshooting_settings' );
@@ -711,6 +729,36 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 					$logger->add( 'woocommerce-mailchimp', $message );
 				}
 			}
+		}
+
+		public function sysinfo_field( $value ) {
+
+			// $option_value = self::get_option( $value['id'], $value['default'] );
+			$option_value = SS_System_Info::get_system_info();
+			// Description handling
+			$field_description = WC_Admin_Settings::get_field_description( $value );
+			extract( $field_description );
+			?>
+			<tr valign="top">
+				<th scope="row" class="titledesc">
+					<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+					<?php echo $tooltip_html; ?>
+				</th>
+				<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+					<?php echo $description; ?>
+
+					<textarea
+						name="<?php echo esc_attr( $value['id'] ); ?>"
+						id="<?php echo esc_attr( $value['id'] ); ?>"
+						style="font-family: Menlo,Monaco,monospace;display: block; overflow: auto; white-space: pre; width: 800px; height: 400px;<?php echo esc_attr( $value['css'] ); ?>"
+						class="<?php echo esc_attr( $value['class'] ); ?>"
+						placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+						readonly="readonly" onclick="this.focus(); this.select()"
+						<?php //echo implode( ' ', $custom_attributes ); ?>
+						><?php echo esc_textarea( $option_value );  ?></textarea>
+				</td>
+			</tr>
+			<?php
 		}
 
 	} //end class SS_WC_MailChimp
