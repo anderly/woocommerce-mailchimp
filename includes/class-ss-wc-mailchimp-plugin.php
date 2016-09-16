@@ -159,7 +159,6 @@ final class SS_WC_MailChimp_Plugin {
 		// Add the "Settings" links on the Plugins administration screen
 		if ( is_admin() ) {
 			add_filter( 'plugin_action_links_' . plugin_basename( SS_WC_MAILCHIMP_FILE ), array( $this, 'action_links' ) );
-			// add_filter( 'woocommerce_integrations', array( $this, 'add_mailchimp_integration' ) );
 			add_filter( 'woocommerce_get_settings_pages', array( $this, 'add_mailchimp_settings' ) );
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts') );
@@ -181,18 +180,6 @@ final class SS_WC_MailChimp_Plugin {
 		);
 
 		return array_merge( $plugin_links, $links );
-	}
-
-	/**
-	 * Add the Integration to WooCommerce
-	 */
-	public function add_mailchimp_integration( $integrations ) {
-
-		require_once( 'class-ss-wc-integration-mailchimp.php' );
-
-		$integrations[] = 'SS_WC_Integration_MailChimp';
-
-		return $integrations;
 	}
 
 	/**
