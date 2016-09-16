@@ -83,12 +83,12 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		}
 
 		/**
-		 * list function.
+		 * get_list function.
 		 *
 		 * @access public
 		 * @return string MailChimp list ID
 		 */
-		public function list() {
+		public function get_list() {
 			return $this->get_option( 'list' );
 		}
 
@@ -159,7 +159,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @return boolean
 		 */
 		public function has_list() {
-			if ( $this->list() ) {
+			if ( $this->get_list() ) {
 				return true;
 			}
 			return false;
@@ -214,10 +214,10 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
 				if ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) {
 					// log
-					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order->billing_email, $this->list() ) );
+					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order->billing_email, $this->get_list() ) );
 
 					// subscribe
-					$this->subscribe( $order->id, $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->list() );
+					$this->subscribe( $order->id, $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->get_list() );
 				}
 			}
 		}
@@ -436,7 +436,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			}
 
 			if ( 'false' == $list_id ) {
-				$list_id = $this->list();
+				$list_id = $this->get_list();
 			}
 
 			$merge_tags = array(

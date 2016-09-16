@@ -84,12 +84,12 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		}
 
 		/**
-		 * list function.
+		 * get_list function.
 		 *
 		 * @access public
 		 * @return string MailChimp list ID
 		 */
-		public function list() {
+		public function get_list() {
 			return $this->get_option( 'list' );
 		}
 
@@ -160,7 +160,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		 * @return boolean
 		 */
 		public function has_list() {
-			if ( $this->list() ) {
+			if ( $this->get_list() ) {
 				return true;
 			}
 			return false;
@@ -668,7 +668,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		public function get_interest_groups() {
 
 			if ( $this->api() && $this->has_list() ) {
-				$interest_groups = $this->api()->get_interest_categories_with_interests( $this->list() );
+				$interest_groups = $this->api()->get_interest_categories_with_interests( $this->get_list() );
 			} else {
 				return false;
 			}
