@@ -19,6 +19,7 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 **WooCommerce Event Selection**
 
 - Subscribe customers to MailChimp after order creation
+- Subscribe customers to MailChimp after order processing
 - Subscribe customers to MailChimp after order completion
 
 **Works with MailChimp Interest Groups**
@@ -55,7 +56,12 @@ WooCommerce MailChimp requires PHP 5.4+ (PHP 7.0+ recommended). You'll also need
 
 = Documentation & Support =
 
-Online documentation and code samples are available via our [Help Center](https://support.saintsystems.com/hc/en-us/sections/201959566). Given the free nature of this plugin, we cannot offer dedicated support via the WordPress.org forums (although we do check them). If you are interested in purchasing dedicated please contact us via our help center to get quote.
+Online documentation and code samples are available via our [Help Center](https://support.saintsystems.com/hc/en-us/sections/201959566).
+
+Please visit the
+[WooCommerce MailChimp support forum on WordPress.org](https://wordpress.org/support/plugin/woocommerce-mailchimp) for basic support and help from other users. Since this is a free plugin, we respond to these as we have time.
+
+Dedicated support will be available with the upcoming [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/).
 
 = Contribute =
 All development for WooCommerce MailChimp is [handled via GitHub](https://github.com/anderly/woocommerce-mailchimp). Opening new issues and submitting pull requests are welcome.
@@ -73,19 +79,21 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 = Usage =
 
-1. Go to WooCommerce > Settings > Integration > MailChimp
-2. First, enable the plugin and set your MailChimp API Key and hit save.
-3. Select whether you want customers to be subscribed to your MailChimp list after order creation or order completion (there's a difference in WooCommerce).
-4. Next, select your MailChimp list and set any interest group settings (optional) and hit save.
-5. That's it, now customers who purchase products from your WooCommerce store will automatically be subscribed to the selected list (and optional interest groups) in MailChimp!
+1. Go to WooCommerce > Settings > MailChimp
+2. First, paste your MailChimp API Key to get started.
+3. Select whether you want customers to be subscribed to your MailChimp list after order creation, order processing or order completion (there's a difference in WooCommerce).
+4. Next, select your MailChimp list and select any interest groups (optional).
+5. Select your opt-in, double opt-in settings and hit `Save changes`.
+6. That's it, your WooCommerce store is now integrated with MailChimp!
 
 == Screenshots ==
 
-1. WooCommerce MailChimp options screen.
+1. WooCommerce MailChimp general settings screen.
+2. WooCommerce MailChimp troubleshooting screen.
 
 == Changelog ==
 
-#### 2.0
+#### 2.0 - September 16, 2016
 
 **WARNING:** This release contains breaking changes to the plugins action hooks and filters. If you have custom code that hooks into the plugins action hooks and filters, please review the breaking changes below to know how to update your code appropriately.
 
@@ -114,6 +122,7 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 **Additions**
 
 - Added `Debug Log` setting to enable/disable logging for troubleshooting purposes.
+- Added `System Info` setting for troubleshooting purposes.
 - New action hook `ss_wc_mailchimp_loaded` fired after the plugin has loaded.
 - New action hook `ss_wc_mailchimp_before_opt_in_checkbox` fired before opt in checkbox is rendered.
 - New action filter `ss_wc_mailchimp_opt_in_checkbox` allows for overriding opt in checkbox rendering
