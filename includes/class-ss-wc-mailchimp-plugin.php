@@ -150,8 +150,8 @@ final class SS_WC_MailChimp_Plugin {
 	public function load_plugin_textdomain() {
 		$locale = apply_filters( 'plugin_locale', get_locale(), 'woocommerce-mailchimp' );
 
-		load_textdomain( $this->namespace, WP_LANG_DIR . '/woocommerce-mailchimp/woocommerce-mailchimp-' . $locale . '.mo' );
-		load_plugin_textdomain( $this->namespace, false, dirname( plugin_basename( SS_WC_MAILCHIMP_FILE ) ) . '/languages' );
+		load_textdomain( 'woocommerce-mailchimp', WP_LANG_DIR . '/woocommerce-mailchimp/woocommerce-mailchimp-' . $locale . '.mo' );
+		load_plugin_textdomain( 'woocommerce-mailchimp', false, dirname( plugin_basename( SS_WC_MAILCHIMP_FILE ) ) . '/languages' );
 	}
 
 	/**
