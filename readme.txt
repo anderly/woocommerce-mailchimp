@@ -1,9 +1,10 @@
 === WooCommerce MailChimp ===
 Contributors: saintsystems, anderly
+Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.6.1
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -97,9 +98,11 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
-#### 2.0 - 2.0.6 - September 16, 2016
+#### 2.0 - 2.0.7 - September 17, 2016
 
-**WARNING:** This release contains breaking changes to the plugins action hooks and filters. If you have custom code that hooks into the plugins action hooks and filters, please review the breaking changes below to know how to update your code appropriately. You must upgrade to version 2.X by December 31, 2016 because prior versions of the MailChimp API will stop working at that point.
+**WARNING:** This release contains breaking changes to the plugins action hooks and filters. If you have custom code that hooks into the plugins action hooks and filters, please review the breaking changes below to know how to update your code appropriately.
+
+**NOTE:** You must upgrade to version 2.X by December 31, 2016 as prior versions of the MailChimp API will stop working at that point.
 
 **Breaking Changes**
 

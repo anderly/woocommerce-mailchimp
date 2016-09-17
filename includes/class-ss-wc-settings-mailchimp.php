@@ -326,9 +326,9 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 			$mailchimp_lists = $this->get_lists();
 
-			if ( ! $this->has_api_key() || $mailchimp_lists === false ) {
-				$settings[] = array( 'type' => 'sectionend', 'id' => 'general_options' );
-			}
+			// if ( ! $this->has_api_key() || $mailchimp_lists === false ) {
+			// 	$settings[] = array( 'type' => 'sectionend', 'id' => 'general_options' );
+			// }
 			// if ( !$this->has_api_key() ) {
 			// 	$form_fields['api_key']['description'] = sprintf( '%s <strong>%s</strong> %s.<br/>', 
 			// 		__( 'Paste your API key above and click', 'woocommerce-mailchimp' ),

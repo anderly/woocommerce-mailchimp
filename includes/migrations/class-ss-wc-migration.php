@@ -1,6 +1,6 @@
 <?php
 
-abstract class SS_WC_MailChimp_Migration_Base {
+abstract class SS_WC_MailChimp_Migration {
 
 	protected $api;
 
@@ -11,13 +11,7 @@ abstract class SS_WC_MailChimp_Migration_Base {
 	protected $current_version;
 	protected $target_version;
 
-	protected $setting_keys;
-
-	protected $settings_key = 'woocommerce_mailchimp_settings';
-
-	public function __construct( $current_version, $target_version ) {
-
-		$this->settings_keys = array(
+	protected $setting_keys = array(
 			'api_key',
 			'enabled',
 			'list',
@@ -29,6 +23,10 @@ abstract class SS_WC_MailChimp_Migration_Base {
 			'opt_in_checkbox_default_status',
 			'opt_in_checkbox_display_location',
 		);
+
+	protected $settings_key = 'woocommerce_mailchimp_settings';
+
+	public function __construct( $current_version, $target_version ) {
 
 		$this->settings = array();
 

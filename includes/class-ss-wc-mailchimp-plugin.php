@@ -7,7 +7,7 @@ final class SS_WC_MailChimp_Plugin {
 
 	private static $_instance;
 
-	private static $version = '2.0.6';
+	private static $version = '2.0.7';
 
 	private static $text_domain = 'woocommerce-mailchimp';
 
