@@ -50,8 +50,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			$this->namespace  = 'ss_wc_' . $this->id;
 			$this->label      = __( 'MailChimp', 'woocommerce-mailchimp' );
 			
-			$this->init();
-			
 			$this->register_hooks();
 
 		} //end function __construct
@@ -172,7 +170,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @return boolean
 		 */
 		public function has_api_key() {
-			return !empty( $this->api_key() );
+			$api_key = $this->api_key();
+			return !empty( $api_key );
 		}
 
 		/**
@@ -222,14 +221,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			}
 		}
 
-		public function init() {
-
-			$this->api_key  = $this->get_option( 'api_key' );
-			
-			$this->enabled  = $this->get_option( 'enabled' );
-
-		}
-
 		public function get_option( $option_suffix ) {
 
 			return get_option( $this->namespace_prefixed( $option_suffix ) );
@@ -251,8 +242,10 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			// hook into woocommerce order status changed hook to handle the desired subscription event trigger
 			add_action( 'woocommerce_order_status_changed', array( $this, 'order_status_changed' ), 10, 3 );
 
+			$opt_in_checkbox_display_location = $this->opt_in_checkbox_display_location();
+
 			// Maybe add an "opt-in" field to the checkout
-			$opt_in_checkbox_display_location = !empty( $this->opt_in_checkbox_display_location() ) ? $this->opt_in_checkbox_display_location() : 'woocommerce_review_order_before_submit';
+			$opt_in_checkbox_display_location = !empty( $opt_in_checkbox_display_location ) ? $opt_in_checkbox_display_location : 'woocommerce_review_order_before_submit';
 
 			// Old opt-in checkbox display locations
 			$old_opt_in_checkbox_display_locations = array(

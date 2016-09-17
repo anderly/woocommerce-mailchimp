@@ -11,22 +11,24 @@ abstract class SS_WC_MailChimp_Migration_Base {
 	protected $current_version;
 	protected $target_version;
 
-	protected $setting_keys = array(
-		'api_key',
-		'enabled',
-		'list',
-		'interest_groups',
-		'display_opt_in',
-		'occurs',
-		'double_opt_in',
-		'opt_in_label',
-		'opt_in_checkbox_default_status',
-		'opt_in_checkbox_display_location',
-	);
+	protected $setting_keys;
 
 	protected $settings_key = 'woocommerce_mailchimp_settings';
 
 	public function __construct( $current_version, $target_version ) {
+
+		$this->settings_keys = array(
+			'api_key',
+			'enabled',
+			'list',
+			'interest_groups',
+			'display_opt_in',
+			'occurs',
+			'double_opt_in',
+			'opt_in_label',
+			'opt_in_checkbox_default_status',
+			'opt_in_checkbox_display_location',
+		);
 
 		$this->settings = array();
 

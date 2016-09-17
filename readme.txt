@@ -3,7 +3,7 @@ Contributors: saintsystems, anderly
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.6.1
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -97,9 +97,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
-#### 2.0 - 2.0.4 - September 16, 2016
+#### 2.0 - 2.0.5 - September 16, 2016
 
-**WARNING:** This release contains breaking changes to the plugins action hooks and filters. If you have custom code that hooks into the plugins action hooks and filters, please review the breaking changes below to know how to update your code appropriately.
+**WARNING:** This release contains breaking changes to the plugins action hooks and filters. If you have custom code that hooks into the plugins action hooks and filters, please review the breaking changes below to know how to update your code appropriately. You must upgrade to version 2.X by December 31, 2016 because prior versions of the MailChimp API will stop working at that point.
 
 **Breaking Changes**
 
@@ -136,6 +136,7 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 - Fixed issues with translations and text domains not loading properly.
 - Change `list` function to `get_list` to prevent PHP error
+- Fix issues with PHP version < 5.5
 
 #### 1.3.9 - September 13, 2016
 

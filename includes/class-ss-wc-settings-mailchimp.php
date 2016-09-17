@@ -173,7 +173,8 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		 * @return boolean
 		 */
 		public function has_api_key() {
-			return !empty( $this->api_key() );
+			$api_key = $this->api_key();
+			return !empty( $api_key );
 		}
 
 		/**
