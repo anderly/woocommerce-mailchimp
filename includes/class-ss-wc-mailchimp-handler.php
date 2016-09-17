@@ -437,7 +437,9 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				'LNAME' => $last_name
 			);
 
-			if ( ! empty( $this->interest_groups() ) ) {
+			$interest_groups = $this->interest_groups();
+
+			if ( ! empty(  $interest_groups) ) {
 				$interest_groups = array_fill_keys( $this->interest_groups(), true );
 
 				// Allow hooking into variables
