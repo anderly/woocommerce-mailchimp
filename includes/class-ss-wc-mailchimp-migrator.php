@@ -7,7 +7,7 @@ final class SS_WC_MailChimp_Migrator {
 
 	const VERSION_KEY = 'ss_wc_mailchimp_version';
 
-	const VERSIONS = array(
+	protected static $versions = array(
 		'1.3.X',
 		'2.0',
 	);
@@ -25,14 +25,14 @@ final class SS_WC_MailChimp_Migrator {
 
 			require_once( 'migrations/class-ss-wc-migration.php' );
 
-			$start = array_search( $current_version, self::VERSIONS );
+			$start = array_search( $current_version, self::$versions );
 
 			// error_log( 'Starting at migration ' . $start );
 
-			for ($start; $start < count(self::VERSIONS) - 1; $start++) {
+			for ($start; $start < count(self::$versions) - 1; $start++) {
 			    $next = $start + 1;
-			    $current_version = self::VERSIONS[$start];
-				$target_version = self::VERSIONS[$next];
+			    $current_version = self::$versions[$start];
+				$target_version = self::$versions[$next];
 
 				// error_log( 'Migrating from ' . $current_version . ' to ' . $target_version );
 				// 
