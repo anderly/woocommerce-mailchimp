@@ -6,6 +6,7 @@
 final class SS_WC_MailChimp_Migrator {
 
 	const VERSION_KEY = 'ss_wc_mailchimp_version';
+	const OLD_SETTINGS_KEY = 'woocommerce_mailchimp_settings';
 
 	protected static $versions = array(
 		'1.3.X',
@@ -14,7 +15,14 @@ final class SS_WC_MailChimp_Migrator {
 
 	public static function migrate( $target_version ) {
 
+		$old_settings = get_option( self::OLD_SETTINGS_KEY );
 		$current_version = get_option( self::VERSION_KEY );
+
+		if ( ! $old_settings && ! $current_version ) {
+			// This is a new install, so no need to migrate
+			return;
+		}
+
 		if ( ! $current_version ) {
 			$current_version = '1.3.X';
 		}
