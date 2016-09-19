@@ -57,6 +57,10 @@ var SS_WC_MailChimp = function($) {
 			$interestGroups.attr('disabled','disabled');
 		}
 
+		$apiKey.on('focus', function() {
+			apiKeyChangeTriggered = false;
+		});
+
 		$apiKey.change(function() {
 			checkApiKey($apiKey.val(), true);
 		});
@@ -72,10 +76,10 @@ var SS_WC_MailChimp = function($) {
 		});
 
 		$apiKey.on('paste cut', function() {
-
 			// Short pause to wait for paste to complete
 			setTimeout( function() {
 				$apiKey.change();
+				$apiKey.blur();
 			}, 100);
 		});
 
