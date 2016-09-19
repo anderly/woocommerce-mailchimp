@@ -327,11 +327,11 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			try {
 
-				// if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
+				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
-				// 	return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'ss_wc_mailchimp' ) ) );
+					return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'ss_wc_mailchimp' ) ) );
 
-				// }
+				}
 
 				if ( !$_POST['data']['list_id'] || empty( $_POST['data']['list_id'] ) ) {
 
@@ -339,9 +339,10 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				}
 
+				$api_key = $_POST['data']['api_key'];
 				$list_id = $_POST['data']['list_id'];
 
-				$interest_groups = $this->mailchimp()->get_interest_categories_with_interests( $list_id );
+				$interest_groups = $this->mailchimp( $api_key )->get_interest_categories_with_interests( $list_id );
 
 				$results = $interest_groups;
 
