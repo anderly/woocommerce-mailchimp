@@ -292,6 +292,11 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 			if ( !isset( $_POST[ 'ss_wc_mailchimp_api_key' ] ) || empty( $_POST[ 'ss_wc_mailchimp_api_key' ] )  ) {
 				delete_transient( 'sswcmc_lists' );
 			}
+
+			$sswcmc = SSWCMC();
+			// Trigger reload of plugin settings
+			$settings = $sswcmc->settings( true );
+			$sswcmc->mailchimp( $settings['api_key'] );
 		}
 
 		/**
@@ -543,11 +548,11 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		 * API Instance Singleton
 		 * @return Object
 		 */
-		public function mailchimp() {
+		public function mailchimp( $api_key = null ) {
 
 			$sswcmc = SSWCMC();
 
-			return $sswcmc->mailchimp();
+			return $sswcmc->mailchimp( $api_key );
 
 		}
 

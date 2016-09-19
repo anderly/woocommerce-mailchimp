@@ -9,7 +9,7 @@ final class SS_WC_MailChimp_Plugin {
 	 * Plugin version
 	 * @var string
 	 */
-	private static $version = '2.0.10';
+	private static $version = '2.0.11';
 
 	/**
 	 * Plugin singleton instance
@@ -79,7 +79,7 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	public function settings( $refresh = false ) {
 
-		if ( empty( $this->settings ) ) {
+		if ( empty( $this->settings ) || true === $refresh ) {
 
 			$defaults = require( SS_WC_MAILCHIMP_DIR . 'config/default-settings.php' );
 			$settings = array();
