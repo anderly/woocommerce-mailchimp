@@ -4,7 +4,7 @@ Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.6.1
-Stable tag: 2.0.11
+Stable tag: 2.0.12
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -113,7 +113,7 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
-#### 2.0 - 2.0.11 - September 19, 2016
+#### 2.0 - 2.0.12 - September 19, 2016
 
 **NOTE:** You must upgrade to version 2.X by December 31, 2016 as prior versions of the MailChimp API will stop working at that point.
 
