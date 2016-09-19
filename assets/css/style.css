@@ -15,9 +15,34 @@
 }
 
 .woocommerce-mailchimp-loading-indicator {
-	background: url(../images/loading.gif) center left no-repeat;
-    background-size: 16px 16px;
-    line-height: 16px;
-    padding-right: 16px;
-    margin-right: 5px;
+    color: #32373c;
+}
+
+.woocommerce-mailchimp-loading-indicator:before {
+	font-family: dashicons;
+    line-height: 1.5em;
+    display: inline-block;
+    font-size: 20px;
+    line-height: 1;
+    text-decoration: inherit;
+    font-weight: 400;
+    font-style: normal;
+    vertical-align: top;
+    text-align: center;
+	content: "\f463";
+}
+
+.woocommerce-mailchimp-loading-indicator.loading:before {\
+	-webkit-animation: rotation 2s infinite linear;
+	animation: rotation 2s infinite linear;
+}
+
+.woocommerce-mailchimp-loading-indicator.success:before {
+	color: #46b450;
+	content: "\f147";
+}
+
+.woocommerce-mailchimp-loading-indicator.error:before {
+	color: #dc3232;
+	content: "\f534";
 }

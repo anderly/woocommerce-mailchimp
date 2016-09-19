@@ -16,28 +16,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 	 */
 	class SS_WC_MailChimp_Handler {
 
-		private static $_instance;
-
-		/**
-		 * Singleton instance
-		 *
-		 * @return SS_WC_Settings_MailChimp   SS_WC_Settings_MailChimp object
-		 */
-		public static function get_instance() {
-
-			if ( empty( self::$_instance ) ) {
-				self::$_instance = new self;
-			}
-
-			return self::$_instance;
-		}
-
-		/**
-		 * Instance of the API class.
-		 * @var Object
-		 */
-		private static $api_instance = null;
-
 		/**
 		 * Constructor
 		 *
@@ -259,15 +237,52 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			}
 
 			add_action( $opt_in_checkbox_display_location, array( $this, 'maybe_add_checkout_fields' ) );
+
 			add_filter( 'default_checkout_ss_wc_mailchimp_opt_in', array( $this, 'checkbox_default_status' ) );
 
 			// Maybe save the "opt-in" field on the checkout
-			add_action( 'woocommerce_checkout_update_order_meta',  array( $this, 'maybe_save_checkout_fields' ) );
+			add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'maybe_save_checkout_fields' ) );
+
+			add_action( 'wp_ajax_ss_wc_mailchimp_get_account', array( $this, 'ajax_get_account' ) );
 
 			add_action( 'wp_ajax_ss_wc_mailchimp_get_lists', array( $this, 'ajax_get_lists' ) );
+
 			add_action( 'wp_ajax_ss_wc_mailchimp_get_interest_groups', array( $this, 'ajax_get_interest_groups' ) );
 
 		} //end function ensure_tab
+
+		/**
+		 * Return all lists from MailChimp to be used in select fields
+		 * 
+		 * @access public
+		 * @return array
+		 */
+		public function ajax_get_account() {
+
+			try {
+
+				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
+
+					throw new Exception( __( 'Please enter an api key.', 'woocommerce-mailchimp' ) );
+
+				}
+
+				$api_key = $_POST['data']['api_key'];
+
+				$account = $this->mailchimp()->get_account( $api_key );
+
+				$results = $account;
+
+			}
+			catch ( Exception $e ) {
+
+				return $this->toJSON( array( 'error' => $e->getMessage() ) );
+
+			}
+
+			return $this->toJSON( $results );
+
+		} //end function ajax_get_account
 
 		/**
 		 * Return all lists from MailChimp to be used in select fields
@@ -287,7 +302,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				$api_key = $_POST['data']['api_key'];
 
-				$lists = $this->api( $api_key )->get_lists();
+				$lists = $this->mailchimp( $api_key )->get_lists();
 
 				$results = array_merge( array('' => 'Select a list...'), $lists );
 
@@ -312,11 +327,11 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			try {
 
-				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
+				// if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
-					return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'ss_wc_mailchimp' ) ) );
+				// 	return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'ss_wc_mailchimp' ) ) );
 
-				}
+				// }
 
 				if ( !$_POST['data']['list_id'] || empty( $_POST['data']['list_id'] ) ) {
 
@@ -324,11 +339,9 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				}
 
-				$api_key = $_POST['data']['api_key'];
-
 				$list_id = $_POST['data']['list_id'];
 
-				$interest_groups = $this->api( $api_key )->get_interest_categories_with_interests( $list_id );
+				$interest_groups = $this->mailchimp()->get_interest_categories_with_interests( $list_id );
 
 				$results = $interest_groups;
 
@@ -392,24 +405,12 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * API Instance Singleton
 		 * @return Object
 		 */
-		public function api( $api_key = null ) {
-			// if ( is_null( self::$api_instance ) ) {
-			// 	if ( ! $this->has_api_key() && empty( $api_key ) ) {
-			// 		return false;
-			// 	}
-			// 	require_once( 'class-ss-wc-mailchimp-api.php' );
-			// 	self::$api_instance = new SS_WC_MailChimp_API( ( $api_key ? $api_key : $this->api_key() ), $this->debug_enabled() );
-			// }
-			// return self::$api_instance;
-			if ( ! is_null( $api_key ) ) {
-				global $ss_wc_mailchimp;
+		public function mailchimp( $api_key = null ) {
 
-				// $ss_wc_mailchimp['api'] = new SS_WC_MailChimp( $api_key , $this->debug_enabled() );
-				$ss_wc_mailchimp['api'] = ss_wc_mailchimp_get_api( $api_key , $this->debug_enabled() );
+			$sswcmc = SSWCMC();
 
-				delete_transient( 'sswcmc_lists' );
-			}
-			return ss_wc_mailchimp('api');
+			return $sswcmc->mailchimp( $api_key );
+
 		}
 
 		/**
@@ -469,14 +470,14 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer to MailChimp: %s', 'woocommerce-mailchimp' ), print_r( $options, true ) ) );
 
 			// Call API
-			$api_response = $this->api()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_optin );
+			$api_response = $this->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_optin );
 
 			// Log api response
 			$this->log( sprintf( __( __METHOD__ . '(): MailChimp API response: %s', 'woocommerce-mailchimp' ), print_r( $api_response, true ) ) );
 
 			if ( $api_response === false ) {
 				// Format error message
-				$error_response = sprintf( __( __METHOD__ . '(): WooCommerce MailChimp subscription failed: %s (%s)', 'woocommerce-mailchimp' ), $this->api()->get_error_message(), $this->api()->get_error_code() );
+				$error_response = sprintf( __( __METHOD__ . '(): WooCommerce MailChimp subscription failed: %s (%s)', 'woocommerce-mailchimp' ), $this->mailchimp()->get_error_message(), $this->mailchimp()->get_error_code() );
 
 				// Log
 				$this->log( $error_response );

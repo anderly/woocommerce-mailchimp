@@ -2,7 +2,7 @@
 
 abstract class SS_WC_MailChimp_Migration {
 
-	protected $api;
+	protected $mailchimp;
 
 	protected $settings;
 
@@ -38,7 +38,7 @@ abstract class SS_WC_MailChimp_Migration {
 		if ( empty( $this->settings['api_key'] ) ) return;
 
 		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp.php' );
-		$this->api = new SS_WC_MailChimp( $this->settings['api_key'] );
+		$this->mailchimp = new SS_WC_MailChimp( $this->settings['api_key'] );
 	}
 
 	/**

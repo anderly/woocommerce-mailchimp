@@ -17,11 +17,17 @@ class SS_WC_MailChimp {
 	 */
 	public $api;
 
+	public $api_key;
+
+	public $debug;
+
 	/**
 	 * Create a new instance
 	 * @param string $api_key MailChimp API key
 	 */
 	function __construct( $api_key, $debug = false ) {
+
+		$this->api_key = $api_key;
 
 		$this->debug = $debug;
 
@@ -29,6 +35,32 @@ class SS_WC_MailChimp {
 		$this->api = new SS_WC_MailChimp_API( $api_key, $debug );
 
 	} //end function __construct
+
+	/**
+	 * Get account
+	 * 
+	 * @access public
+	 * @return mixed
+	 */
+	public function get_account( $api_key = null ) {
+
+		$resource = '';
+
+		$api = $this->api;
+
+		if ( ! empty( $api_key ) ) {
+			$api = new SS_WC_MailChimp_API( $api_key, $this->debug );
+		}
+
+		$account = $api->get( $resource );
+
+		if ( ! $account ) {
+			return false;
+		}
+
+		return $account;
+
+	} //end function get_account
 
 	/**
 	 * Get list

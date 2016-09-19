@@ -25,7 +25,7 @@ final class SS_WC_MailChimp_Migration_From_13X_To_20 extends SS_WC_MailChimp_Mig
 
 			if ( empty( $interest_groupings ) || empty( $groups ) || empty( $list ) ) return;
 
-			$interest_categories = $this->api->get_interest_categories( $list );
+			$interest_categories = $this->mailchimp->get_interest_categories( $list );
 
 			$selected_interest_category = array_filter( $interest_categories, function($v) use($interest_groupings) {
 				return $v == $interest_groupings;
@@ -33,7 +33,7 @@ final class SS_WC_MailChimp_Migration_From_13X_To_20 extends SS_WC_MailChimp_Mig
 
 			$selected_interest_category_id = key( $selected_interest_category );
 
-			$interest_category_interests = $this->api->get_interest_category_interests( $list, $selected_interest_category_id );
+			$interest_category_interests = $this->mailchimp->get_interest_category_interests( $list, $selected_interest_category_id );
 
 			$groups = explode( ',', $groups );
 

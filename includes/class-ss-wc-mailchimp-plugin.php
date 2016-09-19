@@ -5,17 +5,42 @@
  */
 final class SS_WC_MailChimp_Plugin {
 
-	private static $_instance;
+	/**
+	 * Plugin version
+	 * @var string
+	 */
+	private static $version = '2.0.9';
 
-	private static $version = '2.0.8';
+	/**
+	 * Plugin singleton instance
+	 * @var SS_WC_MailChimp_Plugin
+	 */
+	private static $instance;
 
-	private static $text_domain = 'woocommerce-mailchimp';
+	/**
+	 * Plugin namespace
+	 * @var string
+	 */
+	private $namespace = 'ss_wc_mailchimp';
 
+	/**
+	 * Plugin settings
+	 * @var array
+	 */
+	private $settings;
+
+	/**
+	 * Plugin MailChimp helper instance
+	 * @var SS_WC_MailChimp
+	 */
+	private $mailchimp;
+
+	/**
+	 * Returns the plugin version
+	 * @return string
+	 */
 	public static function version() {
 		return self::$version;
-		// $plugin_data = get_plugin_data( SS_WC_MAILCHIMP_FILE );
-		// $plugin_version = $plugin_data['Version'];
-		// return $plugin_version;
 	}
 
 	/**
@@ -23,61 +48,110 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @return SS_WC_MailChimp_Plugin   SS_WC_MailChimp_Plugin object
 	 */
-	public static function get_instance() {
+	public static function instance() {
 
-		if ( empty( self::$_instance ) ) {
-			self::$_instance = new self;
+		if ( empty( self::$instance ) && ! ( self::$instance instanceof SS_WC_MailChimp_Plugin ) ) {
+
+			self::$instance = new SS_WC_MailChimp_Plugin;
+			self::$instance->define_constants();
+
+			add_action( 'plugins_loaded', array( self::$instance, 'load_plugin_textdomain' ) );
+
+			self::$instance->save_settings();
+			self::$instance->settings();
+			self::$instance->includes();
+			self::$instance->mailchimp();
+			self::$instance->handler = new SS_WC_MailChimp_Handler();
+			self::$instance->add_hooks();
+
+			do_action( 'ss_wc_mailchimp_loaded' );
+
 		}
 
-		return self::$_instance;
+		return self::$instance;
+
+	} //end function instance
+
+	/**
+	 * Gets the plugin db settings
+	 * @param  boolean $refresh refresh the settings from DB?
+	 * @return array  The plugin db settings
+	 */
+	public function settings( $refresh = false ) {
+
+		if ( empty( $this->settings ) ) {
+
+			$defaults = require( SS_WC_MAILCHIMP_DIR . 'config/default-settings.php' );
+			$settings = array();
+
+			foreach ( $defaults as $key => $val ) {
+				$settings[ $key ] = get_option( 'ss_wc_mailchimp_' . $key );
+			}
+
+			$this->settings = array_merge( $defaults, $settings );
+
+		}
+
+		return $this->settings;
 	}
 
 	/**
-	 * Constructor
-	 *
-	 * @access public
+	 * Saves the settings back to the DB
 	 * @return void
 	 */
-	public function __construct() {
+	public function save_settings() {
 
-		$this->id         = 'mailchimp';
-		$this->namespace  = 'ss_wc_' . $this->id;
-		$this->label      = __( 'MailChimp', 'woocommerce-mailchimp' );
+		$settings = $this->settings();
 
-		$this->settings_url = admin_url( 'admin.php?page=wc-settings&tab=' . $this->id );
+		foreach ( $settings as $key => $value ) {
+			update_option( $this->namespace_prefixed( $key ), $value );
+		}
 
-		$this->define_constants();
+	} //end function save_settings
 
-		$this->includes();
+	/**
+	 * Gets the MailChimp Helper
+	 * @param  string  $api_key MailChimp API Key
+	 * @param  boolean $debug   Debug mode enabled/disabled
+	 * @return SS_WC_MailChimp  MailChimp Helper class
+	 */
+	public function mailchimp( $api_key = null, $debug = false ) {
 
-		$this->init();
+		$settings = $this->settings();
 
-		$this->add_hooks();
+		if ( empty( $this->mailchimp ) || ! is_null( $api_key ) ) {
 
-		do_action( 'ss_wc_mailchimp_loaded' );
+			$api_key = $api_key ? $api_key : $settings['api_key'];
+			$debug   = $debug   ? $debug   : $settings['debug'];
 
-		self::update();
+			$this->mailchimp = new SS_WC_MailChimp( $api_key, $debug );
 
-	} //end function __construct
+			delete_transient( 'sswcmc_lists' );
+		}
+
+		return $this->mailchimp;
+
+	} //end function mailchimp
 
 	/**
 	 * Define Plugin Constants.
 	 */
 	private function define_constants() {
-		
-		global $woocommerce;
 
-		$settings_url = admin_url( 'admin.php?page=woocommerce_settings&tab=integration&section=mailchimp' );
+		// Plugin version.
+		$this->define( 'SS_WC_MAILCHIMP_VERSION', self::version() );
 
-		if ( $woocommerce->version >= '2.1' ) {
-			$settings_url = admin_url( 'admin.php?page=wc-settings&tab=integration&section=mailchimp' );
-		}
+		// Plugin Folder Path.
+		$this->define( 'SS_WC_MAILCHIMP_DIR', plugin_dir_path( SS_WC_MAILCHIMP_FILE ) );
 
-		$this->define( 'SS_WC_MAILCHIMP_SETTINGS_URL', $this->settings_url );
+		// Plugin Folder URL.
+		$this->define('SS_WC_MAILCHIMP_URL', plugin_dir_url( SS_WC_MAILCHIMP_FILE ) );
 
-		$this->define( 'SS_WC_MAILCHIMP_PLUGIN_VERSION', self::version() );
+		$settings_url = admin_url( 'admin.php?page=wc-settings&tab=mailchimp' );
 
-	}
+		$this->define( 'SS_WC_MAILCHIMP_SETTINGS_URL', $settings_url );
+
+	} //function define_constants
 
 	/**
 	 * Define constant if not already set.
@@ -89,20 +163,12 @@ final class SS_WC_MailChimp_Plugin {
 		if ( ! defined( $name ) ) {
 			define( $name, $value );
 		}
-	}
+	} //function define
 
 	/**
 	 * Include required core plugin files
 	 */
 	public function includes() {
-
-		if ( ! class_exists( 'SS_WC_MailChimp_Container' ) ) {
-			require_once( 'class-ss-wc-mailchimp-container.php' );
-		}
-
-		if ( ! function_exists( 'ss_wc_mailchimp' ) ) {
-			require_once( 'functions.php' );
-		}
 
 		require_once( 'lib/class-ss-system-info.php' );
 
@@ -112,31 +178,7 @@ final class SS_WC_MailChimp_Plugin {
 
 		require_once( 'class-ss-wc-mailchimp-handler.php' );
 
-	}
-
-	/**
-	 * Initialize the plugin
-	 * @return void
-	 */
-	private function init() {
-
-		if ( ! class_exists( 'WC_Integration' ) )
-			return;
-		
-		global $ss_wc_mailchimp;
-
-		/**
-		 * @global SS_WC_MailChimp_Container $GLOBALS['ss_wc_mailchimp']
-		 * @name $mc4wp
-		 */
-		$ss_wc_mailchimp = ss_wc_mailchimp();
-		$ss_wc_mailchimp['mailchimp'] = 'ss_wc_mailchimp_get_mailchimp';
-		$ss_wc_mailchimp['api'] = 'ss_wc_mailchimp_get_api';
-
-		// Set up localization.
-		$this->load_plugin_textdomain();
-
-	}
+	} //end function includes
 
 	/**
 	 * Load Localization files.
@@ -144,31 +186,60 @@ final class SS_WC_MailChimp_Plugin {
 	 * Note: the first-loaded translation file overrides any following ones if the same translation is present.
 	 *
 	 * Locales found in:
-	 *      - WP_LANG_DIR/woocommerce-mailchimp/woocommerce-mailchimp-LOCALE.mo
-	 *      - WP_CONTENT_DIR/plugins/woocommerce-mailchimp/languages/woocommerce-mailchimp-LOCALE.mo
+	 *      - WP_LANG_DIR/plugins/woocommerce-mailchimp/woocommerce-mailchimp-{lang}_{country}.mo
+	 *      - WP_CONTENT_DIR/plugins/woocommerce-mailchimp/languages/woocommerce-mailchimp-{lang}_{country}.mo
 	 */
 	public function load_plugin_textdomain() {
+
+		// Set filter for plugin's languages directory.
+		$woocommerce_mailchimp_lang_dir  = dirname( plugin_basename( SS_WC_MAILCHIMP_FILE ) ) . '/languages/';
+
+		// Traditional WordPress plugin locale filter.
+		// get locale in {lang}_{country} format (e.g. en_US)
 		$locale = apply_filters( 'plugin_locale', get_locale(), 'woocommerce-mailchimp' );
 
-		load_textdomain( 'woocommerce-mailchimp', WP_LANG_DIR . '/woocommerce-mailchimp/woocommerce-mailchimp-' . $locale . '.mo' );
-		load_plugin_textdomain( 'woocommerce-mailchimp', false, dirname( plugin_basename( SS_WC_MAILCHIMP_FILE ) ) . '/languages' );
-	}
+		$mofile = sprintf( '%1$s-%2$s.mo', 'woocommerce-mailchimp', $locale );
+
+		// Look for wp-content/languages/woocommerce-mailchimp/woocommerce-mailchimp-{lang}_{country}.mo
+		$mofile_global1 = WP_LANG_DIR . '/woocommerce-mailchimp/' . $mofile;
+
+		// Look in wp-content/languages/plugins/woocommerce-mailchimp
+		$mofile_global2 = WP_LANG_DIR . '/plugins/woocommerce-mailchimp/' . $mofile;
+
+		if ( file_exists( $mofile_global1 ) ) {
+
+			load_textdomain( 'woocommerce-mailchimp', $mofile_global1 );
+
+		} elseif ( file_exists( $mofile_global2 ) ) {
+
+			load_textdomain( 'woocommerce-mailchimp', $mofile_global2 );
+
+		} else {
+
+			// Load the default language files.
+			load_plugin_textdomain( 'woocommerce-mailchimp', false, $woocommerce_mailchimp_lang_dir );
+
+		}
+
+	} //end function load_plugin_textdomain
 
 	/**
 	 * Add plugin hooks
 	 */
 	private function add_hooks() {
+
 		// Add the "Settings" links on the Plugins administration screen
 		if ( is_admin() ) {
+
 			add_filter( 'plugin_action_links_' . plugin_basename( SS_WC_MAILCHIMP_FILE ), array( $this, 'action_links' ) );
+
 			add_filter( 'woocommerce_get_settings_pages', array( $this, 'add_mailchimp_settings' ) );
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts') );
 
 		}
 
-		SS_WC_MailChimp_Handler::get_instance();
-	}
+	} //end function add_hooks
 
 	/**
 	 * Add Settings link to plugins list
@@ -182,7 +253,8 @@ final class SS_WC_MailChimp_Plugin {
 		);
 
 		return array_merge( $plugin_links, $links );
-	}
+
+	} //end function action_links
 
 	/**
 	 * Add the MailChimp settings tab to WooCommerce
@@ -204,16 +276,16 @@ final class SS_WC_MailChimp_Plugin {
     public function enqueue_scripts() {
 
     	// Plugin scripts and styles
-		wp_register_script( 'woocommerce-mailchimp-admin', SS_WC_MAILCHIMP_PLUGIN_URL . '/assets/js/woocommerce-mailchimp-admin.js', array( 'jquery' ), self::version() );
-		wp_register_style( 'woocommerce-mailchimp', SS_WC_MAILCHIMP_PLUGIN_URL . '/assets/css/style.css', array(), self::version() );
+		wp_register_script( 'woocommerce-mailchimp-admin', SS_WC_MAILCHIMP_URL . 'assets/js/woocommerce-mailchimp-admin.js', array( 'jquery' ), self::version() );
+		wp_register_style( 'woocommerce-mailchimp', SS_WC_MAILCHIMP_URL . 'assets/css/style.css', array(), self::version() );
 
 		// Localize javascript messages
 		$translation_array = array(
-			'connecting_to_mailchimp' 		=> __( 'Connecting to MailChimp', 'woocommerce-mailchimp' ),
-			'error_loading_lists' 			=> __( 'Error loading lists. Please check your api key.', 'woocommerce-mailchimp' ),
-			'error_loading_groups' 			=> __( 'Error loading groups. Please check your MailChimp Interest Groups for the selected list.', 'woocommerce-mailchimp' ),
-			'select_groups_placeholder'		=> __( 'Select one or more groups (optional)', 'woocommerce-mailchimp' ),
-			'interest_groups_not_enabled' 	=> __( 'This list does not have interest groups enabled', 'woocommerce-mailchimp' ),
+			'connecting_to_mailchimp'       => __( 'Connecting to MailChimp', 'woocommerce-mailchimp' ),
+			'error_loading_account'         => __( 'Error. Please check your api key.', 'woocommerce-mailchimp' ),
+			'error_loading_groups'          => __( 'Error loading groups. Please check your MailChimp Interest Groups for the selected list.', 'woocommerce-mailchimp' ),
+			'select_groups_placeholder'     => __( 'Select one or more groups (optional)', 'woocommerce-mailchimp' ),
+			'interest_groups_not_enabled'   => __( 'This list does not have interest groups enabled', 'woocommerce-mailchimp' ),
 		);
 		wp_localize_script( 'woocommerce-mailchimp-admin', 'SS_WC_MailChimp_Messages', $translation_array );
 
@@ -255,8 +327,19 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	public static function deactivate( $network_wide ) {
 
-		
+		// Placeholder
 
 	} //end function deactivate
+
+	/**
+	 * Returns namespace prefixed value
+	 * @param  string  $suffix  The suffix to prefix
+	 * @return string
+	 */
+	private function namespace_prefixed( $suffix ) {
+
+		return $this->namespace . '_' . $suffix;
+
+	} // end function namespace_prefixed
 
 } //end final class SS_WC_MailChimp_Plugin

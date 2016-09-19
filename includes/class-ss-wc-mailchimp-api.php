@@ -43,6 +43,11 @@ class SS_WC_MailChimp_API {
 	private $last_error;
 
 	/**
+	 * @var WC_Logger
+	 */
+	private $log;
+
+	/**
 	 * Create a new instance
 	 * @param string $api_key MailChimp API key
 	 * @param boolean $debug  Whether or not to log API calls
@@ -51,7 +56,7 @@ class SS_WC_MailChimp_API {
 
 		$this->debug = $debug;
 
-		if ( $this->debug ) {
+		if ( $this->debug === true ) {
 			$this->log = new WC_Logger();
 		}
 
@@ -70,7 +75,7 @@ class SS_WC_MailChimp_API {
      */
 	public function get( $resource, $args = array() ) {
 
-		if ( ! array_key_exists( 'count', $args ) ) {
+		if ( is_array( $args) && ! array_key_exists( 'count', $args ) ) {
 			$args['count'] = 10;
 		}
 
@@ -151,7 +156,7 @@ class SS_WC_MailChimp_API {
 				'Content-Type'   => 'application/json',
 				'Accept'         => 'application/json',
 				'Authorization'  => 'apikey ' . $this->api_key,
-				'User-Agent'     => 'woocommerce-mailchimp/' . SS_WC_MAILCHIMP_PLUGIN_VERSION . '; WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' ),
+				'User-Agent'     => 'woocommerce-mailchimp/' . SS_WC_MAILCHIMP_VERSION . '; WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' ),
 			),
 		);
 
@@ -216,7 +221,7 @@ class SS_WC_MailChimp_API {
 	 */
 	private function maybe_log( $resource, $method, $args, $response ) {
 
-		if ( $this->debug ) {
+		if ( $this->debug === true ) {
 			$this->log->add( 'woocommerce-mailchimp', "MailChimp API Call RESOURCE: $resource \n METHOD: $method \n BODY: " . print_r( $args, true ) . " \n RESPONSE: " . print_r( $response, true ) );
 		}
 

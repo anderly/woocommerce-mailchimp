@@ -42,12 +42,20 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 
 **Included Translations:**
 
-- English (default)
+- English (US) (default)
 - French.
 
 **Custom Translations**
-- Place custom translations in `/wp-content/languages/woocommerce-mailchimp/woocommerce-mailchim_{locale}.[mo|po]`. This ensures they won't get overwritten by plugin updates.
-- If no custom translations are present, the plugin will load them from `/wp-content/plugins/woocommerce-mailchimp/languages/woocommerce-mailchimp_{locale}.[mo|po]`
+
+- Place custom translations in `/wp-content/languages/woocommerce-mailchimp/woocommerce-mailchimp_{lang}_{country}.mo`. This ensures they won't get overwritten by plugin updates.
+
+**Language Packs**
+
+- If no custom translations are present, languages will be loaded from language packs in `/wp-content/languages/plugins/woocommerce-mailchimp/woocommerce-mailchimp_{lang}_{country}.mo` or from `/wp-content/plugins/woocommerce-mailchimp/languages/woocommerce-mailchimp_{lang}_{country}.mo`
+
+Would you like to help translate the plugin into more languages? Join our Translations Community at https://translate.wordpress.org/projects/wp-plugins/woocommerce-mailchimp.
+
+WooCommerce translation is managed through https://translate.wordpress.org. This allows WooCommerce MailChimp to be translated into other languages. The preferred tool for translating plugins is called [GlotPress](https://make.wordpress.org/polyglots/handbook/tools/glotpress-translate-wordpress-org/). You can [read about how GlotPress works in the WordPress Translator's Handbook](https://make.wordpress.org/polyglots/handbook/tools/glotpress-translate-wordpress-org/).
 
 Thanks in advance for your help on any translation efforts!
 
