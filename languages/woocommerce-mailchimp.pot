@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: WooCommerce MailChimp\n"
-"POT-Creation-Date: 2016-09-19 11:36-0500\n"
-"PO-Revision-Date: 2016-09-19 11:34-0500\n"
+"POT-Creation-Date: 2016-09-20 10:27-0500\n"
+"PO-Revision-Date: 2016-09-20 10:27-0500\n"
 "Last-Translator: Adam Anderly <adam.anderly@saintsystems.com>\n"
 "Language-Team: Adam Anderly <adam.anderly@saintsystems.com>\n"
 "MIME-Version: 1.0\n"
@@ -21,75 +21,124 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
 #: config/default-settings.php:10
-#: includes/class-ss-wc-settings-mailchimp.php:416
+#: includes/class-ss-wc-settings-mailchimp.php:421
 msgid "Subscribe to our newsletter"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-handler.php:29
+#: includes/class-ss-wc-mailchimp-admin-notices.php:166
+msgid "Dismiss"
+msgstr ""
+
+#: includes/class-ss-wc-mailchimp-compatibility.php:158
+msgid ""
+"You are seeing this notice because you are an administrator. Other users of "
+"the site will see nothing."
+msgstr ""
+
+#: includes/class-ss-wc-mailchimp-compatibility.php:179
+#, php-format
+msgid ""
+"%sWooCommerce MailChimp requires PHP Version %s or newer.%s \n"
+"\n"
+"You're using Version %s. Please ask your host to upgrade your server's PHP."
+msgstr ""
+
+#: includes/class-ss-wc-mailchimp-compatibility.php:201
+#, php-format
+msgid ""
+"%sWooCommerce MailChimp requires WordPress %s or newer.%s \n"
+"\n"
+"You're using Version %s. Please upgrade your WordPress installation."
+msgstr ""
+
+#: includes/class-ss-wc-mailchimp-compatibility.php:253
+#, php-format
+msgid ""
+"%sWooCommerce MailChimp requires WooCommerce Version %s or newer.%s You're "
+"using Version %s. %sUpdate WooCommerce%s to use the WooCommerce MailChimp "
+"plugin."
+msgstr ""
+
+#: includes/class-ss-wc-mailchimp-compatibility.php:288
+#, php-format
+msgid ""
+"%sWooCommerce MailChimp requires WooCommerce to be active. %sActivate "
+"WooCommerce%s to use the WooCommerce MailChimp plugin."
+msgstr ""
+
+#: includes/class-ss-wc-mailchimp-compatibility.php:293
+#, php-format
+msgid ""
+"%sWooCommerce MailChimp requires WooCommerce to be installed in order to run "
+"properly. %sInstall WooCommerce%s to use the WooCommerce MailChimp plugin."
+msgstr ""
+
+#: includes/class-ss-wc-mailchimp-handler.php:35
 #: includes/class-ss-wc-settings-mailchimp.php:46
-#: includes/class-ss-wc-settings-mailchimp.php:308
+#: includes/class-ss-wc-settings-mailchimp.php:313
 msgid "MailChimp"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-handler.php:194
+#: includes/class-ss-wc-mailchimp-handler.php:213
 #, php-format
 msgid "(): Subscribing customer (%s) to list %s"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-handler.php:266
+#: includes/class-ss-wc-mailchimp-handler.php:285
 msgid "Please enter an api key."
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-handler.php:299
+#: includes/class-ss-wc-mailchimp-handler.php:318
+#: includes/class-ss-wc-mailchimp-handler.php:351
 msgid "Enter your api key above to see your lists"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-handler.php:338
+#: includes/class-ss-wc-mailchimp-handler.php:357
 msgid "Please select a list from above."
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-handler.php:470
+#: includes/class-ss-wc-mailchimp-handler.php:490
 #, php-format
 msgid "(): Subscribing customer to MailChimp: %s"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-handler.php:476
+#: includes/class-ss-wc-mailchimp-handler.php:496
 #, php-format
 msgid "(): MailChimp API response: %s"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-handler.php:480
+#: includes/class-ss-wc-mailchimp-handler.php:500
 #, php-format
 msgid "(): WooCommerce MailChimp subscription failed: %s (%s)"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-handler.php:489
+#: includes/class-ss-wc-mailchimp-handler.php:509
 msgid "WooCommerce MailChimp subscription failed"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-plugin.php:252
+#: includes/class-ss-wc-mailchimp-plugin.php:281
 msgid "Settings"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-plugin.php:284
+#: includes/class-ss-wc-mailchimp-plugin.php:313
 msgid "Connecting to MailChimp"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-plugin.php:285
+#: includes/class-ss-wc-mailchimp-plugin.php:314
 msgid "Error. Please check your api key."
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-plugin.php:286
+#: includes/class-ss-wc-mailchimp-plugin.php:315
 msgid ""
 "Error loading groups. Please check your MailChimp Interest Groups for the "
 "selected list."
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-plugin.php:287
+#: includes/class-ss-wc-mailchimp-plugin.php:316
 msgid "Select one or more groups (optional)"
 msgstr ""
 
-#: includes/class-ss-wc-mailchimp-plugin.php:288
+#: includes/class-ss-wc-mailchimp-plugin.php:317
 msgid "This list does not have interest groups enabled"
 msgstr ""
 
@@ -105,102 +154,102 @@ msgid "General"
 msgstr ""
 
 #: includes/class-ss-wc-settings-mailchimp.php:253
-#: includes/class-ss-wc-settings-mailchimp.php:472
+#: includes/class-ss-wc-settings-mailchimp.php:477
 msgid "Troubleshooting"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:310
+#: includes/class-ss-wc-settings-mailchimp.php:315
 msgid ""
 "Enter your MailChimp settings below to control how WooCommerce integrates "
 "with your MailChimp account."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:317
+#: includes/class-ss-wc-settings-mailchimp.php:322
 msgid "API Key"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:319
+#: includes/class-ss-wc-settings-mailchimp.php:324
 #, php-format
 msgid "%sLogin to MailChimp%s to look up your api key."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:321
+#: includes/class-ss-wc-settings-mailchimp.php:326
 msgid "Paste your MailChimp API key here"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:329
+#: includes/class-ss-wc-settings-mailchimp.php:334
 msgid "Enable/Disable"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:330
+#: includes/class-ss-wc-settings-mailchimp.php:335
 msgid "Enable MailChimp Integration"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:332
+#: includes/class-ss-wc-settings-mailchimp.php:337
 msgid "Enable/disable the plugin functionality."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:346
+#: includes/class-ss-wc-settings-mailchimp.php:351
 msgid "Main List"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:348
+#: includes/class-ss-wc-settings-mailchimp.php:353
 msgid "All customers will be added to this list."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:358
+#: includes/class-ss-wc-settings-mailchimp.php:363
 msgid "Interest Groups"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:360
+#: includes/class-ss-wc-settings-mailchimp.php:365
 msgid "Optional: Interest groups to assign to subscribers."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:365
+#: includes/class-ss-wc-settings-mailchimp.php:370
 msgid "Select interest groups..."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:373
+#: includes/class-ss-wc-settings-mailchimp.php:378
 msgid "Subscribe Event"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:375
+#: includes/class-ss-wc-settings-mailchimp.php:380
 msgid ""
 "Choose whether to subscribe customers as soon as an order is placed or after "
 "the order is processing or completed."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:379
+#: includes/class-ss-wc-settings-mailchimp.php:384
 msgid "Order Created"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:380
+#: includes/class-ss-wc-settings-mailchimp.php:385
 msgid "Order Processing"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:381
+#: includes/class-ss-wc-settings-mailchimp.php:386
 msgid "Order Completed"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:388
+#: includes/class-ss-wc-settings-mailchimp.php:393
 msgid "Double Opt-In"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:389
+#: includes/class-ss-wc-settings-mailchimp.php:394
 msgid "Enable Double Opt-In"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:392
+#: includes/class-ss-wc-settings-mailchimp.php:397
 msgid ""
 "If enabled, customers will receive an email prompting them to confirm their "
 "subscription to the list above."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:397
+#: includes/class-ss-wc-settings-mailchimp.php:402
 msgid "Subscribe Customers"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:398
+#: includes/class-ss-wc-settings-mailchimp.php:403
 msgid ""
 "<p>Choose <strong>Ask for permission</strong> to show an \"Opt-in\" checkbox "
 "during checkout. Customers will only be subscribed to the list above if they "
@@ -208,127 +257,127 @@ msgid ""
 "silently upon checkout. Caution, this is without the customer's consent.</p>"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:406
+#: includes/class-ss-wc-settings-mailchimp.php:411
 msgid "Ask for permission"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:407
+#: includes/class-ss-wc-settings-mailchimp.php:412
 msgid "Automatically"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:413
+#: includes/class-ss-wc-settings-mailchimp.php:418
 msgid "Opt-In Field Label"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:415
+#: includes/class-ss-wc-settings-mailchimp.php:420
 msgid "Optional: customize the label displayed next to the opt-in checkbox."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:423
+#: includes/class-ss-wc-settings-mailchimp.php:428
 msgid "Opt-In Checkbox Default"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:425
+#: includes/class-ss-wc-settings-mailchimp.php:430
 msgid "The default state of the opt-in checkbox."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:429
+#: includes/class-ss-wc-settings-mailchimp.php:434
 msgid "Checked"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:430
+#: includes/class-ss-wc-settings-mailchimp.php:435
 msgid "Unchecked"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:437
+#: includes/class-ss-wc-settings-mailchimp.php:442
 msgid "Opt-In Checkbox Location"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:439
+#: includes/class-ss-wc-settings-mailchimp.php:444
 msgid "Where to display the opt-in checkbox on the checkout page."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:443
+#: includes/class-ss-wc-settings-mailchimp.php:448
 msgid "Above customer details"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:444
+#: includes/class-ss-wc-settings-mailchimp.php:449
 msgid "Below customer details"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:445
+#: includes/class-ss-wc-settings-mailchimp.php:450
 msgid "Order review above submit"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:446
+#: includes/class-ss-wc-settings-mailchimp.php:451
 msgid "Order review below submit"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:447
+#: includes/class-ss-wc-settings-mailchimp.php:452
 msgid "Order review above total"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:448
+#: includes/class-ss-wc-settings-mailchimp.php:453
 msgid "Above billing details"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:449
+#: includes/class-ss-wc-settings-mailchimp.php:454
 msgid "Above shipping details"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:450
+#: includes/class-ss-wc-settings-mailchimp.php:455
 msgid "Below Checkout billing form"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:461
+#: includes/class-ss-wc-settings-mailchimp.php:466
 msgid "Enable Logging"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:468
+#: includes/class-ss-wc-settings-mailchimp.php:473
 #, php-format
 msgid "%1$sView Log%2$s"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:480
+#: includes/class-ss-wc-settings-mailchimp.php:485
 msgid "Debug Log"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:484
+#: includes/class-ss-wc-settings-mailchimp.php:489
 msgid ""
 "Enable logging MailChimp API calls. Only enable for troubleshooting purposes."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:489
+#: includes/class-ss-wc-settings-mailchimp.php:494
 msgid "System Info"
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:491
+#: includes/class-ss-wc-settings-mailchimp.php:496
 msgid ""
 "Copy the information below and send it to us when reporting an issue with "
 "the plugin."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:579
+#: includes/class-ss-wc-settings-mailchimp.php:584
 msgid "Oops! No lists in your MailChimp account..."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:584
+#: includes/class-ss-wc-settings-mailchimp.php:589
 msgid "Select a list..."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:624
+#: includes/class-ss-wc-settings-mailchimp.php:629
 #, php-format
 msgid ""
 "Oops! There are no lists in your MailChimp account. %sClick here%s to create "
 "one."
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:636
+#: includes/class-ss-wc-settings-mailchimp.php:641
 #, php-format
 msgid "Unable to load lists from MailChimp: (%s) %s. "
 msgstr ""
 
-#: includes/class-ss-wc-settings-mailchimp.php:637
+#: includes/class-ss-wc-settings-mailchimp.php:642
 #, php-format
 msgid "Please check your Settings %ssettings%s."
 msgstr ""
