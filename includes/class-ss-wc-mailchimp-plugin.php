@@ -9,7 +9,7 @@ final class SS_WC_MailChimp_Plugin {
 	 * Plugin version
 	 * @var string
 	 */
-	private static $version = '2.0.13';
+	private static $version = '2.0.14';
 
 	/**
 	 * Plugin singleton instance
@@ -191,19 +191,19 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	public function includes() {
 
-		require_once( 'lib/class-ss-system-info.php' );
+		require_once( SS_WC_MAILCHIMP_DIR . 'includes/lib/class-ss-system-info.php' );
 
-		require_once( 'helper-functions.php' );
+		require_once( SS_WC_MAILCHIMP_DIR . 'includes/helper-functions.php' );
 
-		require_once( 'class-ss-wc-mailchimp-compatibility.php' );
+		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp-compatibility.php' );
 
-		require_once( 'class-ss-wc-mailchimp-admin-notices.php' );
+		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp-admin-notices.php' );
 
-		require_once( 'class-ss-wc-mailchimp-api.php' );
+		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp-api.php' );
 
-		require_once( 'class-ss-wc-mailchimp.php' );
+		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp.php' );
 
-		require_once( 'class-ss-wc-mailchimp-handler.php' );
+		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp-handler.php' );
 
 	} //end function includes
 
@@ -290,7 +290,7 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	function add_mailchimp_settings( $settings ) {
 
-		$settings[] = require_once( 'class-ss-wc-settings-mailchimp.php' );
+		$settings[] = require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-settings-mailchimp.php' );
 
 		return $settings;
 
