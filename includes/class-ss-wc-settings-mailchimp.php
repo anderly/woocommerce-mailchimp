@@ -17,7 +17,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 	 */
 	class SS_WC_Settings_MailChimp extends WC_Settings_Page  {
 
-		private static $_instance;
+		private static $instance;
 
 		/**
 		 * Singleton instance
@@ -26,11 +26,11 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		 */
 		public static function get_instance() {
 
-			if ( empty( self::$_instance ) ) {
-				self::$_instance = new self;
+			if ( empty( self::$instance ) ) {
+				self::$instance = new self;
 			}
 
-			return self::$_instance;
+			return self::$instance;
 		}
 
 		/**
