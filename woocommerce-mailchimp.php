@@ -40,8 +40,8 @@ if ( is_admin() ) {
 
 //add_action( 'plugins_loaded', array( 'SS_WC_MailChimp_Plugin', 'instance' ), 0 );
 function SSWCMC() {
-	return SS_WC_MailChimp_Plugin::instance();
+	return SS_WC_MailChimp_Plugin::get_instance();
 }
 
-// Get WooCommerce Mailchipm Running.
-SSWCMC();
+// Get WooCommerce Mailchimp Running.
+add_action( 'plugins_loaded', 'SSWCMC', 0 );
