@@ -36,6 +36,12 @@ final class SS_WC_MailChimp_Plugin {
 	private $mailchimp;
 
 	/**
+	 * Plugin compatibility checker
+	 * @return SS_WC_MailChimp_Compatibility
+	 */
+	public $compatibility;
+
+	/**
 	 * Returns the plugin version
 	 * @return string
 	 */
@@ -48,23 +54,26 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @return SS_WC_MailChimp_Plugin   SS_WC_MailChimp_Plugin object
 	 */
-	public static function instance() {
+	public static function get_instance() {
 
 		if ( empty( self::$instance ) && ! ( self::$instance instanceof SS_WC_MailChimp_Plugin ) ) {
 
 			self::$instance = new SS_WC_MailChimp_Plugin;
 			self::$instance->define_constants();
 
-			add_action( 'plugins_loaded', array( self::$instance, 'load_plugin_textdomain' ) );
-
 			self::$instance->save_settings();
 			self::$instance->settings();
 			self::$instance->includes();
 			self::$instance->mailchimp();
-			self::$instance->handler = new SS_WC_MailChimp_Handler();
-			self::$instance->add_hooks();
+			self::$instance->handler = SS_WC_MailChimp_Handler::get_instance();
+			self::$instance->compatibility = SS_WC_MailChimp_Compatibility::get_instance();
+			self::$instance->admin_notices = new SS_WC_MailChimp_Admin_Notices;
+			self::$instance->load_plugin_textdomain();
 
-			do_action( 'ss_wc_mailchimp_loaded' );
+			//if ( self::$instance->compatibility->is_valid() ) {
+				self::$instance->add_hooks();
+				do_action( 'ss_wc_mailchimp_loaded' );
+			//}
 
 		}
 
@@ -84,8 +93,11 @@ final class SS_WC_MailChimp_Plugin {
 			$defaults = require( SS_WC_MAILCHIMP_DIR . 'config/default-settings.php' );
 			$settings = array();
 
-			foreach ( $defaults as $key => $val ) {
-				$settings[ $key ] = get_option( 'ss_wc_mailchimp_' . $key );
+			foreach ( $defaults as $key => $default_value ) {
+
+				$setting_value = get_option( $this->namespace_prefixed( $key ) );
+
+				$settings[ $key ] = $setting_value ? $setting_value : $default_value;
 			}
 
 			$this->settings = array_merge( $defaults, $settings );
@@ -138,6 +150,15 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	private function define_constants() {
 
+		// Minimum supported version of WordPress
+		$this->define( 'SS_WC_MAILCHIMP_MIN_WP_VERSION', '3.5.1' );
+
+		// Minimum supported version of WooCommerce
+		$this->define( 'SS_WC_MAILCHIMP_MIN_WC_VERSION', '2.2.0' );
+
+		// Minimum supported version of PHP
+		$this->define( 'SS_WC_MAILCHIMP_MIN_PHP_VERSION', '5.4.0' );
+
 		// Plugin version.
 		$this->define( 'SS_WC_MAILCHIMP_VERSION', self::version() );
 
@@ -171,6 +192,12 @@ final class SS_WC_MailChimp_Plugin {
 	public function includes() {
 
 		require_once( 'lib/class-ss-system-info.php' );
+
+		require_once( 'helper-functions.php' );
+
+		require_once( 'class-ss-wc-mailchimp-compatibility.php' );
+
+		require_once( 'class-ss-wc-mailchimp-admin-notices.php' );
 
 		require_once( 'class-ss-wc-mailchimp-api.php' );
 
@@ -227,6 +254,8 @@ final class SS_WC_MailChimp_Plugin {
 	 * Add plugin hooks
 	 */
 	private function add_hooks() {
+
+		//add_action( 'plugins_loaded', array( self::$instance, 'on_plugins_loaded' ) );
 
 		// Add the "Settings" links on the Plugins administration screen
 		if ( is_admin() ) {
@@ -330,6 +359,15 @@ final class SS_WC_MailChimp_Plugin {
 		// Placeholder
 
 	} //end function deactivate
+
+	/**
+	 * Check whether WooCommerce MailChimp is network activated
+	 * @since 1.0
+	 * @return bool
+	 */
+	public static function is_network_activated() {
+		return is_multisite() && ( function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( 'woocommerce-mailchimp/woocommerce-mailchimp.php' ) );
+	}
 
 	/**
 	 * Returns namespace prefixed value
