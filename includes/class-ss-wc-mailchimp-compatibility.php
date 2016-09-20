@@ -7,12 +7,12 @@
  * @link      http://www.saintsystems.com
  * @copyright Copyright 2016, Saint Systems, LLC
  *
- * @since 2.1
+ * @since 2.0.13
  */
 
 /**
  * Handle WooCommerce MailChimp compatibility notices and fallback shortcodes
- * @since 2.1
+ * @since 2.0.13
  */
 final class SS_WC_MailChimp_Compatibility {
 
@@ -99,14 +99,14 @@ final class SS_WC_MailChimp_Compatibility {
 
 	/**
 	 * Is the version of WordPress compatible?
-	 * @since 2.1
+	 * @since 2.0.13
 	 */
 	static function is_valid_wordpress() {
 		return self::$valid_wordpress;
 	}
 
 	/**
-	 * @since 2.1
+	 * @since 2.0.13
 	 * @return bool
 	 */
 	static function is_valid_woocommerce() {
@@ -114,7 +114,7 @@ final class SS_WC_MailChimp_Compatibility {
 	}
 
 	/**
-	 * @since 2.1.2
+	 * @since 2.0.13.2
 	 * @return bool
 	 */
 	static function is_valid_curl() {
@@ -122,7 +122,7 @@ final class SS_WC_MailChimp_Compatibility {
 	}
 
 	/**
-	 * @since 2.1
+	 * @since 2.0.13
 	 * @return bool
 	 */
 	static function is_valid_php() {
@@ -131,7 +131,7 @@ final class SS_WC_MailChimp_Compatibility {
 
 	/**
 	 * Get admin notices
-	 * @since 2.1
+	 * @since 2.0.13
 	 * @return array
 	 */
 	public static function get_notices() {
@@ -139,7 +139,7 @@ final class SS_WC_MailChimp_Compatibility {
 	}
 
 	/**
-	 * @since 2.1
+	 * @since 2.0.13
 	 *
 	 * @param array $atts
 	 * @param null $content
@@ -168,7 +168,7 @@ final class SS_WC_MailChimp_Compatibility {
 	/**
 	 * Is the version of PHP compatible?
 	 *
-	 * @since 2.1
+	 * @since 2.0.13
 	 * @return boolean
 	 */
 	public static function check_php() {
@@ -188,7 +188,7 @@ final class SS_WC_MailChimp_Compatibility {
 	/**
 	 * Is WordPress compatible?
 	 *
-	 * @since 2.1
+	 * @since 2.0.13
 	 * @return boolean
 	 */
 	public static function check_wordpress() {
@@ -212,7 +212,7 @@ final class SS_WC_MailChimp_Compatibility {
 	/**
 	 * Check if WooCommerce plugin is active and show notice if not.
 	 *
-	 * @since 2.1
+	 * @since 2.0.13
 	 *
 	 * @access public
 	 * @return boolean True: checks have been passed; WooCommerce MailChimp is fine to run; False: checks have failed, don't continue loading
