@@ -31,7 +31,7 @@ final class SS_WC_MailChimp_Migrator {
 
 			// error_log( 'Need to migrate from ' . $current_version . ' to ' . $target_version );
 
-			require_once( 'migrations/class-ss-wc-migration.php' );
+			require_once( SS_WC_MAILCHIMP_DIR . 'includes/migrations/class-ss-wc-migration.php' );
 
 			$start = array_search( $current_version, self::$versions );
 
