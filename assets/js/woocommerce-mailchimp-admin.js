@@ -57,10 +57,6 @@ var SS_WC_MailChimp = function($) {
 			$interestGroups.attr('disabled','disabled');
 		}
 
-		$apiKey.on('focus', function() {
-			apiKeyChangeTriggered = false;
-		});
-
 		$apiKey.change(function() {
 			checkApiKey($apiKey.val(), true);
 		});
