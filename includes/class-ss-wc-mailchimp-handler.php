@@ -14,7 +14,13 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 	/**
 	 * @class SS_WC_MailChimp_Handler
 	 */
-	class SS_WC_MailChimp_Handler {
+	final class SS_WC_MailChimp_Handler {
+
+		/**
+		 * Plugin singleton instance
+		 * @var SS_WC_MailChimp_Handler
+		 */
+		private static $instance = null;
 
 		/**
 		 * Constructor
@@ -31,6 +37,19 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			$this->register_hooks();
 
 		} //end function __construct
+
+		/**
+		 * @return SS_WC_MailChimp_Handler
+		 */
+		public static function get_instance() {
+
+			if ( empty( self::$instance ) ) {
+				self::$instance = new self;
+			}
+
+			return self::$instance;
+
+		}
 
 		/**
 		 * api_key function.
