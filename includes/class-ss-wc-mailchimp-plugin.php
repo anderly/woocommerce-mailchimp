@@ -91,6 +91,7 @@ final class SS_WC_MailChimp_Plugin {
 		if ( empty( $this->settings ) || true === $refresh ) {
 
 			$defaults = require( SS_WC_MAILCHIMP_DIR . 'config/default-settings.php' );
+			$defaults = apply_filters( 'ss_wc_mailchimp_default_settings', $defaults );
 			$settings = array();
 
 			foreach ( $defaults as $key => $default_value ) {
@@ -100,7 +101,9 @@ final class SS_WC_MailChimp_Plugin {
 				$settings[ $key ] = $setting_value ? $setting_value : $default_value;
 			}
 
-			$this->settings = array_merge( $defaults, $settings );
+			$merged_settings = apply_filters( 'ss_wc_mailchimp_settings', array_merge( $defaults, $settings ) );
+
+			$this->settings = $merged_settings;
 
 			$this->mailchimp( $settings['api_key'] );
 
