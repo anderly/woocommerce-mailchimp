@@ -277,6 +277,8 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 	 			})(jQuery);
 			");
 
+			do_action( 'ss_wc_mailchimp_after_settings_enqueue_js' );
+
 		}
 
 		/**
@@ -296,7 +298,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 			$sswcmc = SSWCMC();
 			// Trigger reload of plugin settings
 			$settings = $sswcmc->settings( true );
-			$sswcmc->mailchimp( $settings['api_key'] );
+			
 		}
 
 		/**
@@ -305,6 +307,8 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		 * @return array
 		 */
 		public function get_settings( $current_section = '' ) {
+
+			$settings = array();
 
 			if ( '' === $current_section ) {
 
@@ -372,6 +376,8 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'css'         => 'min-width: 350px;',
 						'desc_tip'    =>  true,
 					);
+
+				$settings = apply_filters( $this->namespace_prefixed( 'settings_general_after_interest_groups' ), $settings );
 
 				$settings[] = array(
 						'id'          => $this->namespace_prefixed( 'occurs' ),
@@ -457,9 +463,9 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'desc_tip'    =>  true,
 					);
 
-				$settings[] = array( 'type' => 'sectionend', 'id' => 'general_options' );
-
 				$settings = apply_filters( $this->namespace_prefixed( 'settings_general' ), $settings );
+
+				$settings[] = array( 'type' => 'sectionend', 'id' => 'general_options' );
 
 			} elseif ( 'troubleshooting' === $current_section ) {
 
