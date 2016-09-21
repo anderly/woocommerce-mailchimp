@@ -9,7 +9,7 @@ final class SS_WC_MailChimp_Plugin {
 	 * Plugin version
 	 * @var string
 	 */
-	private static $version = '2.0.14';
+	private static $version = '2.0.15';
 
 	/**
 	 * Plugin singleton instance
@@ -102,9 +102,151 @@ final class SS_WC_MailChimp_Plugin {
 
 			$this->settings = array_merge( $defaults, $settings );
 
+			$this->mailchimp( $settings['api_key'] );
+
 		}
 
 		return $this->settings;
+	}
+
+	/**
+	 * api_key function.
+	 * @return string MailChimp API Key
+	 */
+	public function api_key() {
+		return $this->settings[ 'api_key' ];
+	}
+
+	/**
+	 * is_enabled function.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function is_enabled() {
+		return 'yes' === $this->settings[ 'enabled' ];
+	}
+
+	/**
+	 * has_list function.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function has_list() {
+		if ( $this->get_list() ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * occurs function
+	 * @return string
+	 */
+	public function occurs() {
+		return $this->settings[ 'occurs' ];
+	}
+
+	/**
+	 * get_list function.
+	 *
+	 * @access public
+	 * @return string MailChimp list ID
+	 */
+	public function get_list() {
+		return $this->settings[ 'list' ];
+	}
+
+	/**
+	 * double_optin function.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function double_optin() {
+		return 'yes' === $this->settings[ 'double_optin' ];
+	}
+
+	/**
+	 * display_opt_in function.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function display_opt_in() {
+		return 'yes' === $this->settings[ 'display_opt_in' ];
+	}
+
+	/**
+	 * opt_in_label function.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function opt_in_label() {
+		return $this->settings[ 'opt_in_label' ];
+	}
+
+	/**
+	 * opt_in_checkbox_default_status function.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function opt_in_checkbox_default_status() {
+		return $this->settings[ 'opt_in_checkbox_default_status' ];
+	}
+
+	/**
+	 * opt_in_checkbox_display_location function.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function opt_in_checkbox_display_location() {
+		return $this->settings[ 'opt_in_checkbox_display_location' ];
+	}
+
+	/**
+	 * interests function.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function interest_groups() {
+		return $this->settings[ 'interest_groups' ];
+	}
+
+	/**
+	 * has_api_key function.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function has_api_key() {
+		$api_key = $this->api_key();
+		return !empty( $api_key );
+	}
+
+	/**
+	 * is_valid function.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function is_valid() {
+		return $this->is_enabled() && $this->has_api_key() && $this->has_list();
+	}
+
+	/**
+	 * debug_enabled function.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function debug_enabled() {
+		return 'yes' === $this->settings[ 'debug' ];
 	}
 
 	/**
@@ -136,6 +278,7 @@ final class SS_WC_MailChimp_Plugin {
 			$api_key = $api_key ? $api_key : $settings['api_key'];
 			$debug   = $debug   ? $debug   : $settings['debug'];
 
+			require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp.php' );
 			$this->mailchimp = new SS_WC_MailChimp( $api_key, $debug );
 
 			delete_transient( 'sswcmc_lists' );
