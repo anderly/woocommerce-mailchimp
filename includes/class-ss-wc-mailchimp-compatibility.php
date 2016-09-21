@@ -114,14 +114,6 @@ final class SS_WC_MailChimp_Compatibility {
 	}
 
 	/**
-	 * @since 2.0.13.2
-	 * @return bool
-	 */
-	static function is_valid_curl() {
-		return self::$valid_curl;
-	}
-
-	/**
 	 * @since 2.0.13
 	 * @return bool
 	 */
@@ -136,33 +128,6 @@ final class SS_WC_MailChimp_Compatibility {
 	 */
 	public static function get_notices() {
 		return self::$notices;
-	}
-
-	/**
-	 * @since 2.0.13
-	 *
-	 * @param array $atts
-	 * @param null $content
-	 * @param string $shortcode
-	 *
-	 * @return null|string NULL returned if user can't manage options. Notice shown with a warning that GF isn't supported.
-	 */
-	public function _shortcode_woocommerce_mailchimp_notice( $atts = array(), $content = null, $shortcode = 'woocommerce_mailchimp' ) {
-
-		if( ! current_user_can('manage_options') ) {
-			return null;
-		}
-
-		$notices = self::get_notices();
-
-		$message = '<div style="border:1px solid red; padding: 15px;"><p style="text-align:center;"><em>' . esc_html__( 'You are seeing this notice because you are an administrator. Other users of the site will see nothing.', 'woocommerce-mailchimp') . '</em></p>';
-		foreach( (array)$notices as $notice ) {
-			$message .= wpautop( $notice['message'] );
-		}
-		$message .= '</div>';
-
-		return $message;
-
 	}
 
 	/**
