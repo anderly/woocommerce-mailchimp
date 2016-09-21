@@ -268,6 +268,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			add_action( 'wp_ajax_ss_wc_mailchimp_get_interest_groups', array( $this, 'ajax_get_interest_groups' ) );
 
+			add_action( 'wp_ajax_ss_wc_mailchimp_get_merge_fields', array( $this, 'ajax_get_merge_fields' ) );
+
 		} //end function ensure_tab
 
 		/**
@@ -375,6 +377,46 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			return $this->toJSON( $results );
 
 		} //end function ajax_get_interest_groups
+
+		/**
+		 * Return merge fields (a.k.a. merge tags) for the passed MailChimp List
+		 * 
+		 * @access public
+		 * @return array
+		 */
+		public function ajax_get_merge_fields() {
+
+			try {
+
+				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
+
+					return $this->toJSON( array( '' => __( 'Please enter your api key above.', 'ss_wc_mailchimp' ) ) );
+
+				}
+
+				if ( !$_POST['data']['list_id'] || empty( $_POST['data']['list_id'] ) ) {
+
+					return $this->toJSON( array( '' => __( 'Please select a list from above.', 'ss_wc_mailchimp' ) ) );
+
+				}
+
+				$api_key = $_POST['data']['api_key'];
+				$list_id = $_POST['data']['list_id'];
+
+				$merge_fields = $this->mailchimp( $api_key )->get_merge_fields( $list_id );
+
+				$results = $merge_fields;
+
+			}
+			catch ( Exception $e ) {
+
+				return $this->toJSON( array( 'error' => $e->getMessage() ) );
+
+			}
+
+			return $this->toJSON( $results );
+
+		} //end function ajax_get_merge_fields
 
 		private function toJSON( $response ) {
 
