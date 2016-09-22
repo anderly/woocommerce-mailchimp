@@ -118,9 +118,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 #### 2.0.15 - September 22, 2016
 
 - Fix for activation error running migrations.
+- Double opt-in fix.
 - Added additional hooks and filters.
-- Removed unused functions.
-- Reduce duplication and use main plugin class helper functions for settings retrieval.
+- Code cleanup.
 
 #### 2.0.13 - 2.0.14 - September 20, 2016
 
