@@ -71,6 +71,7 @@ final class SS_WC_MailChimp_Plugin {
 			self::$instance->load_plugin_textdomain();
 
 			//if ( self::$instance->compatibility->is_valid() ) {
+				self::update();
 				self::$instance->add_hooks();
 				do_action( 'ss_wc_mailchimp_loaded' );
 			//}
@@ -356,6 +357,28 @@ final class SS_WC_MailChimp_Plugin {
 	} //end function includes
 
 	/**
+	 * Add plugin hooks
+	 */
+	private function add_hooks() {
+
+		/** Register hooks that are fired when the plugin is activated and deactivated. */
+		register_activation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'activate' ) );
+		register_deactivation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'deactivate' ) );
+
+		// Add the "Settings" links on the Plugins administration screen
+		if ( is_admin() ) {
+
+			add_filter( 'plugin_action_links_' . plugin_basename( SS_WC_MAILCHIMP_FILE ), array( $this, 'action_links' ) );
+
+			add_filter( 'woocommerce_get_settings_pages', array( $this, 'add_mailchimp_settings' ) );
+
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts') );
+
+		}
+
+	} //end function add_hooks
+
+	/**
 	 * Load Localization files.
 	 *
 	 * Note: the first-loaded translation file overrides any following ones if the same translation is present.
@@ -397,30 +420,6 @@ final class SS_WC_MailChimp_Plugin {
 		}
 
 	} //end function load_plugin_textdomain
-
-	/**
-	 * Add plugin hooks
-	 */
-	private function add_hooks() {
-
-		/** Register hooks that are fired when the plugin is activated and deactivated. */
-		register_activation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'activate' ) );
-		register_deactivation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'deactivate' ) );
-
-		//add_action( 'plugins_loaded', array( self::$instance, 'on_plugins_loaded' ) );
-
-		// Add the "Settings" links on the Plugins administration screen
-		if ( is_admin() ) {
-
-			add_filter( 'plugin_action_links_' . plugin_basename( SS_WC_MAILCHIMP_FILE ), array( $this, 'action_links' ) );
-
-			add_filter( 'woocommerce_get_settings_pages', array( $this, 'add_mailchimp_settings' ) );
-
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts') );
-
-		}
-
-	} //end function add_hooks
 
 	/**
 	 * Add Settings link to plugins list
@@ -478,11 +477,17 @@ final class SS_WC_MailChimp_Plugin {
 
 	} //end function enqueue_scripts
 
+	/**
+	 * Handles running plugin upgrades if necessary
+	 * @return void
+	 */
 	public static function update() {
+
 		require_once( 'class-ss-wc-mailchimp-migrator.php' );
 
 		SS_WC_MailChimp_Migrator::migrate( self::version() );
-	}
+
+	} //end function update
 
 	/**
 	 * Plugin activate function.
