@@ -531,8 +531,12 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			// Log
 			$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer to MailChimp: %s', 'woocommerce-mailchimp' ), print_r( $options, true ) ) );
 
+			do_action( $this->namespace_prefixed( 'before_subscribe', $subscribe_options, $order_id );
+
 			// Call API
 			$api_response = $this->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_optin );
+
+			do_action( $this->namespace_prefixed( 'after_subscribe', $subscribe_options, $order_id );
 
 			// Log api response
 			$this->log( sprintf( __( __METHOD__ . '(): MailChimp API response: %s', 'woocommerce-mailchimp' ), print_r( $api_response, true ) ) );
