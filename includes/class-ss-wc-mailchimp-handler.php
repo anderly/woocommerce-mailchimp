@@ -359,7 +359,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				'merge_tags'      	=> $merge_tags,
 				'interest_groups'   => $interest_groups,
 				'email_type'        => 'html',
-				'double_optin'      => $this->sswcmc->double_optin(),
+				'double_opt_in'     => $this->sswcmc->double_opt_in(),
 			);
 
 			// Allow hooking into subscription options
@@ -374,7 +374,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			do_action( $this->namespace_prefixed( 'before_subscribe' ), $subscribe_options, $order_id );
 
 			// Call API
-			$api_response = $this->sswcmc->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_optin );
+			$api_response = $this->sswcmc->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_opt_in );
 
 			do_action( $this->namespace_prefixed( 'after_subscribe' ), $subscribe_options, $order_id );
 

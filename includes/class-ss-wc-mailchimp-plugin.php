@@ -164,12 +164,12 @@ final class SS_WC_MailChimp_Plugin {
 	}
 
 	/**
-	 * double_optin function.
+	 * double_opt_in function.
 	 *
 	 * @access public
 	 * @return boolean
 	 */
-	public function double_optin() {
+	public function double_opt_in() {
 		return 'yes' === $this->settings[ 'double_opt_in' ];
 	}
 
