@@ -93,7 +93,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		 * @return boolean
 		 */
 		public function double_optin() {
-			return 'yes' === $this->get_option( 'double_optin' );
+			return 'yes' === $this->get_option( 'double_opt_in' );
 		}
 
 		/**
