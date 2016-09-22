@@ -11,6 +11,7 @@ final class SS_WC_MailChimp_Migrator {
 	protected static $versions = array(
 		'1.3.X',
 		'2.0',
+		'2.0.15',
 	);
 
 	public static function migrate( $target_version ) {
@@ -65,7 +66,7 @@ final class SS_WC_MailChimp_Migrator {
 	}
 
 	private static function clean_version( $version ) {
-		return str_replace( '.', '', $version );
+		return str_replace( '.', '_', $version );
 	}
 
 }

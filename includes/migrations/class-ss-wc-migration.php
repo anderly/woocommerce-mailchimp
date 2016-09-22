@@ -59,7 +59,7 @@ abstract class SS_WC_MailChimp_Migration {
 
 		} else {
 
-			foreach ( $this->$setting_keys as $key ) {
+			foreach ( $this->setting_keys as $key ) {
 				$this->settings[ $key ] = get_option( $this->namespace_prefixed( $key ) );
 			}
 
@@ -89,7 +89,7 @@ abstract class SS_WC_MailChimp_Migration {
 
 	}
 
-	private function namespace_prefixed( $suffix ) {
+	protected function namespace_prefixed( $suffix ) {
 		return $this->namespace . '_' . $suffix;
 	}
 
