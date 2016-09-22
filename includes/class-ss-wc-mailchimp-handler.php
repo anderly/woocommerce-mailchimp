@@ -420,7 +420,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @version 1.1
 		 */
 		function maybe_save_checkout_fields( $order_id ) {
-			if ( $this->display_opt_in() ) {
+			if ( $this->sswcmc->display_opt_in() ) {
 				$opt_in = isset( $_POST[ $this->namespace_prefixed( 'opt_in' ) ] ) ? 'yes' : 'no';
 
 				update_post_meta( $order_id, $this->namespace_prefixed( 'opt_in' ), $opt_in );
@@ -433,7 +433,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @since 1.2.2
 		 */
 		private function log( $message ) {
-			if ( $this->debug_enabled() ) {
+			if ( $this->sswcmc->debug_enabled() ) {
 				$logger = new WC_Logger();
 
 				if ( is_array( $message ) || is_object( $message ) ) {
