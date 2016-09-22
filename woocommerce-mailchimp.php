@@ -32,16 +32,11 @@ define( 'SS_WC_MAILCHIMP_FILE', __FILE__ );
  */
 require_once( 'includes/class-ss-wc-mailchimp-plugin.php' );
 
-/** Register hooks that are fired when the plugin is activated and deactivated. */
-if ( is_admin() ) {
-	register_activation_hook( SS_WC_MAILCHIMP_FILE, array( 'SS_WC_MailChimp_Plugin', 'activate' ) );
-	register_deactivation_hook( SS_WC_MAILCHIMP_FILE, array( 'SS_WC_MailChimp_Plugin', 'deactivate' ) );
-}
-
 //add_action( 'plugins_loaded', array( 'SS_WC_MailChimp_Plugin', 'instance' ), 0 );
 function SSWCMC() {
 	return SS_WC_MailChimp_Plugin::get_instance();
 }
 
 // Get WooCommerce Mailchimp Running.
-add_action( 'plugins_loaded', 'SSWCMC', 0 );
+//add_action( 'plugins_loaded', 'SSWCMC', 0 );
+SSWCMC();

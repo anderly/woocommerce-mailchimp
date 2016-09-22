@@ -401,6 +401,10 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	private function add_hooks() {
 
+		/** Register hooks that are fired when the plugin is activated and deactivated. */
+		register_activation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'activate' ) );
+		register_deactivation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'deactivate' ) );
+
 		//add_action( 'plugins_loaded', array( self::$instance, 'on_plugins_loaded' ) );
 
 		// Add the "Settings" links on the Plugins administration screen
