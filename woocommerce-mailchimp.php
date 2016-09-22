@@ -32,11 +32,9 @@ define( 'SS_WC_MAILCHIMP_FILE', __FILE__ );
  */
 require_once( 'includes/class-ss-wc-mailchimp-plugin.php' );
 
-//add_action( 'plugins_loaded', array( 'SS_WC_MailChimp_Plugin', 'instance' ), 0 );
 function SSWCMC() {
 	return SS_WC_MailChimp_Plugin::get_instance();
 }
 
 // Get WooCommerce Mailchimp Running.
-//add_action( 'plugins_loaded', 'SSWCMC', 0 );
 SSWCMC();
