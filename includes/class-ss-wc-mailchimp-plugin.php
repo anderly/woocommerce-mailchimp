@@ -137,10 +137,12 @@ final class SS_WC_MailChimp_Plugin {
 	 * @return boolean
 	 */
 	public function has_list() {
+		$has_list = false;
+
 		if ( $this->get_list() ) {
-			return true;
+			$has_list = true;
 		}
-		return false;
+		return apply_filters( 'ss_wc_mailchimp_has_list', $has_list );
 	}
 
 	/**

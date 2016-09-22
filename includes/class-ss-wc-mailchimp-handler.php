@@ -33,7 +33,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			$this->id         = 'mailchimp';
 			$this->namespace  = 'ss_wc_' . $this->id;
 			$this->label      = __( 'MailChimp', 'woocommerce-mailchimp' );
-			
+			$this->sswcmc     = SSWCMC();
 			$this->register_hooks();
 
 		} //end function __construct
@@ -52,153 +52,13 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		}
 
 		/**
-		 * api_key function.
-		 * @return string MailChimp API Key
-		 */
-		public function api_key() {
-			return $this->get_option( 'api_key' );
-		}
-
-		/**
-		 * is_enabled function.
-		 *
-		 * @access public
-		 * @return boolean
-		 */
-		public function is_enabled() {
-			return 'yes' === $this->get_option( 'enabled' );
-		}
-
-		/**
-		 * occurs function
-		 * @return string
-		 */
-		public function occurs() {
-			return $this->get_option( 'occurs' );
-		}
-
-		/**
-		 * get_list function.
-		 *
-		 * @access public
-		 * @return string MailChimp list ID
-		 */
-		public function get_list() {
-			return $this->get_option( 'list' );
-		}
-
-		/**
-		 * double_optin function.
-		 *
-		 * @access public
-		 * @return boolean
-		 */
-		public function double_optin() {
-			return 'yes' === $this->get_option( 'double_optin' );
-		}
-
-		/**
-		 * display_opt_in function.
-		 *
-		 * @access public
-		 * @return boolean
-		 */
-		public function display_opt_in() {
-			return 'yes' === $this->get_option( 'display_opt_in' );
-		}
-
-		/**
-		 * opt_in_label function.
-		 *
-		 * @access public
-		 * @return string
-		 */
-		public function opt_in_label() {
-			return $this->get_option( 'opt_in_label' );
-		}
-
-		/**
-		 * opt_in_checkbox_default_status function.
-		 *
-		 * @access public
-		 * @return string
-		 */
-		public function opt_in_checkbox_default_status() {
-			return $this->get_option( 'opt_in_checkbox_default_status' );
-		}
-
-		/**
-		 * opt_in_checkbox_display_location function.
-		 *
-		 * @access public
-		 * @return string
-		 */
-		public function opt_in_checkbox_display_location() {
-			return $this->get_option( 'opt_in_checkbox_display_location' );
-		}
-
-		/**
-		 * interests function.
-		 *
-		 * @access public
-		 * @return array
-		 */
-		public function interest_groups() {
-			return $this->get_option( 'interest_groups' );
-		}
-
-		/**
-		 * has_list function.
-		 *
-		 * @access public
-		 * @return boolean
-		 */
-		public function has_list() {
-			if ( $this->get_list() ) {
-				return true;
-			}
-			return false;
-		}
-
-		/**
-		 * has_api_key function.
-		 *
-		 * @access public
-		 * @return boolean
-		 */
-		public function has_api_key() {
-			$api_key = $this->api_key();
-			return !empty( $api_key );
-		}
-
-		/**
-		 * is_valid function.
-		 *
-		 * @access public
-		 * @return boolean
-		 */
-		public function is_valid() {
-			return $this->is_enabled() && $this->has_api_key() && $this->has_list();
-		}
-
-		/**
-		 * debug_enabled function.
-		 *
-		 * @access public
-		 * @return boolean
-		 */
-		public function debug_enabled() {
-			return 'yes' === $this->get_option( 'debug' );
-		}
-
-		/**
 		 * order_status_changed function.
 		 *
 		 * @access public
 		 * @return void
 		 */
 		public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) {
-			if ( $this->is_valid() && $new_status === $this->occurs() ) {
+			if ( $this->sswcmc->is_valid() && $new_status === $this->sswcmc->occurs() ) {
 				// Get WC order
 				$order = $this->wc_get_order( $id );
 
@@ -210,18 +70,12 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
 				if ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) {
 					// log
-					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order->billing_email, $this->get_list() ) );
+					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order->billing_email, $this->sswcmc->get_list() ) );
 
 					// subscribe
-					$this->subscribe( $order->id, $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->get_list() );
+					$this->subscribe( $order->id, $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->sswcmc->get_list() );
 				}
 			}
-		}
-
-		public function get_option( $option_suffix ) {
-
-			return get_option( $this->namespace_prefixed( $option_suffix ) );
-
 		}
 
 		/**
@@ -239,7 +93,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			// hook into woocommerce order status changed hook to handle the desired subscription event trigger
 			add_action( 'woocommerce_order_status_changed', array( $this, 'order_status_changed' ), 10, 3 );
 
-			$opt_in_checkbox_display_location = $this->opt_in_checkbox_display_location();
+			$opt_in_checkbox_display_location = $this->sswcmc->opt_in_checkbox_display_location();
 
 			// Maybe add an "opt-in" field to the checkout
 			$opt_in_checkbox_display_location = !empty( $opt_in_checkbox_display_location ) ? $opt_in_checkbox_display_location : 'woocommerce_review_order_before_submit';
@@ -256,8 +110,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			}
 
 			add_action( $opt_in_checkbox_display_location, array( $this, 'maybe_add_checkout_fields' ) );
-
-			add_filter( 'default_checkout_ss_wc_mailchimp_opt_in', array( $this, 'checkbox_default_status' ) );
 
 			// Maybe save the "opt-in" field on the checkout
 			add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'maybe_save_checkout_fields' ) );
@@ -290,7 +142,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				$api_key = $_POST['data']['api_key'];
 
-				$account = $this->mailchimp()->get_account( $api_key );
+				$account = $this->sswcmc->mailchimp()->get_account( $api_key );
 
 				$results = $account;
 
@@ -323,7 +175,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				$api_key = $_POST['data']['api_key'];
 
-				$lists = $this->mailchimp( $api_key )->get_lists();
+				$lists = $this->sswcmc->mailchimp( $api_key )->get_lists();
 
 				$results = array_merge( array('' => 'Select a list...'), $lists );
 
@@ -363,7 +215,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				$api_key = $_POST['data']['api_key'];
 				$list_id = $_POST['data']['list_id'];
 
-				$interest_groups = $this->mailchimp( $api_key )->get_interest_categories_with_interests( $list_id );
+				$interest_groups = $this->sswcmc->mailchimp( $api_key )->get_interest_categories_with_interests( $list_id );
 
 				$results = $interest_groups;
 
@@ -403,7 +255,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				$api_key = $_POST['data']['api_key'];
 				$list_id = $_POST['data']['list_id'];
 
-				$merge_fields = $this->mailchimp( $api_key )->get_merge_fields( $list_id );
+				$merge_fields = $this->sswcmc->mailchimp( $api_key )->get_merge_fields( $list_id );
 
 				$results = $merge_fields;
 
@@ -464,18 +316,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		}
 
 		/**
-		 * API Instance Singleton
-		 * @return Object
-		 */
-		public function mailchimp( $api_key = null ) {
-
-			$sswcmc = SSWCMC();
-
-			return $sswcmc->mailchimp( $api_key );
-
-		}
-
-		/**
 		 * subscribe function.
 		 *
 		 * @access public
@@ -492,7 +332,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			}
 
 			if ( 'false' == $list_id ) {
-				$list_id = $this->get_list();
+				$list_id = $this->sswcmc->get_list();
 			}
 
 			$merge_tags = array(
@@ -500,10 +340,10 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				'LNAME' => $last_name
 			);
 
-			$interest_groups = $this->interest_groups();
+			$interest_groups = $this->sswcmc->interest_groups();
 
 			if ( ! empty(  $interest_groups) ) {
-				$interest_groups = array_fill_keys( $this->interest_groups(), true );
+				$interest_groups = array_fill_keys( $this->sswcmc->interest_groups(), true );
 
 				// Allow hooking into variables
 				$interest_groups = apply_filters( $this->namespace_prefixed( 'subscribe_interest_groups' ), $interest_groups, $order_id, $email );
@@ -519,7 +359,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				'merge_tags'      	=> $merge_tags,
 				'interest_groups'   => $interest_groups,
 				'email_type'        => 'html',
-				'double_optin'      => $this->double_optin(),
+				'double_optin'      => $this->sswcmc->double_optin(),
 			);
 
 			// Allow hooking into subscription options
@@ -531,19 +371,19 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			// Log
 			$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer to MailChimp: %s', 'woocommerce-mailchimp' ), print_r( $options, true ) ) );
 
-			do_action( $this->namespace_prefixed( 'before_subscribe', $subscribe_options, $order_id );
+			do_action( $this->namespace_prefixed( 'before_subscribe' ), $subscribe_options, $order_id );
 
 			// Call API
-			$api_response = $this->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_optin );
+			$api_response = $this->sswcmc->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_optin );
 
-			do_action( $this->namespace_prefixed( 'after_subscribe', $subscribe_options, $order_id );
+			do_action( $this->namespace_prefixed( 'after_subscribe' ), $subscribe_options, $order_id );
 
 			// Log api response
 			$this->log( sprintf( __( __METHOD__ . '(): MailChimp API response: %s', 'woocommerce-mailchimp' ), print_r( $api_response, true ) ) );
 
 			if ( $api_response === false ) {
 				// Format error message
-				$error_response = sprintf( __( __METHOD__ . '(): WooCommerce MailChimp subscription failed: %s (%s)', 'woocommerce-mailchimp' ), $this->mailchimp()->get_error_message(), $this->mailchimp()->get_error_code() );
+				$error_response = sprintf( __( __METHOD__ . '(): WooCommerce MailChimp subscription failed: %s (%s)', 'woocommerce-mailchimp' ), $this->sswcmc->mailchimp()->get_error_message(), $this->sswcmc->mailchimp()->get_error_code() );
 
 				// Log
 				$this->log( $error_response );
@@ -565,22 +405,13 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @since 1.1
 		 */
 		function maybe_add_checkout_fields() {
-			if ( $this->is_valid() ) {
-				if ( $this->display_opt_in() ) {
+			if ( $this->sswcmc->is_valid() ) {
+				if ( $this->sswcmc->display_opt_in() ) {
 					do_action( $this->namespace_prefixed( 'before_opt_in_checkbox' ) );
-					echo apply_filters( $this->namespace_prefixed( 'opt_in_checkbox' ), '<p class="form-row woocommerce-mailchimp-opt-in"><label for="ss_wc_mailchimp_opt_in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" value="yes"' . ($this->opt_in_checkbox_default_status() == 'checked' ? ' checked="checked"' : '') . '/> ' . esc_html( $this->opt_in_label() ) . '</label></p>' . "\n", $this->opt_in_checkbox_default_status(), $this->opt_in_label() );
+					echo apply_filters( $this->namespace_prefixed( 'opt_in_checkbox' ), '<p class="form-row woocommerce-mailchimp-opt-in"><label for="ss_wc_mailchimp_opt_in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" value="yes"' . ($this->sswcmc->opt_in_checkbox_default_status() == 'checked' ? ' checked="checked"' : '') . '/> ' . esc_html( $this->sswcmc->opt_in_label() ) . '</label></p>' . "\n", $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label() );
 					do_action( $this->namespace_prefixed( 'after_opt_in_checkbox' ) );
 				}
 			}
-		}
-
-		/**
-		 * Opt-in checkbox default support for WooCommerce 2.1
-		 *
-		 * @since 1.2.1
-		 */
-		function checkbox_default_status( $input ) {
-			return $this->opt_in_checkbox_default_status === 'checked' ? 1 : 0;
 		}
 
 		/**
