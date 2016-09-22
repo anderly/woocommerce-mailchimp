@@ -394,7 +394,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 					);
 				
 				$settings[] = array(
-						'id'          => $this->namespace_prefixed( 'double_optin' ),
+						'id'          => $this->namespace_prefixed( 'double_opt_in' ),
 						'title'       => __( 'Double Opt-In', 'woocommerce-mailchimp' ),
 						'desc'        => __( 'Enable Double Opt-In', 'woocommerce-mailchimp' ),
 						'type'        => 'checkbox',
