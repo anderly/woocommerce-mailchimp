@@ -40,24 +40,25 @@ final class SS_WC_MailChimp_Migrator {
 			for ($start; $start < count(self::$versions) - 1; $start++) {
 			    $next = $start + 1;
 			    $current_version = self::$versions[$start];
-				$target_version = self::$versions[$next];
+				$next_version = self::$versions[$next];
 
 				// error_log( 'Migrating from ' . $current_version . ' to ' . $target_version );
 				// 
-			    if ( file_exists( SS_WC_MAILCHIMP_DIR . "includes/migrations/class-ss-wc-migration-from-$current_version-to-$target_version.php" ) ) {
+			    if ( file_exists( SS_WC_MAILCHIMP_DIR . "includes/migrations/class-ss-wc-migration-from-$current_version-to-$next_version.php" ) ) {
 
-					require_once( SS_WC_MAILCHIMP_DIR . "includes/migrations/class-ss-wc-migration-from-$current_version-to-$target_version.php" );
+					require_once( SS_WC_MAILCHIMP_DIR . "includes/migrations/class-ss-wc-migration-from-$current_version-to-$next_version.php" );
 
-					$migration_name = 'SS_WC_MailChimp_Migration_From_'. self::clean_version( $current_version ) .'_To_'. self::clean_version( $target_version );
+					$migration_name = 'SS_WC_MailChimp_Migration_From_'. self::clean_version( $current_version ) .'_To_'. self::clean_version( $next_version );
 
-					$migration = new $migration_name( $current_version, $target_version );
+					$migration = new $migration_name( $current_version, $next_version );
 					if ( $migration->up() ) {
 						// Update the current plugin version
-						update_option( self::VERSION_KEY, $target_version );
+						update_option( self::VERSION_KEY, $next_version );
 					}
 
 				}
 			}
+			//update_option( self::VERSION_KEY, $target_version );
 
 		}
 

@@ -115,6 +115,13 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 **IMPORTANT:** You must upgrade to version 2.X by December 31, 2016 as prior versions of the MailChimp API will stop working at that point.
 
+#### 2.0.15 - September 22, 2016
+
+- Fix for activation error running migrations.
+- Added additional hooks and filters.
+- Removed unused functions.
+- Reduce duplication and use main plugin class helper functions for settings retrieval.
+
 #### 2.0.13 - 2.0.14 - September 20, 2016
 
 - Added plugin compatibility checks for minimum supported versions of WooCommerce, WordPress and PHP.
