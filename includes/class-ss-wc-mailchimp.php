@@ -102,7 +102,7 @@ class SS_WC_MailChimp {
 
 	} //end function get_lists
 
-	public function subscribe( $list_id, $email_address,  $email_type, $merge_fields, $interests, $double_opt_in ) {
+	public function subscribe( $list_id, $email_address, $email_type, $merge_fields, $interests, $double_opt_in ) {
 
 		$args = array(
 			'email_address' => $email_address,
