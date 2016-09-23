@@ -2,6 +2,8 @@
 
 final class SS_WC_MailChimp_Migration_From_1_3_X_To_2_0 extends SS_WC_MailChimp_Migration {
 
+	protected $interest_groupings;
+
 	public function __construct( $current_version, $target_version ) {
 		parent::__construct( $current_version, $target_version );
 	}
@@ -20,16 +22,14 @@ final class SS_WC_MailChimp_Migration_From_1_3_X_To_2_0 extends SS_WC_MailChimp_
 			if ( !array_key_exists( $interest_groupings_key, $this->settings ) || !array_key_exists( $groups_key, $this->settings ) ) return;
 
 			$list = $this->settings['list'];
-			$interest_groupings = $this->settings[$interest_groupings_key];
+			$this->interest_groupings = $this->settings[$interest_groupings_key];
 			$groups = $this->settings[$groups_key];
 
-			if ( empty( $interest_groupings ) || empty( $groups ) || empty( $list ) ) return;
+			if ( empty( $this->interest_groupings ) || empty( $groups ) || empty( $list ) ) return;
 
 			$interest_categories = $this->mailchimp->get_interest_categories( $list );
 
-			$selected_interest_category = array_filter( $interest_categories, function($v) use($interest_groupings) {
-				return $v == $interest_groupings;
-			} );
+			$selected_interest_category = array_filter( $interest_categories, array( $this, 'filter_interest_groups' ) );
 
 			$selected_interest_category_id = key( $selected_interest_category );
 
@@ -57,6 +57,10 @@ final class SS_WC_MailChimp_Migration_From_1_3_X_To_2_0 extends SS_WC_MailChimp_
 
 		return true;
 
+	}
+
+	public function filter_interest_groups( $interest_group ) {
+		return $interest_group == $this->interest_groupings;
 	}
 
 	/**
