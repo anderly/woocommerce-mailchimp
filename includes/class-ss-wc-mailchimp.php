@@ -102,6 +102,38 @@ class SS_WC_MailChimp {
 
 	} //end function get_lists
 
+	/**
+	 * Get Subscriber
+	 * @param  string $list_id         The MailChimp list ID
+	 * @param  string $email_address   The user's email address
+	 * @return string                  The status of the subscriber
+	 */
+	public function get_subscriber_status( $list_id, $email_address ) {
+
+		$subscriber_hash = $this->get_subscriber_hash( $email_address );
+
+		$resource = "lists/$list_id/members/$subscriber_hash";
+
+		$response = $this->api->get( $resource, array() );
+
+		if ( ! $response ) {
+			return false;
+		}
+
+		return $response['status'];
+
+	} //end function get_subscriber_status
+
+	/**
+	 * Subscribe the user to the list
+	 * @param  string $list_id         The MailChimp list ID
+	 * @param  string $email_address   The user's email address
+	 * @param  string $email_type      html|text
+	 * @param  array $merge_fields     Array of MailChimp Merge Tags
+	 * @param  array $interests        Array of MailChimp Interest Groups
+	 * @param  boolean $double_opt_in  Whether to send a double opt-in email to confirm subscription
+	 * @return mixed $response         The MailChimp API response
+	 */
 	public function subscribe( $list_id, $email_address, $email_type, $merge_fields, $interests, $double_opt_in ) {
 
 		$args = array(
@@ -115,7 +147,16 @@ class SS_WC_MailChimp {
 			$args['interests'] = $interests;
 		}
 
-		$subscriber_hash = md5( strtolower( $email_address ) );
+		$subscriber_status = $this->get_subscriber_status( $list_id, $email_address );
+
+		error_log( '$list_id:' . $list_id . ', $email_address:' . $email_address . ', $subscriber_status:'. $subscriber_status );
+
+		// If the user is already subscribed, bypass the double opt-in email
+		if ( 'subscribed' === $subscriber_status ) {
+			$args['status'] = 'subscribed';
+		}
+
+		$subscriber_hash = $this->get_subscriber_hash( $email_address );
 
 		$resource = "lists/$list_id/members/$subscriber_hash";
 
@@ -128,6 +169,17 @@ class SS_WC_MailChimp {
 		return $response;
 
 	} //end function subscribe
+
+	/**
+	 * Returns the MD5 hash of the email
+	 * @param  string $email_address The email address to hash
+	 * @return string                MD5 hash of the lower-cased email address
+	 */
+	public function get_subscriber_hash( $email_address ) {
+
+		return md5( strtolower( $email_address ) );
+
+	} //end function get_subscriber_hash
 
 	/**
 	 * Get merge fields
