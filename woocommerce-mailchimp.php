@@ -5,7 +5,7 @@
  * Description: WooCommerce MailChimp provides simple MailChimp integration for WooCommerce.
  * Author: Saint Systems
  * Author URI: https://www.saintsystems.com
- * Version: 2.0.19
+ * Version: 2.0.20
  * Text Domain: woocommerce-mailchimp
  * Domain Path: languages
  *

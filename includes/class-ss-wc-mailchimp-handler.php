@@ -392,7 +392,9 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				do_action( $this->namespace_prefixed( 'subscription_failed' ), $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
 
 				// Email admin
-				wp_mail( get_option( 'admin_email' ), __( 'WooCommerce MailChimp subscription failed', 'woocommerce-mailchimp' ), $error_response );
+				$admin_email = get_option( 'admin_email' );
+				$admin_email = apply_filters( $this->namespace_prefixed( 'admin_email'), $admin_email );
+				wp_mail( $admin_email, __( 'WooCommerce MailChimp subscription failed', 'woocommerce-mailchimp' ), $error_response );
 			} else {
 				// Hook on success
 				do_action( $this->namespace_prefixed( 'subscription_success' ), $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
