@@ -458,6 +458,8 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 							'woocommerce_checkout_billing' => __( 'Above billing details', 'woocommerce-mailchimp' ),
 							'woocommerce_checkout_shipping' => __( 'Above shipping details', 'woocommerce-mailchimp' ),
 							'woocommerce_after_checkout_billing_form' => __( 'Below Checkout billing form', 'woocommerce-mailchimp' ),
+							'woocommerce_checkout_before_terms_and_conditions' => __( 'Above Checkout Terms and Conditions', 'woocommerce-mailchimp' ),
+							'woocommerce_checkout_after_terms_and_conditions' => __( 'Below Checkout Terms and Conditions', 'woocommerce-mailchimp' ),
 						),
 						'desc_tip'    =>  true,
 					);

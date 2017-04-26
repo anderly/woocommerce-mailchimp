@@ -13,33 +13,33 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class SS_WC_MailChimp_API {
 
 	/**
-     * @var string
-     */
+	 * @var string
+	 */
 	public $api_key;
 
 	/**
-     * @var string
-     */
+	 * @var string
+	 */
 	public $datacenter = 'us1';
 
 	/**
-     * @var string
-     */
+	 * @var string
+	 */
 	private $api_root = 'https://<dc>.api.mailchimp.com/3.0/';
 
 	/**
-     * @var boolean
-     */
+	 * @var boolean
+	 */
 	private $debug = false;
 
 	/**
-     * @var array
-     */
-    private $last_response;
+	 * @var array
+	 */
+	private $last_response;
 
-    /**
-     * @var WP_Error
-     */
+	/**
+	 * @var WP_Error
+	 */
 	private $last_error;
 
 	/**
@@ -68,11 +68,11 @@ class SS_WC_MailChimp_API {
 	} //end function __construct
 
 	/**
-     * @param string $resource
-     * @param array $args
-     *
-     * @return mixed
-     */
+	 * @param string $resource
+	 * @param array $args
+	 *
+	 * @return mixed
+	 */
 	public function get( $resource, $args = array() ) {
 
 		if ( is_array( $args) && ! array_key_exists( 'count', $args ) ) {
@@ -84,11 +84,11 @@ class SS_WC_MailChimp_API {
 	} //end function post
 
 	/**
-     * @param string $resource
-     * @param array $args
-     *
-     * @return mixed
-     */
+	 * @param string $resource
+	 * @param array $args
+	 *
+	 * @return mixed
+	 */
 	public function post( $resource, $args = array() ) {
 
 		return $this->api_request( 'POST', $resource, $args );
@@ -96,11 +96,11 @@ class SS_WC_MailChimp_API {
 	} //end function post
 
 	/**
-     * @param string $resource
-     * @param array $args
-     *
-     * @return mixed
-     */
+	 * @param string $resource
+	 * @param array $args
+	 *
+	 * @return mixed
+	 */
 	public function put( $resource, $args = array() ) {
 
 		return $this->api_request( 'PUT', $resource, $args );
@@ -108,11 +108,11 @@ class SS_WC_MailChimp_API {
 	} //end function put
 
 	/**
-     * @param string $resource
-     * @param array $args
-     *
-     * @return mixed
-     */
+	 * @param string $resource
+	 * @param array $args
+	 *
+	 * @return mixed
+	 */
 	public function patch( $resource, $args = array() ) {
 
 		return $this->api_request( 'PATCH', $resource, $args );
@@ -120,11 +120,11 @@ class SS_WC_MailChimp_API {
 	} //end function patch
 
 	/**
-     * @param string $resource
-     * @param array $args
-     *
-     * @return mixed
-     */
+	 * @param string $resource
+	 * @param array $args
+	 *
+	 * @return mixed
+	 */
 	public function delete( $resource, $args = array() ) {
 
 		return $this->api_request( 'DELETE', $resource, $args );
@@ -161,11 +161,14 @@ class SS_WC_MailChimp_API {
 		);
 
 		// attach arguments (in body or URL)
-        if ( $method === 'GET' ) {
-            $url = add_query_arg( $args, $url );
-        } else {
-            $request_args['body'] = json_encode( $args );
-        }
+		if ( $method === 'GET' ) {
+			$url = add_query_arg( $args, $url );
+		} else {
+			$request_args['body'] = json_encode( $args );
+		}
+
+		// print_r($url);
+		// die();
 
 		$raw_response = wp_remote_request( $url, $request_args );
 
@@ -204,12 +207,12 @@ class SS_WC_MailChimp_API {
 	} //end function api_request
 
 	/**
-     * Empties all data from previous response
-     */
-    private function reset() {
-        $this->last_response = null;
-        $this->last_error = null;
-    }
+	 * Empties all data from previous response
+	 */
+	private function reset() {
+		$this->last_response = null;
+		$this->last_error = null;
+	}
 
 	/**
 	 * Conditionally log MailChimp API Call
@@ -255,11 +258,11 @@ class SS_WC_MailChimp_API {
 	} //end function has_api_key
 
 	/**
-     * @return array|WP_Error
-     */
-    public function get_last_response() {
-        return $this->last_response;
-    }
+	 * @return array|WP_Error
+	 */
+	public function get_last_response() {
+		return $this->last_response;
+	}
 
 	/**
 	 * Returns error code from error property
@@ -267,7 +270,11 @@ class SS_WC_MailChimp_API {
 	 */
 	public function get_error_code() {
 
-		return $this->last_error->get_error_code();
+		$last_error = $this->last_error;
+		if ( is_wp_error( $last_error ) ) {
+			return $last_error->get_error_code();
+		}
+		return null;
 
 	} //end get_error_code
 
@@ -277,7 +284,11 @@ class SS_WC_MailChimp_API {
 	 */
 	public function get_error_message() {
 
-		return $this->last_error->get_error_message();
+		$last_error = $this->last_error;
+		if ( is_wp_error( $last_error ) ) {
+			return $last_error->get_error_message();
+		}
+		return null;
 
 	} //end get_error_message
 

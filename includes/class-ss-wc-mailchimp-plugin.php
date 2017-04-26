@@ -441,6 +441,10 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	function add_mailchimp_settings( $settings ) {
 
+		if ( ! is_array( $settings ) ) {
+			$settings = [];
+		}
+
 		$settings[] = require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-settings-mailchimp.php' );
 
 		return $settings;

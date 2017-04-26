@@ -65,15 +65,20 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				// get the ss_wc_mailchimp_opt_in value from the post meta. "order_custom_fields" was removed with WooCommerce 2.1
 				$subscribe_customer = get_post_meta( $id, $this->namespace_prefixed( 'opt_in' ), true );
 
+				$order_id = method_exists($order, 'get_id') ? $order->get_id(): $order->id;
+				$order_billing_email = method_exists($order, 'get_billing_email') ? $order->get_billing_email(): $order->billing_email;
+				$order_billing_first_name = method_exists($order, 'get_billing_first_name') ? $order->get_billing_first_name(): $order->billing_first_name;
+				$order_billing_last_name = method_exists($order, 'get_billing_last_name') ? $order->get_billing_last_name(): $order->billing_last_name;
+
 				// If the 'ss_wc_mailchimp_opt_in' meta value isn't set 
 				// (because 'display_opt_in' wasn't enabled at the time the order was placed) 
 				// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
 				if ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) {
 					// log
-					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order->billing_email, $this->sswcmc->get_list() ) );
+					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order_billing_email , $this->sswcmc->get_list() ) );
 
 					// subscribe
-					$this->subscribe( $order->id, $order->billing_first_name, $order->billing_last_name, $order->billing_email, $this->sswcmc->get_list() );
+					$this->subscribe( $order_id, $order_billing_first_name, $order_billing_last_name, $order_billing_email , $this->sswcmc->get_list() );
 				}
 			}
 		}
