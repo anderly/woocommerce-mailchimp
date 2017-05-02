@@ -37,4 +37,8 @@ function SSWCMC() {
 }
 
 // Get WooCommerce Mailchimp Running.
-SSWCMC();
+if ( function_exists( 'icl_object_id' ) ) {
+	add_action( 'wpml_st_loaded', 'SSWCMC' );
+} else {
+	SSWCMC();
+}
