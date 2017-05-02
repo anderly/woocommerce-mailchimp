@@ -191,6 +191,10 @@ final class SS_WC_MailChimp_Plugin {
 	 * @return string
 	 */
 	public function opt_in_label() {
+		if ( function_exists( 'icl_object_id' ) ) {
+			return apply_filters( 'wpml_translate_single_string', $this->settings[ 'opt_in_label' ], 'ss_wc_mailchimp', 'opt_in_label' );
+		}
+
 		return $this->settings[ 'opt_in_label' ];
 	}
 
