@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * WooCommerce MailChimp plugin main class
@@ -267,6 +267,11 @@ final class SS_WC_MailChimp_Plugin {
 			update_option( $this->namespace_prefixed( $key ), $value );
 		}
 
+		// WMPL register string for translation
+		if (function_exists( 'icl_object_id' )) {
+	    	do_action( 'wpml_register_single_string', 'ss_wc_mailchimp', 'opt_in_label', $settings['opt_in_label'] );
+	    }
+
 	} //end function save_settings
 
 	/**
@@ -453,7 +458,7 @@ final class SS_WC_MailChimp_Plugin {
 
 	/**
      * Load scripts required for admin
-     * 
+     *
      * @access public
      * @return void
      */
