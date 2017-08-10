@@ -233,19 +233,18 @@ final class SS_WC_MailChimp_Compatibility {
 		// If WooCommerce doesn't exist, assume WooCommerce not active
 		$return = false;
 
+		// Required for multisite
+		if ( ! function_exists('wp_create_nonce') ) {
+			require_once ABSPATH . WPINC . '/pluggable.php';
+		}
+
+		// Otherwise, throws an error on activation & deactivation "Use of undefined constant LOGGED_IN_COOKIE"
+		if ( is_multisite() ) {
+			wp_cookie_constants();
+		}
+
 		switch ( $wc_status ) {
 			case 'inactive':
-
-				// Required for multisite
-				if( ! function_exists('wp_create_nonce') ) {
-					require_once ABSPATH . WPINC . '/pluggable.php';
-				}
-
-				// Otherwise, throws an error on activation & deactivation "Use of undefined constant LOGGED_IN_COOKIE"
-				if( is_multisite() ) {
-					wp_cookie_constants();
-				}
-
 				$return = false;
 
 				$button = function_exists('is_network_admin') && is_network_admin() ? '<strong><a href="#woocommerce">' : '<strong><a href="'. wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=woocommerce/woocommerce.php' ), 'activate-plugin_woocommerce/woocommerce.php') . '" class="button button-large">';
