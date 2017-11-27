@@ -1,3 +1,16 @@
 # osx noise
 .DS_Store
 profile
+bin/install-wp-tests.sh
+
+includes/woocommerce-mailchimp.sublime-workspace
+
+.travis.yml
+
+phpcs.ruleset.xml
+
+phpunit.xml.dist
+
+tests/bootstrap.php
+
+tests/test-sample.php
