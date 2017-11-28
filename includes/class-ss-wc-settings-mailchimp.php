@@ -197,7 +197,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 			// Check required fields
 			if ( $this->is_enabled() && ! $this->has_api_key() ) {
 				// Show notice
-				echo $this->get_message( sprintf( __( 'WooCommerce MailChimp error: Plugin is enabled but no api key provided. Please enter your api key <a href="%s">here</a>.', 'woocommerce-mailchimp' ), WOOCOMMERCE_MAILCHIMP_SETTINGS_URL )
+				echo $this->get_message( sprintf( __( 'WooCommerce MailChimp error: Plugin is enabled but no api key provided. Please enter your api key <a href="%s">here</a>.', 'woocommerce-mailchimp' ), SS_WC_MAILCHIMP_SETTINGS_URL )
 				);
 			}
 		}
@@ -646,7 +646,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		public function mailchimp_api_error_msg() {
 			echo $this->get_message(
 				sprintf( __( 'Unable to load lists from MailChimp: (%s) %s. ', 'woocommerce-mailchimp' ), $this->mailchimp()->get_error_code(), $this->mailchimp()->get_error_message() ) .
-				sprintf( __( 'Please check your Settings %ssettings%s.', 'woocommerce-mailchimp' ), '<a href="' . WOOCOMMERCE_MAILCHIMP_SETTINGS_URL .'">', '</a>' )
+				sprintf( __( 'Please check your Settings %ssettings%s.', 'woocommerce-mailchimp' ), '<a href="' . SS_WC_MAILCHIMP_SETTINGS_URL .'">', '</a>' )
 			);
 		} //end function mailchimp_api_error_msg
 
