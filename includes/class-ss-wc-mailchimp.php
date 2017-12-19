@@ -38,7 +38,7 @@ class SS_WC_MailChimp {
 
 	/**
 	 * Get account
-	 * 
+	 *
 	 * @access public
 	 * @return mixed
 	 */
@@ -55,6 +55,20 @@ class SS_WC_MailChimp {
 		$account = $api->get( $resource );
 
 		if ( ! $account ) {
+			$last_response = $api->get_last_response();
+			if (floor( $last_response['response']['code'] ) / 100 >= 4) {
+				$body = $last_response['body'];
+				$errorMessage = $last_response['response']['code'] . ' ' . $last_response['response']['message'];
+				if (preg_match("'<h1>(.*)</h1>'si", $body, $matches)) {
+					$errorMessage .= '<br/>' . $matches[1] . ': ';
+				}
+				if (preg_match("'<p>(.*)</p>'si", $body, $matches)) {
+					$errorMessage .= $matches[1];
+				}
+				return array(
+					'error' => $errorMessage
+				);
+			}
 			return false;
 		}
 
@@ -64,7 +78,7 @@ class SS_WC_MailChimp {
 
 	/**
 	 * Get list
-	 * 
+	 *
 	 * @access public
 	 * @return mixed
 	 */
@@ -181,7 +195,7 @@ class SS_WC_MailChimp {
 
 	/**
 	 * Get merge fields
-	 * 
+	 *
 	 * @access public
 	 * @param string $list_id
 	 * @return mixed
