@@ -4,7 +4,7 @@ Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.8.1
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -112,6 +112,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce MailChimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.1.3 - December 19, 2017
+- Small fix to show MailChimp API error message in UI.
 
 #### 2.1.2 - August 25, 2017
 - Fix retrieval of mailchimp lists with numeric ids.
