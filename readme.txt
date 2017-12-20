@@ -3,7 +3,7 @@ Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
-Tested up to: 4.8.1
+Tested up to: 4.9.1
 Stable tag: 2.1.3
 License: GPLv3
 
