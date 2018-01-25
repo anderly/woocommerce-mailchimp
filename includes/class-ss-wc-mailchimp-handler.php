@@ -415,7 +415,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			if ( $this->sswcmc->is_valid() ) {
 				if ( $this->sswcmc->display_opt_in() ) {
 					do_action( $this->namespace_prefixed( 'before_opt_in_checkbox' ) );
-					echo apply_filters( $this->namespace_prefixed( 'opt_in_checkbox' ), '<p class="form-row woocommerce-mailchimp-opt-in"><label for="ss_wc_mailchimp_opt_in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" value="yes"' . ($this->sswcmc->opt_in_checkbox_default_status() == 'checked' ? ' checked="checked"' : '') . '/> ' . esc_html( $this->sswcmc->opt_in_label() ) . '</label></p>' . "\n", $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label() );
+					echo apply_filters( $this->namespace_prefixed( 'opt_in_checkbox' ), '<p class="form-row woocommerce-mailchimp-opt-in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" value="yes"' . ($this->sswcmc->opt_in_checkbox_default_status() == 'checked' ? ' checked="checked"' : '') . '/> <label for="ss_wc_mailchimp_opt_in">' . esc_html( $this->sswcmc->opt_in_label() ) . '</label></p>' . "\n", $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label() );
 					do_action( $this->namespace_prefixed( 'after_opt_in_checkbox' ) );
 				}
 			}
