@@ -4,7 +4,7 @@ Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.9.1
-Stable tag: 2.1.5
+Stable tag: 2.1.6
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -112,6 +112,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce MailChimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.1.6 - January 26, 2018
+- Restore opt-in checkbox location and add params to filter to allow easier adjustment of its placement.
 
 #### 2.1.5 - January 25, 2018
 - Move opt-in checkbox before associated label
