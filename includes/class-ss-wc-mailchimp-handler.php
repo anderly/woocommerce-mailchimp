@@ -70,8 +70,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				$order_billing_first_name = method_exists($order, 'get_billing_first_name') ? $order->get_billing_first_name(): $order->billing_first_name;
 				$order_billing_last_name = method_exists($order, 'get_billing_last_name') ? $order->get_billing_last_name(): $order->billing_last_name;
 
-				// If the 'ss_wc_mailchimp_opt_in' meta value isn't set 
-				// (because 'display_opt_in' wasn't enabled at the time the order was placed) 
+				// If the 'ss_wc_mailchimp_opt_in' meta value isn't set
+				// (because 'display_opt_in' wasn't enabled at the time the order was placed)
 				// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
 				if ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) {
 					// log
@@ -131,13 +131,17 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 		/**
 		 * Return all lists from MailChimp to be used in select fields
-		 * 
+		 *
 		 * @access public
 		 * @return array
 		 */
 		public function ajax_get_account() {
 
 			try {
+
+				if ( !isset($_POST['data']) ) {
+					throw new Exception( __( __METHOD__ . ': $_POST[\'data\'] not provided.', 'woocommerce-mailchimp' ) );
+				}
 
 				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
@@ -164,7 +168,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 		/**
 		 * Return all lists from MailChimp to be used in select fields
-		 * 
+		 *
 		 * @access public
 		 * @return array
 		 */
@@ -197,7 +201,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 		/**
 		 * Return interest categories for the passed MailChimp List to be used in select fields
-		 * 
+		 *
 		 * @access public
 		 * @return array
 		 */
@@ -237,7 +241,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 		/**
 		 * Return merge fields (a.k.a. merge tags) for the passed MailChimp List
-		 * 
+		 *
 		 * @access public
 		 * @return array
 		 */
@@ -412,10 +416,20 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @since 1.1
 		 */
 		function maybe_add_checkout_fields() {
+
 			if ( $this->sswcmc->is_valid() ) {
 				if ( $this->sswcmc->display_opt_in() ) {
 					do_action( $this->namespace_prefixed( 'before_opt_in_checkbox' ) );
-					echo apply_filters( $this->namespace_prefixed( 'opt_in_checkbox' ), '<p class="form-row woocommerce-mailchimp-opt-in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" value="yes"' . ($this->sswcmc->opt_in_checkbox_default_status() == 'checked' ? ' checked="checked"' : '') . '/> <label for="ss_wc_mailchimp_opt_in">' . esc_html( $this->sswcmc->opt_in_label() ) . '</label></p>' . "\n", $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label() );
+
+					echo apply_filters( $this->namespace_prefixed( 'opt_in_checkbox' ), '<p class="form-row woocommerce-mailchimp-opt-in"><label class="checkbox" for="ss_wc_mailchimp_opt_in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" class="input-checkbox" value="yes"' . ($this->sswcmc->opt_in_checkbox_default_status() == 'checked' ? ' checked="checked"' : '') . '/> ' . esc_html( $this->sswcmc->opt_in_label() ) . '</label></p>' . "\n", $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label(), $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label() );
+					// woocommerce_form_field( '2ss_wc_mailchimp_opt_in', array(
+					// 		'type'          => 'checkbox',
+					// 		'class'         => array('woocommerce-mailchimp-opt-in'),
+					// 		'label'         => esc_html( $this->sswcmc->opt_in_label() ),
+					// 		'custom_attributes' => array(
+					// 			'for' => '2ss_wc_mailchimp_opt_in',
+					// 		),
+					// 	), $this->sswcmc->opt_in_checkbox_default_status() == 'checked' );
 					do_action( $this->namespace_prefixed( 'after_opt_in_checkbox' ) );
 				}
 			}
