@@ -183,6 +183,36 @@ class SS_WC_MailChimp {
 	} //end function subscribe
 
 	/**
+	 * Unsubscribe the user from the list
+	 * @param  string $list_id         The MailChimp list ID
+	 * @param  string $email_address   The user's email address
+	 * @return mixed $response         The MailChimp API response
+	 */
+	public function unsubscribe( $list_id, $email_address ) {
+
+		$args = array(
+			'status' => 'unsubscribed',
+		);
+
+		if ( ! $subscriber_status = $this->get_subscriber_status( $list_id, $email_address ) ) {
+			return false;
+		}
+
+		$subscriber_hash = $this->get_subscriber_hash( $email_address );
+
+		$resource = "lists/$list_id/members/$subscriber_hash";
+
+		$response = $this->api->put( $resource, $args );
+
+		if ( ! $response ) {
+			return false;
+		}
+
+		return $response;
+
+	} //end function subscribe
+
+	/**
 	 * Returns the MD5 hash of the email
 	 * @param  string $email_address The email address to hash
 	 * @return string                MD5 hash of the lower-cased email address
