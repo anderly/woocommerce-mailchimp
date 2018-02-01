@@ -4,7 +4,7 @@ Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.9.1
-Stable tag: 2.1.7
+Stable tag: 2.1.8
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -113,7 +113,10 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
-#### 2.1.7 - February 1, 2018
+#### 2.1.9 - February 1, 2018
+- Added new opt-in checkbox location for order review above cart/product table.
+
+#### 2.1.8 - February 1, 2018
 - Fix "Invalid argument supplied for foreach" warning in settings (Issue #21)
 
 #### 2.1.6 - January 26, 2018
