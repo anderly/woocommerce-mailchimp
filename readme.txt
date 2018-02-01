@@ -4,7 +4,7 @@ Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.9.1
-Stable tag: 2.1.6
+Stable tag: 2.1.7
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -94,7 +94,7 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Installation ==
 
-1. Upload or extract the `woocommerce-mailchimp` folder to your site's `/wp-content/plugins/` directory. You can also use the *Add new- option found in the *Plugins- menu in WordPress.  
+1. Upload or extract the `woocommerce-mailchimp` folder to your site's `/wp-content/plugins/` directory. You can also use the *Add new- option found in the *Plugins- menu in WordPress.
 2. Enable the plugin from the *Plugins- menu in WordPress.
 
 = Usage =
@@ -112,6 +112,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce MailChimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.1.7 - February 1, 2018
+- Fix "Invalid argument supplied for foreach" warning in settings (Issue #21)
 
 #### 2.1.6 - January 26, 2018
 - Restore opt-in checkbox location and add params to filter to allow easier adjustment of its placement.
