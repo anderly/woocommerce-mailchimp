@@ -619,8 +619,8 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 			if ( $interest_groups === false ) {
 
-				add_action( 'admin_notices',         array( $this, 'mailchimp_api_error_msg' ) );
-				add_action( 'network_admin_notices', array( $this, 'mailchimp_api_error_msg' ) );
+				// add_action( 'admin_notices',         array( $this, 'mailchimp_api_error_msg' ) );
+				// add_action( 'network_admin_notices', array( $this, 'mailchimp_api_error_msg' ) );
 
 				return array();
 
