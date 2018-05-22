@@ -5,7 +5,7 @@ Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
 Tested up to: 4.9.5
 WC tested up to: 3.3.1
-Stable tag: 2.1.11
+Stable tag: 2.1.12
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -113,6 +113,10 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce MailChimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.1.12 - May 22, 2018
+- WPML Opt-in label fix.
+- Plugin now loads after `plugins_loaded` action hook.
 
 #### 2.1.11 - April 27, 2018
 - Fix erroneous error saying can't load lists when no interest groups for list.

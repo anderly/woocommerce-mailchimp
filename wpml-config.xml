@@ -1,7 +1,5 @@
 <wpml-config>
 	<admin-texts>
-		<key name="woocommerce_mailchimp_settings">
-  			<key name="opt_in_label" />
- 		</key>
+		<key name="ss_wc_mailchimp_opt_in_label" />
 	</admin-texts>
 </wpml-config>
