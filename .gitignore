@@ -6,6 +6,10 @@ includes/woocommerce-mailchimp.sublime-workspace
 .travis.yml
 phpcs.ruleset.xml
 phpunit.xml.dist
-tests/bootstrap.php
-tests/test-sample.php
 release.sh
+# Unit tests
+/tmp
+/tests/bin/tmp
+phpcs.xml.dist
+tests/test-woocommerce-mailchimp.php
+tests/bootstrap.php

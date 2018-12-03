@@ -52,38 +52,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		}
 
 		/**
-		 * order_status_changed function.
-		 *
-		 * @access public
-		 * @return void
-		 */
-		public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) {
-			if ( $this->sswcmc->is_valid() && $new_status === $this->sswcmc->occurs() ) {
-				// Get WC order
-				$order = $this->wc_get_order( $id );
-
-				// get the ss_wc_mailchimp_opt_in value from the post meta. "order_custom_fields" was removed with WooCommerce 2.1
-				$subscribe_customer = get_post_meta( $id, $this->namespace_prefixed( 'opt_in' ), true );
-
-				$order_id = method_exists($order, 'get_id') ? $order->get_id(): $order->id;
-				$order_billing_email = method_exists($order, 'get_billing_email') ? $order->get_billing_email(): $order->billing_email;
-				$order_billing_first_name = method_exists($order, 'get_billing_first_name') ? $order->get_billing_first_name(): $order->billing_first_name;
-				$order_billing_last_name = method_exists($order, 'get_billing_last_name') ? $order->get_billing_last_name(): $order->billing_last_name;
-
-				// If the 'ss_wc_mailchimp_opt_in' meta value isn't set
-				// (because 'display_opt_in' wasn't enabled at the time the order was placed)
-				// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
-				if ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) {
-					// log
-					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order_billing_email , $this->sswcmc->get_list() ) );
-
-					// subscribe
-					$this->subscribe( $order_id, $order_billing_first_name, $order_billing_last_name, $order_billing_email , $this->sswcmc->get_list() );
-				}
-			}
-		}
-
-		/**
 		 * Register plugin hooks
 		 *
 		 * @access public
@@ -128,6 +96,38 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			add_action( 'wp_ajax_ss_wc_mailchimp_get_merge_fields', array( $this, 'ajax_get_merge_fields' ) );
 
 		} //end function ensure_tab
+
+		/**
+		 * order_status_changed function.
+		 *
+		 * @access public
+		 * @return void
+		 */
+		public function order_status_changed( $id, $status = 'new', $new_status = 'pending' ) {
+			if ( $this->sswcmc->is_valid() && $new_status === $this->sswcmc->occurs() ) {
+				// Get WC order
+				$order = $this->wc_get_order( $id );
+
+				// get the ss_wc_mailchimp_opt_in value from the post meta. "order_custom_fields" was removed with WooCommerce 2.1
+				$subscribe_customer = get_post_meta( $id, 'ss_wc_mailchimp_opt_in', true );
+
+				$order_id = method_exists( $order, 'get_id' ) ? $order->get_id() : $order->id;
+				$order_billing_email = method_exists( $order, 'get_billing_email' ) ? $order->get_billing_email() : $order->billing_email;
+				$order_billing_first_name = method_exists( $order, 'get_billing_first_name' ) ? $order->get_billing_first_name() : $order->billing_first_name;
+				$order_billing_last_name = method_exists( $order, 'get_billing_last_name' ) ? $order->get_billing_last_name() : $order->billing_last_name;
+
+				// If the 'ss_wc_mailchimp_opt_in' meta value isn't set
+				// (because 'display_opt_in' wasn't enabled at the time the order was placed)
+				// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
+				if ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) {
+					// log
+					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order_billing_email , $this->sswcmc->get_list() ) );
+
+					// subscribe
+					$this->subscribe( $order_id, $order_billing_first_name, $order_billing_last_name, $order_billing_email , $this->sswcmc->get_list() );
+				}
+			}
+		}
 
 		/**
 		 * Return all lists from MailChimp to be used in select fields
@@ -288,10 +288,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 		} //end function toJSON
 
-		private function namespace_prefixed( $suffix ) {
-			return $this->namespace . '_' . $suffix;
-		}
-
 		/**
 		 * WooCommerce 2.2 support for wc_get_order
 		 *
@@ -355,11 +351,11 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				$interest_groups = array_fill_keys( $this->sswcmc->interest_groups(), true );
 
 				// Allow hooking into variables
-				$interest_groups = apply_filters( $this->namespace_prefixed( 'subscribe_interest_groups' ), $interest_groups, $order_id, $email );
+				$interest_groups = apply_filters( 'ss_wc_mailchimp_subscribe_interest_groups', $interest_groups, $order_id, $email );
 			}
 
 			// Allow hooking into variables
-			$merge_tags = apply_filters( $this->namespace_prefixed( 'subscribe_merge_tags' ), $merge_tags, $order_id, $email );
+			$merge_tags = apply_filters( 'ss_wc_mailchimp_subscribe_merge_tags', $merge_tags, $order_id, $email );
 
 			// Set subscription options
 			$subscribe_options = array(
@@ -372,7 +368,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			);
 
 			// Allow hooking into subscription options
-			$options = apply_filters( $this->namespace_prefixed( 'subscribe_options' ), $subscribe_options, $order_id  );
+			$options = apply_filters( 'ss_wc_mailchimp_subscribe_options', $subscribe_options, $order_id  );
 
 			// Extract options into variables
 			extract( $options );
@@ -380,34 +376,37 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			// Log
 			$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer to MailChimp: %s', 'woocommerce-mailchimp' ), print_r( $options, true ) ) );
 
-			do_action( $this->namespace_prefixed( 'before_subscribe' ), $subscribe_options, $order_id );
+			do_action( 'ss_wc_mailchimp_before_subscribe', $subscribe_options, $order_id );
 
-			// Call API
-			$api_response = $this->sswcmc->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_opt_in );
+			if ( ! empty( $list_id ) ) {
+				// Call API
+				$api_response = $this->sswcmc->mailchimp()->subscribe($list_id, $email, $email_type, $merge_tags, $interest_groups, $double_opt_in);
 
-			do_action( $this->namespace_prefixed( 'after_subscribe' ), $subscribe_options, $order_id );
+				// Log api response
+				$this->log( sprintf( __( __METHOD__ . '(): MailChimp API response: %s', 'woocommerce-mailchimp' ), print_r( $api_response, true ) ) );
 
-			// Log api response
-			$this->log( sprintf( __( __METHOD__ . '(): MailChimp API response: %s', 'woocommerce-mailchimp' ), print_r( $api_response, true ) ) );
+				if ( $api_response === false ) {
+					// Format error message
+					$error_response = sprintf( __( __METHOD__ . '(): WooCommerce MailChimp subscription failed: %s (%s)', 'woocommerce-mailchimp' ), $this->sswcmc->mailchimp()->get_error_message(), $this->sswcmc->mailchimp()->get_error_code() );
 
-			if ( $api_response === false ) {
-				// Format error message
-				$error_response = sprintf( __( __METHOD__ . '(): WooCommerce MailChimp subscription failed: %s (%s)', 'woocommerce-mailchimp' ), $this->sswcmc->mailchimp()->get_error_message(), $this->sswcmc->mailchimp()->get_error_code() );
+					// Log
+					$this->log( $error_response );
 
-				// Log
-				$this->log( $error_response );
+					// New hook for failing operations
+					do_action( 'ss_wc_mailchimp_subscription_failed', $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
 
-				// New hook for failing operations
-				do_action( $this->namespace_prefixed( 'subscription_failed' ), $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
-
-				// Email admin
-				$admin_email = get_option( 'admin_email' );
-				$admin_email = apply_filters( $this->namespace_prefixed( 'admin_email'), $admin_email );
-				wp_mail( $admin_email, __( 'WooCommerce MailChimp subscription failed', 'woocommerce-mailchimp' ), $error_response );
-			} else {
-				// Hook on success
-				do_action( $this->namespace_prefixed( 'subscription_success' ), $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
+					// Email admin
+					$admin_email = get_option( 'admin_email' );
+					$admin_email = apply_filters( 'ss_wc_mailchimp_admin_email', $admin_email );
+					wp_mail( $admin_email, __( 'WooCommerce MailChimp subscription failed', 'woocommerce-mailchimp' ), $error_response );
+				} else {
+					// Hook on success
+					do_action( 'ss_wc_mailchimp_subscription_success', $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
+				}
 			}
+
+			do_action( 'ss_wc_mailchimp_after_subscribe', $subscribe_options, $order_id );
+
 		}
 
 		/**
@@ -419,9 +418,9 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			if ( $this->sswcmc->is_valid() ) {
 				if ( $this->sswcmc->display_opt_in() ) {
-					do_action( $this->namespace_prefixed( 'before_opt_in_checkbox' ) );
+					do_action( 'ss_wc_mailchimp_before_opt_in_checkbox' );
 
-					echo apply_filters( $this->namespace_prefixed( 'opt_in_checkbox' ), '<p class="form-row woocommerce-mailchimp-opt-in"><label class="checkbox" for="ss_wc_mailchimp_opt_in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" class="input-checkbox" value="yes"' . ($this->sswcmc->opt_in_checkbox_default_status() == 'checked' ? ' checked="checked"' : '') . '/> ' . esc_html( $this->sswcmc->opt_in_label() ) . '</label></p>' . "\n", $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label(), $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label() );
+					echo apply_filters( 'ss_wc_mailchimp_opt_in_checkbox', '<p class="form-row woocommerce-mailchimp-opt-in"><label class="checkbox" for="ss_wc_mailchimp_opt_in"><input type="checkbox" name="ss_wc_mailchimp_opt_in" id="ss_wc_mailchimp_opt_in" class="input-checkbox" value="yes"' . ($this->sswcmc->opt_in_checkbox_default_status() == 'checked' ? ' checked="checked"' : '') . '/> ' . esc_html( $this->sswcmc->opt_in_label() ) . '</label></p>' . "\n", $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label(), $this->sswcmc->opt_in_checkbox_default_status(), $this->sswcmc->opt_in_label() );
 					// woocommerce_form_field( '2ss_wc_mailchimp_opt_in', array(
 					// 		'type'          => 'checkbox',
 					// 		'class'         => array('woocommerce-mailchimp-opt-in'),
@@ -430,7 +429,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 					// 			'for' => '2ss_wc_mailchimp_opt_in',
 					// 		),
 					// 	), $this->sswcmc->opt_in_checkbox_default_status() == 'checked' );
-					do_action( $this->namespace_prefixed( 'after_opt_in_checkbox' ) );
+					do_action( 'ss_wc_mailchimp_after_opt_in_checkbox' );
 				}
 			}
 		}
@@ -442,9 +441,9 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 */
 		function maybe_save_checkout_fields( $order_id ) {
 			if ( $this->sswcmc->display_opt_in() ) {
-				$opt_in = isset( $_POST[ $this->namespace_prefixed( 'opt_in' ) ] ) ? 'yes' : 'no';
+				$opt_in = isset( $_POST[ 'ss_wc_mailchimp_opt_in' ] ) ? 'yes' : 'no';
 
-				update_post_meta( $order_id, $this->namespace_prefixed( 'opt_in' ), $opt_in );
+				update_post_meta( $order_id, 'ss_wc_mailchimp_opt_in', $opt_in );
 			}
 		}
 

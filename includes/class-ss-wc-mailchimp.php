@@ -163,8 +163,8 @@ class SS_WC_MailChimp {
 
 		$subscriber_status = $this->get_subscriber_status( $list_id, $email_address );
 
-		// If the user is already subscribed, bypass the double opt-in email
-		if ( 'subscribed' === $subscriber_status ) {
+		// If user is already subscribed or unsubscribed, set their status to 'subscribed' (and bypass the double opt-in email)
+		if ( 'subscribed' === $subscriber_status || 'unsubscribed' === $subscriber_status ) {
 			$args['status'] = 'subscribed';
 		}
 

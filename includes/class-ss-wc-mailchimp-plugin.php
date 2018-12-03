@@ -77,7 +77,7 @@ final class SS_WC_MailChimp_Plugin {
 			self::$instance->settings();
 			self::$instance->includes();
 			self::$instance->mailchimp();
-			self::$instance->handler = SS_WC_MailChimp_Handler::get_instance();
+			self::$instance->handler       = SS_WC_MailChimp_Handler::get_instance();
 			self::$instance->compatibility = SS_WC_MailChimp_Compatibility::get_instance();
 			self::$instance->admin_notices = new SS_WC_MailChimp_Admin_Notices();
 			self::$instance->load_plugin_textdomain();
@@ -255,7 +255,7 @@ final class SS_WC_MailChimp_Plugin {
 	 * @return boolean
 	 */
 	public function is_valid() {
-		return $this->is_enabled() && $this->has_api_key() && $this->has_list();
+		return $this->is_enabled() && $this->has_api_key();
 	}
 
 	/**
@@ -412,7 +412,7 @@ final class SS_WC_MailChimp_Plugin {
 	public function load_plugin_textdomain() {
 
 		// Set filter for plugin's languages directory.
-		$woocommerce_mailchimp_lang_dir  = dirname( plugin_basename( SS_WC_MAILCHIMP_FILE ) ) . '/languages/';
+		$woocommerce_mailchimp_lang_dir = dirname( plugin_basename( SS_WC_MAILCHIMP_FILE ) ) . '/languages/';
 
 		// Traditional WordPress plugin locale filter.
 		// get locale in {lang}_{country} format (e.g. en_US).
@@ -490,11 +490,11 @@ final class SS_WC_MailChimp_Plugin {
 
 		// Localize javascript messages.
 		$translation_array = array(
-			'connecting_to_mailchimp'       => __( 'Connecting to MailChimp', 'woocommerce-mailchimp' ),
-			'error_loading_account'         => __( 'Error. Please check your api key.', 'woocommerce-mailchimp' ),
-			'error_loading_groups'          => __( 'Error loading groups. Please check your MailChimp Interest Groups for the selected list.', 'woocommerce-mailchimp' ),
-			'select_groups_placeholder'     => __( 'Select one or more groups (optional)', 'woocommerce-mailchimp' ),
-			'interest_groups_not_enabled'   => __( 'This list does not have interest groups enabled', 'woocommerce-mailchimp' ),
+			'connecting_to_mailchimp'     => __( 'Connecting to MailChimp', 'woocommerce-mailchimp' ),
+			'error_loading_account'       => __( 'Error. Please check your api key.', 'woocommerce-mailchimp' ),
+			'error_loading_groups'        => __( 'Error loading groups. Please check your MailChimp Interest Groups for the selected list.', 'woocommerce-mailchimp' ),
+			'select_groups_placeholder'   => __( 'Select one or more groups (optional)', 'woocommerce-mailchimp' ),
+			'interest_groups_not_enabled' => __( 'This list does not have interest groups enabled', 'woocommerce-mailchimp' ),
 		);
 		wp_localize_script( 'woocommerce-mailchimp-admin', 'SS_WC_MailChimp_Messages', $translation_array );
 
