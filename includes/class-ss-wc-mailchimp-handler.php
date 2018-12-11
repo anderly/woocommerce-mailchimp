@@ -95,6 +95,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			add_action( 'wp_ajax_ss_wc_mailchimp_get_merge_fields', array( $this, 'ajax_get_merge_fields' ) );
 
+			add_action( 'queue_ss_wc_mailchimp_maybe_subscribe', array( $this, 'maybe_subscribe' ), 10, 6 );
+
 		} //end function ensure_tab
 
 		/**
@@ -116,16 +118,13 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				$order_billing_first_name = method_exists( $order, 'get_billing_first_name' ) ? $order->get_billing_first_name() : $order->billing_first_name;
 				$order_billing_last_name = method_exists( $order, 'get_billing_last_name' ) ? $order->get_billing_last_name() : $order->billing_last_name;
 
-				// If the 'ss_wc_mailchimp_opt_in' meta value isn't set
-				// (because 'display_opt_in' wasn't enabled at the time the order was placed)
-				// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
-				if ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) {
-					// log
-					$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer (%s) to list %s', 'woocommerce-mailchimp' ), $order_billing_email , $this->sswcmc->get_list() ) );
+				$list_id = $this->sswcmc->get_list();
 
-					// subscribe
-					$this->subscribe( $order_id, $order_billing_first_name, $order_billing_last_name, $order_billing_email , $this->sswcmc->get_list() );
-				}
+				$this->log( sprintf( __( __METHOD__ . '(): Queueing maybe subscribe ($subscribe_customer: %s) for customer (%s) to list %s', 'woocommerce-mailchimp'), $subscribe_customer, $order_billing_email, $list_id ) );
+
+				// Queue the subscription.
+				as_schedule_single_action( time(), 'queue_ss_wc_mailchimp_maybe_subscribe', array( $subscribe_customer, $order_id, $order_billing_first_name, $order_billing_last_name, $order_billing_email , $list_id ), 'sswcmc' );
+
 			}
 		}
 
@@ -324,6 +323,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * subscribe function.
 		 *
 		 * @access public
+		 * @param boolean $subscribe_customer
 		 * @param int $order_id
 		 * @param mixed $first_name
 		 * @param mixed $last_name
@@ -331,9 +331,14 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @param string $listid (default: 'false')
 		 * @return void
 		 */
-		public function subscribe( $order_id, $first_name, $last_name, $email, $list_id = 'false' ) {
+		public function maybe_subscribe( $subscribe_customer, $order_id, $first_name, $last_name, $email, $list_id = 'false' ) {
+
+			// throw new Exception('Failure: Houston we have a problem!');
+
+			$this->log( sprintf( __( __METHOD__ . '(): Processing queued maybe_subscribe ($subscribe_customer: %s) for customer (%s) to list %s', 'woocommerce-mailchimp' ), $subscribe_customer, $email, $list_id ) );
+
 			if ( ! $email ) {
-				return; // Email is required
+				return; // Email is required.
 			}
 
 			if ( 'false' == $list_id ) {
@@ -342,22 +347,22 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			$merge_tags = array(
 				'FNAME' => $first_name,
-				'LNAME' => $last_name
+				'LNAME' => $last_name,
 			);
 
 			$interest_groups = $this->sswcmc->interest_groups();
 
-			if ( ! empty(  $interest_groups) ) {
+			if ( ! empty(  $interest_groups ) ) {
 				$interest_groups = array_fill_keys( $this->sswcmc->interest_groups(), true );
 
-				// Allow hooking into variables
+				// Allow hooking into variables.
 				$interest_groups = apply_filters( 'ss_wc_mailchimp_subscribe_interest_groups', $interest_groups, $order_id, $email );
 			}
 
-			// Allow hooking into variables
+			// Allow hooking into variables.
 			$merge_tags = apply_filters( 'ss_wc_mailchimp_subscribe_merge_tags', $merge_tags, $order_id, $email );
 
-			// Set subscription options
+			// Set subscription options.
 			$subscribe_options = array(
 				'list_id'           => $list_id,
 				'email'             => $email,
@@ -367,40 +372,44 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				'double_opt_in'     => $this->sswcmc->double_opt_in(),
 			);
 
-			// Allow hooking into subscription options
+			// Allow hooking into subscription options.
 			$options = apply_filters( 'ss_wc_mailchimp_subscribe_options', $subscribe_options, $order_id  );
 
-			// Extract options into variables
+			// Extract options into variables.
 			extract( $options );
 
-			// Log
-			$this->log( sprintf( __( __METHOD__ . '(): Subscribing customer to MailChimp: %s', 'woocommerce-mailchimp' ), print_r( $options, true ) ) );
+			// Log.
+			$this->log( sprintf( __( __METHOD__ . '(): Maybe subscribing customer ($subscribe_customer: %s) to MailChimp: %s', 'woocommerce-mailchimp' ), $subscribe_customer, print_r( $options, true ) ) );
 
 			do_action( 'ss_wc_mailchimp_before_subscribe', $subscribe_options, $order_id );
 
-			if ( ! empty( $list_id ) ) {
-				// Call API
-				$api_response = $this->sswcmc->mailchimp()->subscribe($list_id, $email, $email_type, $merge_tags, $interest_groups, $double_opt_in);
+			// If the 'ss_wc_mailchimp_opt_in' meta value isn't set
+			// (because 'display_opt_in' wasn't enabled at the time the order was placed)
+			// or the 'ss_wc_mailchimp_opt_in' is yes, subscriber the customer
 
-				// Log api response
+			if ( ! empty( $list_id ) && ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) ) {
+				// Call API.
+				$api_response = $this->sswcmc->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_opt_in );
+
+				// Log api response.
 				$this->log( sprintf( __( __METHOD__ . '(): MailChimp API response: %s', 'woocommerce-mailchimp' ), print_r( $api_response, true ) ) );
 
 				if ( $api_response === false ) {
-					// Format error message
+					// Format error message.
 					$error_response = sprintf( __( __METHOD__ . '(): WooCommerce MailChimp subscription failed: %s (%s)', 'woocommerce-mailchimp' ), $this->sswcmc->mailchimp()->get_error_message(), $this->sswcmc->mailchimp()->get_error_code() );
 
-					// Log
+					// Log the error response.
 					$this->log( $error_response );
 
-					// New hook for failing operations
+					// New hook for failing operations.
 					do_action( 'ss_wc_mailchimp_subscription_failed', $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
 
-					// Email admin
+					// Email admin.
 					$admin_email = get_option( 'admin_email' );
 					$admin_email = apply_filters( 'ss_wc_mailchimp_admin_email', $admin_email );
 					wp_mail( $admin_email, __( 'WooCommerce MailChimp subscription failed', 'woocommerce-mailchimp' ), $error_response );
 				} else {
-					// Hook on success
+					// Hook on success.
 					do_action( 'ss_wc_mailchimp_subscription_success', $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
 				}
 			}
