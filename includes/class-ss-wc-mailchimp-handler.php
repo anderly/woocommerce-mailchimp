@@ -123,7 +123,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				$this->log( sprintf( __( __METHOD__ . '(): Queueing maybe subscribe ($subscribe_customer: %s) for customer (%s) to list %s', 'woocommerce-mailchimp'), $subscribe_customer, $order_billing_email, $list_id ) );
 
 				// Queue the subscription.
-				as_schedule_single_action( time(), 'queue_ss_wc_mailchimp_maybe_subscribe', array( $subscribe_customer, $order_id, $order_billing_first_name, $order_billing_last_name, $order_billing_email , $list_id ), 'sswcmc' );
+				as_schedule_single_action( time(), 'queue_ss_wc_mailchimp_maybe_subscribe', array( $subscribe_customer, $order_id, $order_billing_first_name, $order_billing_last_name, $order_billing_email, $list_id ), 'sswcmc' );
 
 			}
 		}
@@ -138,11 +138,11 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			try {
 
-				if ( !isset($_POST['data']) ) {
+				if ( ! isset( $_POST['data'] ) ) {
 					throw new Exception( __( __METHOD__ . ': $_POST[\'data\'] not provided.', 'woocommerce-mailchimp' ) );
 				}
 
-				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
+				if ( ! $_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
 					throw new Exception( __( 'Please enter an api key.', 'woocommerce-mailchimp' ) );
 
@@ -154,8 +154,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				$results = $account;
 
-			}
-			catch ( Exception $e ) {
+			} catch ( Exception $e ) {
 
 				return $this->toJSON( array( 'error' => $e->getMessage() ) );
 
@@ -175,7 +174,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			try {
 
-				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
+				if ( ! $_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
 					return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'woocommerce-mailchimp' ) ) );
 
@@ -185,10 +184,9 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				$lists = $this->sswcmc->mailchimp( $api_key )->get_lists();
 
-				$results = array_merge( array('' => 'Select a list...'), $lists );
+				$results = array_merge( array( '' => 'Select a list...' ), $lists );
 
-			}
-			catch ( Exception $e ) {
+			} catch ( Exception $e ) {
 
 				return $this->toJSON( array( 'error' => $e->getMessage() ) );
 
@@ -208,13 +206,13 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			try {
 
-				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
+				if ( ! $_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
 					return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'ss_wc_mailchimp' ) ) );
 
 				}
 
-				if ( !$_POST['data']['list_id'] || empty( $_POST['data']['list_id'] ) ) {
+				if ( ! $_POST['data']['list_id'] || empty( $_POST['data']['list_id'] ) ) {
 
 					return $this->toJSON( array( '' => __( 'Please select a list from above.', 'ss_wc_mailchimp' ) ) );
 
@@ -227,8 +225,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				$results = $interest_groups;
 
-			}
-			catch ( Exception $e ) {
+			} catch ( Exception $e ) {
 
 				return $this->toJSON( array( 'error' => $e->getMessage() ) );
 
@@ -352,7 +349,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			$interest_groups = $this->sswcmc->interest_groups();
 
-			if ( ! empty(  $interest_groups ) ) {
+			if ( ! empty( $interest_groups ) ) {
 				$interest_groups = array_fill_keys( $this->sswcmc->interest_groups(), true );
 
 				// Allow hooking into variables.
@@ -373,7 +370,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			);
 
 			// Allow hooking into subscription options.
-			$options = apply_filters( 'ss_wc_mailchimp_subscribe_options', $subscribe_options, $order_id  );
+			$options = apply_filters( 'ss_wc_mailchimp_subscribe_options', $subscribe_options, $order_id );
 
 			// Extract options into variables.
 			extract( $options );

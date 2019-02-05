@@ -277,7 +277,7 @@ class SS_WC_MailChimp {
 
 			$resource = "lists/$list_id/interest-categories";
 
-			$response = $this->api->get( $resource );
+			$response = $this->api->get( $resource, array( 'count' => 100 ) );
 
 			if ( ! $response ) {
 				return false;
@@ -315,7 +315,7 @@ class SS_WC_MailChimp {
 
 			$resource = "lists/$list_id/interest-categories/$interest_category_id/interests";
 
-			$response = $this->api->get( $resource );
+			$response = $this->api->get( $resource, array( 'count' => 100 ) );
 
 			if ( ! $response ) {
 				return false;

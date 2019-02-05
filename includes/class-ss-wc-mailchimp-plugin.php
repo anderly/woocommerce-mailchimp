@@ -15,7 +15,7 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '2.1.13';
+	private static $version = '2.1.14';
 
 	/**
 	 * Plugin singleton instance
@@ -390,6 +390,8 @@ final class SS_WC_MailChimp_Plugin {
 
 			add_filter( 'plugin_action_links_' . plugin_basename( SS_WC_MAILCHIMP_FILE ), array( $this, 'action_links' ) );
 
+			//add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
+
 			add_filter( 'woocommerce_get_settings_pages', array( $this, 'add_mailchimp_settings' ) );
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -457,6 +459,32 @@ final class SS_WC_MailChimp_Plugin {
 		return array_merge( $plugin_links, $links );
 
 	} //end function action_links
+
+	/**
+	 * Show row meta on the plugin screen.
+	 *
+	 * @param mixed $links Plugin Row Meta.
+	 * @param mixed $file  Plugin Base file.
+	 *
+	 * @return array
+	 */
+	public static function plugin_row_meta( $links, $file ) {
+		if ( plugin_basename( SS_WC_MAILCHIMP_FILE ) === $file ) {
+			$row_meta = array(
+				'docs'    => '<a href="' . esc_url( apply_filters( 'ss_wc_mailchimp_docs_url', 'https://docs.woocommerce.com/documentation/plugins/woocommerce/' ) ) . '" aria-label="' . esc_attr__( 'View WooCommerce MailChimp documentation', 'woocommerce-mailchimp' ) . '">' . esc_html__( 'Documentation', 'woocommerce-mailchimp' ) . '</a>',
+			);
+
+			if ( ! function_exists( 'SSWCMCPRO' ) ) {
+				$$row_meta[] = array(
+					'support' => '<a href="' . esc_url( apply_filters( 'ss_wc_mailchimp_support_url', 'https://www.saintsystems.com/products/woocommerce-mailchimp-pro/#utm_source=wp-plugin&utm_medium=woocommerce-mailchimp&utm_campaign=plugins-upgrade-link' ) ) . '" aria-label="' . esc_attr__( 'Upgrade to WooCommerce MailChimp Pro', 'woocommerce-mailchimp' ) . '" target="_blank">' . esc_html__( 'Upgrade to Pro', 'woocommerce-mailchimp' ) . '</a>',
+				);
+			}
+
+			return array_merge( $row_meta, $links );
+		}
+
+		return (array) $links;
+	}
 
 	/**
 	 * Add the MailChimp settings tab to WooCommerce
