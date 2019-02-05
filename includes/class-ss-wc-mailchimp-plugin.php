@@ -15,7 +15,7 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '2.1.14';
+	private static $version = '2.1.15';
 
 	/**
 	 * Plugin singleton instance
@@ -480,7 +480,7 @@ final class SS_WC_MailChimp_Plugin {
 			);
 
 			if ( ! function_exists( 'SSWCMCPRO' ) ) {
-				$$row_meta[] = array(
+				$row_meta[] = array(
 					'support' => '<a href="' . esc_url( apply_filters( 'ss_wc_mailchimp_support_url', 'https://www.saintsystems.com/products/woocommerce-mailchimp-pro/#utm_source=wp-plugin&utm_medium=woocommerce-mailchimp&utm_campaign=plugins-upgrade-link' ) ) . '" aria-label="' . esc_attr__( 'Upgrade to WooCommerce MailChimp Pro', 'woocommerce-mailchimp' ) . '" target="_blank">' . esc_html__( 'Upgrade to Pro', 'woocommerce-mailchimp' ) . '</a>',
 				);
 			}
