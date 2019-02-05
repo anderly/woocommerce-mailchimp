@@ -15,7 +15,7 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '2.1.15';
+	private static $version = '2.1.16';
 
 	/**
 	 * Plugin singleton instance
