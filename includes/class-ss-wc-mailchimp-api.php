@@ -43,11 +43,6 @@ class SS_WC_MailChimp_API {
 	private $last_error;
 
 	/**
-	 * @var WC_Logger
-	 */
-	private $log;
-
-	/**
 	 * Create a new instance
 	 * @param string $api_key MailChimp API key
 	 * @param boolean $debug  Whether or not to log API calls
@@ -55,10 +50,6 @@ class SS_WC_MailChimp_API {
 	function __construct( $api_key, $debug = false ) {
 
 		$this->debug = $debug;
-
-		if ( $this->debug === true ) {
-			$this->log = new WC_Logger();
-		}
 
 		$this->api_key = $api_key;
 		$api_key_parts = explode( '-', $this->api_key );
@@ -68,6 +59,8 @@ class SS_WC_MailChimp_API {
 	} //end function __construct
 
 	/**
+	 * Get request.
+	 *
 	 * @param string $resource
 	 * @param array $args
 	 *
@@ -84,6 +77,8 @@ class SS_WC_MailChimp_API {
 	} //end function post
 
 	/**
+	 * Post request.
+	 *
 	 * @param string $resource
 	 * @param array $args
 	 *
@@ -96,6 +91,8 @@ class SS_WC_MailChimp_API {
 	} //end function post
 
 	/**
+	 * Put request.
+	 *
 	 * @param string $resource
 	 * @param array $args
 	 *
@@ -108,6 +105,8 @@ class SS_WC_MailChimp_API {
 	} //end function put
 
 	/**
+	 * Patch request.
+	 *
 	 * @param string $resource
 	 * @param array $args
 	 *
@@ -120,6 +119,8 @@ class SS_WC_MailChimp_API {
 	} //end function patch
 
 	/**
+	 * Delete request.
+	 *
 	 * @param string $resource
 	 * @param array $args
 	 *
@@ -133,10 +134,11 @@ class SS_WC_MailChimp_API {
 
 	/**
 	 * Performs the underlying HTTP request.
-	 * @param  string $method HTTP method (GET|POST|PUT|PATCH|DELETE)
-	 * @param  string $resource MailChimp API resource to be called
-	 * @param  array  $args   array of parameters to be passed
-	 * @return array          array of decoded result
+	 *
+	 * @param  string $method HTTP method (GET|POST|PUT|PATCH|DELETE).
+	 * @param  string $resource MailChimp API resource to be called.
+	 * @param  array  $args   array of parameters to be passed.
+	 * @return array          array of decoded result.
 	 */
 	private function api_request( $method, $resource, $args = array() ) {
 
@@ -160,8 +162,8 @@ class SS_WC_MailChimp_API {
 			),
 		);
 
-		// attach arguments (in body or URL)
-		if ( $method === 'GET' ) {
+		// attach arguments (in body or URL).
+		if ( 'GET' === $method ) {
 			$url = add_query_arg( $args, $url );
 		} else {
 			$request_args['body'] = json_encode( $args );
@@ -182,8 +184,8 @@ class SS_WC_MailChimp_API {
 
 			return false;
 
-		} elseif ( is_array( $raw_response ) 
-			&& $raw_response['response']['code'] 
+		} elseif ( is_array( $raw_response )
+			&& $raw_response['response']['code']
 			&& floor( $raw_response['response']['code'] ) / 100 >= 4 ) {
 
 			$json = wp_remote_retrieve_body( $raw_response );
@@ -216,18 +218,15 @@ class SS_WC_MailChimp_API {
 
 	/**
 	 * Conditionally log MailChimp API Call
-	 * @param  string $resource MailChimp API Resource
-	 * @param  string $method   HTTP Method
-	 * @param  array $args      HTTP Request Body
-	 * @param  array $response  WP HTTP Response
+	 *
+	 * @param  string $resource MailChimp API Resource.
+	 * @param  string $method   HTTP Method.
+	 * @param  array  $args     HTTP Request Body.
+	 * @param  array  $response WP HTTP Response.
 	 * @return void
 	 */
 	private function maybe_log( $resource, $method, $args, $response ) {
-
-		if ( $this->debug === true ) {
-			$this->log->add( 'woocommerce-mailchimp', "MailChimp API Call RESOURCE: $resource \n METHOD: $method \n BODY: " . print_r( $args, true ) . " \n RESPONSE: " . print_r( $response, true ) );
-		}
-
+		do_action( 'sswcmc_log', "MailChimp API Call RESOURCE: $resource \n METHOD: $method \n BODY: " . print_r( $args, true ) . " \n RESPONSE: " . print_r( $response, true ) );
 	}
 
 	/**

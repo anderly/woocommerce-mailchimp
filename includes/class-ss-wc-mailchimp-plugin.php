@@ -77,6 +77,7 @@ final class SS_WC_MailChimp_Plugin {
 			self::$instance->settings();
 			self::$instance->includes();
 			self::$instance->mailchimp();
+			self::$instance->logger        = SSWCMC_Logger::get_instance();
 			self::$instance->handler       = SS_WC_MailChimp_Handler::get_instance();
 			self::$instance->compatibility = SS_WC_MailChimp_Compatibility::get_instance();
 			self::$instance->admin_notices = new SS_WC_MailChimp_Admin_Notices();
@@ -372,6 +373,8 @@ final class SS_WC_MailChimp_Plugin {
 
 		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp-handler.php' );
 
+		require_once( SS_WC_MAILCHIMP_DIR . 'includes/class-sswcmc-logger.php' );
+
 	} //end function includes
 
 	/**
@@ -395,6 +398,8 @@ final class SS_WC_MailChimp_Plugin {
 			add_filter( 'woocommerce_get_settings_pages', array( $this, 'add_mailchimp_settings' ) );
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+			add_action( 'admin_init', array( $this, 'process_actions' ) );
 
 		}
 
@@ -533,6 +538,24 @@ final class SS_WC_MailChimp_Plugin {
 		wp_enqueue_style( 'woocommerce-mailchimp' );
 
 	} //end function enqueue_scripts
+
+	/**
+	 * Processes all SSWCMC actions sent via POST and GET by looking for the 'sswcmc-action'
+	 * request and running do_action() to call the function
+	 *
+	 * @since 2.1.15
+	 * @access public
+	 * @return void
+	 */
+	public function process_actions() {
+		if ( isset( $_POST['sswcmc-action'] ) ) {
+			do_action( 'sswcmc_' . $_POST['sswcmc-action'], $_POST );
+		}
+
+		if ( isset( $_GET['sswcmc-action'] ) ) {
+			do_action( 'sswcmc_' . $_GET['sswcmc-action'], $_GET );
+		}
+	}
 
 	/**
 	 * Handles running plugin upgrades if necessary

@@ -72,6 +72,8 @@ class SS_WC_MailChimp {
 			return false;
 		}
 
+		do_action( 'sswcmc_log', __METHOD__ . ' Mailchimp Account Retrieved: ' . print_r( $account, true ) );
+
 		return $account;
 
 	} //end function get_account
