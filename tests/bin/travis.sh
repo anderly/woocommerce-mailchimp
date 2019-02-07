@@ -9,7 +9,7 @@ say() {
 
 if [ $1 == 'before' ]; then
 
-	install_wc()
+	install_wc
 
 fi
 
