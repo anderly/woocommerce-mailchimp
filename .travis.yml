@@ -14,7 +14,7 @@ php:
 # - 7.3
 
 env:
-  - WP_VERSION=latest WC_BRANCH=master WP_MULTISITE=0
+  - WP_VERSION=latest WC_VERSION=latest WC_BRANCH=master WP_MULTISITE=0
 
 notifications:
   email:
