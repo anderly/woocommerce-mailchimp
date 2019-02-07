@@ -23,8 +23,10 @@ download() {
     fi
 }
 
-if [[ $WP_VERSION =~ [0-9]+\.[0-9]+(\.[0-9]+)? ]]; then
+if [[ $WP_VERSION =~ [0-9]+\.[0-9]+(\.[0-9]+)?(^-) ]]; then
 	WP_TESTS_TAG="tags/$WP_VERSION"
+elif [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
+	WP_TESTS_TAG="trunk"
 else
 	# http serves a single offer, whereas https serves multiple. we only want one
 	download http://api.wordpress.org/core/version-check/1.7/ /tmp/wp-latest.json
@@ -37,12 +39,11 @@ else
 	WP_TESTS_TAG="tags/$LATEST_VERSION"
 fi
 
-if [[ $WP_TESTS_TAG == *"beta"* ]]
-then
-	WP_TESTS_TAG="trunk"
-fi
-
 set -ex
+
+say() {
+  echo -e "$1"
+}
 
 install_wp() {
 	if [ $FORCE == 'true' ]; then
@@ -65,6 +66,8 @@ install_wp() {
 	tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C $WP_CORE_DIR
 
 	download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
+
+	say "WordPress Installed"
 }
 
 install_test_suite() {
@@ -98,6 +101,8 @@ install_test_suite() {
 		sed $ioption "s|localhost|${DB_HOST}|" "$WP_TESTS_DIR"/wp-tests-config.php
 	fi
 
+	say "Test Suite Installed"
+
 }
 
 install_db() {
@@ -119,6 +124,8 @@ install_db() {
 
 	# create database
 	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
+
+	say "Database Created"
 }
 
 install_wp

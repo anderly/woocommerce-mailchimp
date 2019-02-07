@@ -40,13 +40,17 @@ class WCMC_Unit_Tests_Bootstrap
 
 		$this->tests_dir = dirname( __FILE__ );
 		$this->plugin_dir = dirname( $this->tests_dir );
+		$this->modules_dir  = dirname( dirname( $this->tests_dir ) );
 		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : '/tmp/wordpress-tests-lib';
 
 		// load test function so tests_add_filter() is available
 		require_once $this->wp_tests_dir . '/includes/functions.php';
 
-		// load WCMC
-		tests_add_filter( 'muplugins_loaded', array( $this, 'load_wcmc' ) );
+		// load WC
+		tests_add_filter( 'muplugins_loaded', array( $this, 'load_wc' ) );
+
+		// install WC
+		tests_add_filter( 'setup_theme', array( $this, 'install_wc' ) );
 
 		// install WC
 		// tests_add_filter('setup_theme', array($this, 'install_wc'));
@@ -56,6 +60,33 @@ class WCMC_Unit_Tests_Bootstrap
 
 		// load WCMC testing framework
 		$this->includes();
+
+		// load WCMC
+		$this->load_wcmc();
+	}
+
+	/**
+	 * Load WooCommerce
+	 *
+	 * @since 2.0
+	 */
+	public function load_wc() {
+		require_once( $this->modules_dir . '/woocommerce/woocommerce.php' );
+	}
+	/**
+	 * Load WooCommerce for testing
+	 *
+	 * @since 2.0
+	 */
+	function install_wc() {
+		echo "Installing WooCommerce..." . PHP_EOL;
+		define( 'WP_UNINSTALL_PLUGIN', true );
+		include( $this->modules_dir . '/woocommerce/uninstall.php' );
+		WC_Install::install();
+		// reload capabilities after install, see https://core.trac.wordpress.org/ticket/28374
+		$GLOBALS['wp_roles']->for_site();
+		WC()->init();
+		echo "WooCommerce Finished Installing..." . PHP_EOL;
 	}
 
 	/**
@@ -65,7 +96,9 @@ class WCMC_Unit_Tests_Bootstrap
 	 */
 	public function load_wcmc()
 	{
+		echo "Loading WooCommerce MailChimp..." . PHP_EOL;
 		require_once $this->plugin_dir . '/woocommerce-mailchimp.php';
+		echo "WooCommerce MailChimp Loaded..." . PHP_EOL;
 	}
 
 	/**
