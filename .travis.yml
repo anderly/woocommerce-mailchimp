@@ -17,9 +17,8 @@ env:
   - WP_VERSION=latest WC_VERSION=latest WC_BRANCH=master WP_MULTISITE=0
 
 notifications:
-  email:
-    on_success: never
-    on_failure: change
+  slack:
+    secure: Mjk7B9Oly1O0aWWlO8nzdLuNwDHBeG7zfSV9Qkx37SOiuGX7D3MeDyRbJR7t+M2ArxIUyh3tcqw8fskzyvRK6yq4ZRQXS7FHPrE8YNBsqUTL4LNmZnYo2RtwpvplbzLl9bVWhCoFs4YUMLx/YZ+Nsu+ace4v5xhkLTTEQsZ2aNM=
 
 cache:
   directories:
