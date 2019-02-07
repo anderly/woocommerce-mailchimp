@@ -7,12 +7,6 @@ say() {
   echo -e "$1"
 }
 
-if [ $1 == 'before' ]; then
-
-	install_wc
-
-fi
-
 install_wc() {
 
   cd $INITIAL_DIR
@@ -26,3 +20,9 @@ install_wc() {
 	say "WooCommerce Installed"
 
 }
+
+if [ $1 == 'before' ]; then
+
+	install_wc
+
+fi
