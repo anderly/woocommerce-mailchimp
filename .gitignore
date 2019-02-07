@@ -3,13 +3,9 @@
 profile
 bin/install-wp-tests.sh
 includes/woocommerce-mailchimp.sublime-workspace
-.travis.yml
 phpcs.ruleset.xml
 phpunit.xml.dist
 release.sh
 # Unit tests
-/tmp
-/tests/bin/tmp
 phpcs.xml.dist
-tests/test-woocommerce-mailchimp.php
-tests/bootstrap.php
+vendor

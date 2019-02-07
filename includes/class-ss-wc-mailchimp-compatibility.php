@@ -90,8 +90,8 @@ final class SS_WC_MailChimp_Compatibility {
 	 */
 	public static function is_valid() {
 
-		return ( self::is_valid_woocommerce() 
-			  && self::is_valid_wordpress() 
+		return ( self::is_valid_woocommerce()
+			  && self::is_valid_wordpress()
 			  && self::is_valid_php()
 		);
 
@@ -195,7 +195,7 @@ final class SS_WC_MailChimp_Compatibility {
 		} else {
 
 			if ( $wc_status = self::get_plugin_status( 'woocommerce/woocommerce.php' ) ) {
-				if ( true === $wc_status  ) {
+				if ( true === $wc_status ) {
 					$woocommerce_is_active = true;
 				}
 				$wc_data = get_plugin_data( WP_CONTENT_DIR . '/plugins/woocommerce/woocommerce.php' );
