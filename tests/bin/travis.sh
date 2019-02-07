@@ -3,6 +3,8 @@
 
 set -e
 
+INITIAL_DIR=$PWD
+
 say() {
   echo -e "$1"
 }
