@@ -1,10 +1,7 @@
 # osx noise
 .DS_Store
 profile
-bin/install-wp-tests.sh
 includes/woocommerce-mailchimp.sublime-workspace
-phpcs.ruleset.xml
-phpunit.xml.dist
 release.sh
 # Unit tests
 phpcs.xml.dist
