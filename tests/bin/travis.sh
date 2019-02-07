@@ -25,14 +25,14 @@ install_wc() {
 	mkdir -p "../woocommerce"
 	if [ $WC_VERSION == 'latest' ]; then
 		# Get the latest WooCommerce release
-		curl -L https://api.github.com/repos/woocommerce/woocommerce/releases/$WC_VERSION |
+		curl -L https://api.github.com/repos/woocommerce/woocommerce/releases/$WC_VERSION?access_token=$GITHUB_TOKEN |
 			grep '"tarball_url":' | #Get tarball url line
 			sed -E 's/.*"([^"]+)".*/\1/' | #Get tarball url
 			xargs -I {} curl -sL "{}" | #Capture the argument and use to download the tarball
 			tar --strip-components=1 -zx -C "../woocommerce" #Extract
 	else
 		# Get the specified WooCommerce release
-		curl -sL https://api.github.com/repos/woocommerce/woocommerce/tarball/$WC_VERSION | tar --strip-components=1 -zx -C "../woocommerce"
+		curl -sL https://api.github.com/repos/woocommerce/woocommerce/tarball/$WC_VERSION?access_token=$GITHUB_TOKEN | tar --strip-components=1 -zx -C "../woocommerce"
 	fi
 
 	say "WooCommerce Installed"
