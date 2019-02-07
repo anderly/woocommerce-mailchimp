@@ -1,11 +1,12 @@
 WooCommerce MailChimp
 ======================
-[![WordPress tested](http://img.shields.io/wordpress/v/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
-[![WordPress Plugin version](http://img.shields.io/wordpress/plugin/v/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
-[![WordPress Plugin Downloads](http://img.shields.io/wordpress/plugin/dt/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![Build Status](https://img.shields.io/travis/anderly/woocommerce-mailchimp/master.svg?style=flat-square)](https://travis-ci.org/anderly/woocommerce-mailchimp)
+[![WordPress tested](https://img.shields.io/wordpress/v/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![WordPress Plugin version](https://img.shields.io/wordpress/plugin/v/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![WordPress Plugin Downloads](https://img.shields.io/wordpress/plugin/dt/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
 [![WordPress Plugin Active Installs](https://img.shields.io/wordpress/plugin/installs/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
-[![WordPress Plugin Rating](http://img.shields.io/wordpress/plugin/r/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
-[![License](http://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)](http://opensource.org/licenses/GPL-3.0)
+[![WordPress Plugin Rating](https://img.shields.io/wordpress/plugin/r/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
+[![License](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)](http://opensource.org/licenses/GPL-3.0)
 
 WooCommerce MailChimp provides simple and flexible MailChimp integration for WooCommerce.
 
