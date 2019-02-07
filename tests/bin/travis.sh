@@ -21,6 +21,8 @@ install_wc() {
 
 	# say "WooCommerce Installed"
 
+	say "Downloading WooCommerce ($WC_VERSION)"
+
 	# place a copy of woocommerce where the unit tests etc. expect it to be
 	mkdir -p "../woocommerce"
 	if [ $WC_VERSION == 'latest' ]; then
@@ -35,7 +37,7 @@ install_wc() {
 		curl --max-time 900 --connect-timeout 60 -sL https://api.github.com/repos/woocommerce/woocommerce/tarball/$WC_VERSION?access_token=$GITHUB_TOKEN | tar --strip-components=1 -zx -C "../woocommerce"
 	fi
 
-	say "WooCommerce Installed"
+	say "WooCommerce ($WC_VERSION) Downloaded"
 
 }
 
