@@ -421,7 +421,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 				$settings[] = array(
 						'id'          => $this->namespace_prefixed( 'opt_in_label' ),
 						'title'       => __( 'Opt-In Field Label', 'woocommerce-mailchimp' ),
-						'type'        => 'text',
+						'type'        => 'textarea',
 						'desc'        => __( 'Optional: customize the label displayed next to the opt-in checkbox.', 'woocommerce-mailchimp' ),
 						'default'     => __( 'Subscribe to our newsletter', 'woocommerce-mailchimp' ),
 						'css'         => 'min-width:350px;',
