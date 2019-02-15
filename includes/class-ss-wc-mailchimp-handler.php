@@ -120,7 +120,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				$list_id = $this->sswcmc->get_list();
 
-				$this->log( sprintf( __( __METHOD__ . '(): Queueing maybe subscribe ($subscribe_customer: %s) for customer (%s) to list %s', 'woocommerce-mailchimp'), $subscribe_customer, $order_billing_email, $list_id ) );
+				$this->log( sprintf( __( __METHOD__ . '(): Queueing maybe subscribe ($subscribe_customer: %s) for customer (%s) to list %s for order (%s)', 'woocommerce-mailchimp'), $subscribe_customer, $order_billing_email, $list_id, $order_id ) );
 
 				// Queue the subscription.
 				as_schedule_single_action( time(), 'queue_ss_wc_mailchimp_maybe_subscribe', array( $subscribe_customer, $order_id, $order_billing_first_name, $order_billing_last_name, $order_billing_email, $list_id ), 'sswcmc' );
@@ -330,9 +330,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 */
 		public function maybe_subscribe( $subscribe_customer, $order_id, $first_name, $last_name, $email, $list_id = 'false' ) {
 
-			// throw new Exception('Failure: Houston we have a problem!');
-
-			$this->log( sprintf( __( __METHOD__ . '(): Processing queued maybe_subscribe ($subscribe_customer: %s) for customer (%s) to list %s', 'woocommerce-mailchimp' ), $subscribe_customer, $email, $list_id ) );
+			$this->log( sprintf( __( __METHOD__ . '(): Processing queued maybe_subscribe ($subscribe_customer: %s) for customer (%s) to list %s for order (%s)', 'woocommerce-mailchimp' ), $subscribe_customer, $email, $list_id, $order_id ) );
 
 			if ( ! $email ) {
 				return; // Email is required.
@@ -378,7 +376,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			// Log.
 			$this->log( sprintf( __( __METHOD__ . '(): Maybe subscribing customer ($subscribe_customer: %s) to MailChimp: %s', 'woocommerce-mailchimp' ), $subscribe_customer, print_r( $options, true ) ) );
 
-			do_action( 'ss_wc_mailchimp_before_subscribe', $subscribe_options, $order_id );
+			do_action( 'ss_wc_mailchimp_before_subscribe', $subscribe_customer, $subscribe_options, $order_id );
 
 			// If the 'ss_wc_mailchimp_opt_in' meta value isn't set
 			// (because 'display_opt_in' wasn't enabled at the time the order was placed)
@@ -411,7 +409,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				}
 			}
 
-			do_action( 'ss_wc_mailchimp_after_subscribe', $subscribe_options, $order_id );
+			do_action( 'ss_wc_mailchimp_after_subscribe', $subscribe_customer, $subscribe_options, $order_id );
 
 		}
 
@@ -459,15 +457,10 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @since 1.2.2
 		 */
 		private function log( $message ) {
-			if ( $this->sswcmc->debug_enabled() ) {
-				$logger = new WC_Logger();
-
-				if ( is_array( $message ) || is_object( $message ) ) {
-					$logger->add( 'woocommerce-mailchimp', print_r( $message, true ) );
-				}
-				else {
-					$logger->add( 'woocommerce-mailchimp', $message );
-				}
+			if ( is_array( $message ) || is_object( $message ) ) {
+				do_action( 'sswcmc_log', print_r( $message, true ) );
+			} else {
+				do_action( 'sswcmc_log', $message );
 			}
 		}
 
