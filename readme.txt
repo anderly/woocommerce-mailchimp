@@ -3,9 +3,9 @@ Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
 Requires at least: 3.5.1
-Tested up to: 5.0.3
+Tested up to: 5.1
 WC tested up to: 3.5.4
-Stable tag: 2.1.17
+Stable tag: 2.1.18
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -113,6 +113,11 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce MailChimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.1.18 - February 15, 2019
+- Add subscribe_customer param to before/after subscribe hooks.
+- Use new logging action for logging.
+- Update tested to WP 5.1
 
 #### 2.1.17 - February 14, 2019
 - Allow html (hyperlinks, etc.) in Opt-In Field Label.
