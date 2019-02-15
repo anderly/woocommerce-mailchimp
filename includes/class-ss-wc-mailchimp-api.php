@@ -176,7 +176,7 @@ class SS_WC_MailChimp_API {
 
 		$this->last_response = $raw_response;
 
-		$this->maybe_log( $url, $method, $args, $raw_response );
+		// $this->maybe_log( $url, $method, $args, $raw_response );
 
 		if ( is_wp_error( $raw_response ) ) {
 
@@ -226,6 +226,11 @@ class SS_WC_MailChimp_API {
 	 * @return void
 	 */
 	private function maybe_log( $resource, $method, $args, $response ) {
+
+		if ( isset( $response['_links'] ) ) {
+			unset( $response['_links'] );
+		}
+
 		do_action( 'sswcmc_log', "MailChimp API Call RESOURCE: $resource \n METHOD: $method \n BODY: " . print_r( $args, true ) . " \n RESPONSE: " . print_r( $response, true ) );
 	}
 
