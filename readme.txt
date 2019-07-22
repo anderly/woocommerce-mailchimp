@@ -114,6 +114,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
+#### 2.1.20 - July 22, 2019
+- Bump plugin version and min WP and WC tested versions.
+
 #### 2.1.19 - February 15, 2019
 - Update styling of opt-in checkbox.
 
