@@ -38,7 +38,7 @@ This is a developer's portal for the WooCommerce MailChimp plugin and should not
 
 Online documentation and code samples are available via our [Help Center](https://support.saintsystems.com/hc/en-us/sections/201959566).
 
-Priority support will be available with the upcoming [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/).
+Priority support is available for [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) customers.
 
 Contributions
 -------------
