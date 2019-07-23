@@ -379,6 +379,43 @@ class SS_WC_MailChimp {
 	} //end function get_interest_categories_with_interests
 
 	/**
+	 * Get interest categories with interests
+	 *
+	 * @access public
+	 * @param string $list_id
+	 * @return mixed
+	 */
+	public function get_tags( $list_id ) {
+
+		if ( ! $results = get_transient( "sswcmc_{$list_id}_tags" ) ) {
+
+			$resource = "lists/$list_id/segments?type=static";
+
+			$response = $this->api->get( $resource, array( 'count' => 100 ) );
+
+			if ( ! $response ) {
+				return false;
+			}
+
+			$tags = $response['segments'];
+
+			$results = array();
+
+			foreach ( $tags as $tag ) {
+
+				$results[ $tag['id'] ] = $tag['name'];
+
+			}
+
+			set_transient( "sswcmc_{$list_id}_tags", $results, 60*15*1 );
+
+		}
+
+		return $results;
+
+	} //end function get_tags
+
+	/**
 	 * Returns error code from error property
 	 * @return string error code
 	 */
