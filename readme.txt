@@ -2,10 +2,10 @@
 Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
-Requires at least: 3.5.1
+Requires at least: 4.7.0
 Tested up to: 5.2.2
 WC tested up to: 3.6.5
-Stable tag: 2.1.21
+Stable tag: 2.2.0
 License: GPLv3
 
 Simple and flexible MailChimp integration for WooCommerce.
@@ -73,7 +73,7 @@ If no custom translations are present, languages will be loaded in the following
 
 = Requirements =
 
-WooCommerce MailChimp requires PHP 5.4+ (PHP 7.0+ recommended). You'll also need to be running WordPress 3.5.1+ and have WooCommerce 2.2+.
+WooCommerce MailChimp requires PHP 5.6+ (PHP 7.0+ recommended). You'll also need to be running WordPress 4.7.0+ and have WooCommerce 3.5.0+.
 
 = Documentation & Support =
 
@@ -113,6 +113,10 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce MailChimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.2.0 - July 23, 2019
+- Bump min WC version to 3.5.0, and min WP version to 4.7.0.
+- Bump min PHP version to 5.6 in prep for WooCoommerce 3.7 requirements.
 
 #### 2.1.21 - July 23, 2019
 - Prep for getting list tags.

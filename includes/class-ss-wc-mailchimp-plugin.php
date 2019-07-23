@@ -15,7 +15,7 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '2.1.21';
+	private static $version = '2.2.0';
 
 	/**
 	 * Plugin singleton instance
@@ -316,13 +316,13 @@ final class SS_WC_MailChimp_Plugin {
 	private function define_constants() {
 
 		// Minimum supported version of WordPress.
-		$this->define( 'SS_WC_MAILCHIMP_MIN_WP_VERSION', '3.5.1' );
+		$this->define( 'SS_WC_MAILCHIMP_MIN_WP_VERSION', '4.7.0' );
 
 		// Minimum supported version of WooCommerce.
-		$this->define( 'SS_WC_MAILCHIMP_MIN_WC_VERSION', '2.2.0' );
+		$this->define( 'SS_WC_MAILCHIMP_MIN_WC_VERSION', '3.5.0' );
 
 		// Minimum supported version of PHP.
-		$this->define( 'SS_WC_MAILCHIMP_MIN_PHP_VERSION', '5.4.0' );
+		$this->define( 'SS_WC_MAILCHIMP_MIN_PHP_VERSION', '5.6.0' );
 
 		// Plugin version.
 		$this->define( 'SS_WC_MAILCHIMP_VERSION', self::version() );
