@@ -82,7 +82,7 @@ Online documentation and code samples are available via our [Help Center](https:
 Please visit the
 [WooCommerce MailChimp support forum on WordPress.org](https://wordpress.org/support/plugin/woocommerce-mailchimp) for basic support and help from other users. Since this is a free plugin, we respond to these as we have time.
 
-Dedicated support will be available with the upcoming [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/).
+Dedicated support will is available for [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) customers.
 
 = Contribute =
 All development for WooCommerce MailChimp is [handled via GitHub](https://github.com/anderly/woocommerce-mailchimp). Opening new issues and submitting pull requests are welcome.
@@ -91,7 +91,7 @@ All development for WooCommerce MailChimp is [handled via GitHub](https://github
 
 You can also keep up to date with [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) development by [subscribing to our newsletter](http://eepurl.com/bxcewL).
 
-Also, if you enjoy using the software [we'd love it if you could give us a review](https://wordpress.org/support/plugin/woocommerce-mailchimp/reviews/)!
+Also, if you enjoy using the software [we'd love it if you could give us a review](https://wordpress.org/support/plugin/woocommerce-mailchimp/reviews/?rate=5#new-post)!
 
 == Installation ==
 
