@@ -1,7 +1,7 @@
 === WooCommerce MailChimp ===
 Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
-Tags: woocommerce, mailchimp
+Tags: woocommerce, mailchimp, ecommerce, email
 Requires at least: 4.7.0
 Tested up to: 5.2.2
 WC tested up to: 3.6.5
