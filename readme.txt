@@ -5,6 +5,7 @@ Tags: woocommerce, mailchimp
 Requires at least: 4.7.0
 Tested up to: 5.2.2
 WC tested up to: 3.6.5
+Requires PHP: 5.6
 Stable tag: 2.2.0
 License: GPLv3
 
