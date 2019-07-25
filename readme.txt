@@ -18,7 +18,7 @@ WooCommerce Mailchimp provides simple and flexible Mailchimp integration for Woo
 Automatically subscribe customers to a designated Mailchimp list and, optionally, Mailchimp interest groups and tags upon order creation or order completion.
 This can be done quietly or based on the user's consent with several opt-in settings that support international opt-in laws.
 
-Upgrade to [WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/)) for more advanced features including WooCommerce Subscriptions support and the ability to set product-specific lists, groups and tags.
+Upgrade to [WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) for more advanced features including WooCommerce Subscriptions support and the ability to set product-specific lists, groups and tags.
 
 = Features =
 
