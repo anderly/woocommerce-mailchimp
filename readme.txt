@@ -1,4 +1,4 @@
-=== WooCommerce MailChimp ===
+=== WooCommerce Mailchimp ===
 Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp
@@ -8,25 +8,29 @@ WC tested up to: 3.6.5
 Stable tag: 2.2.0
 License: GPLv3
 
-Simple and flexible MailChimp integration for WooCommerce.
+Simple and flexible Mailchimp integration for WooCommerce.
 
 == Description ==
 
-WooCommerce MailChimp provides simple and flexible MailChimp integration for WooCommerce.
+WooCommerce Mailchimp provides simple and flexible Mailchimp integration for WooCommerce.
 
-Automatically subscribe customers to a designated MailChimp list and, optionally, MailChimp interest groups upon order creation or order completion. This can be done quietly or based on the user's consent with several opt-in settings that support international opt-in laws.
+Automatically subscribe customers to a designated Mailchimp list and, optionally, Mailchimp interest groups and tags upon order creation or order completion.
+This can be done quietly or based on the user's consent with several opt-in settings that support international opt-in laws.
+
+Upgrade to [WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/)) for more advanced features including WooCommerce Subscriptions support and the ability to set product-specific lists, groups and tags.
 
 = Features =
 
 **WooCommerce Event Selection**
 
-- Subscribe customers to MailChimp after order creation
-- Subscribe customers to MailChimp after order processing
-- Subscribe customers to MailChimp after order completion
+- Subscribe customers to Mailchimp after order creation
+- Subscribe customers to Mailchimp after order processing
+- Subscribe customers to Mailchimp after order completion
 
-**Works with MailChimp Interest Groups**
+**Works with Mailchimp Interest Groups and Tags**
 
-- Set one or more interest groups to add users to based on the selected MailChimp list.
+- Set one or more interest groups to add users to based on the selected Mailchimp list.
+- Set one or more tags to add users to based on the selected Mailchimp list.
 
 **Opt-In Settings**
 
@@ -40,7 +44,7 @@ Automatically subscribe customers to a designated MailChimp list and, optionally
 
 Would you like to help translate the plugin into more languages? Join our Translations Community at https://translate.wordpress.org/projects/wp-plugins/woocommerce-mailchimp.
 
-WooCommerce MailChimp translation is managed through WordPress language packs here: https://translate.wordpress.org. This allows WooCommerce MailChimp to be translated into other languages. The preferred tool for translating plugins is called [GlotPress](https://make.wordpress.org/polyglots/handbook/tools/glotpress-translate-wordpress-org/). You can [read about how GlotPress works in the WordPress Translator's Handbook](https://make.wordpress.org/polyglots/handbook/tools/glotpress-translate-wordpress-org/).
+WooCommerce Mailchimp translation is managed through WordPress language packs here: https://translate.wordpress.org. This allows WooCommerce Mailchimp to be translated into other languages. The preferred tool for translating plugins is called [GlotPress](https://make.wordpress.org/polyglots/handbook/tools/glotpress-translate-wordpress-org/). You can [read about how GlotPress works in the WordPress Translator's Handbook](https://make.wordpress.org/polyglots/handbook/tools/glotpress-translate-wordpress-org/).
 
 Thanks in advance for your help on any translation efforts!
 
@@ -73,7 +77,7 @@ If no custom translations are present, languages will be loaded in the following
 
 = Requirements =
 
-WooCommerce MailChimp requires PHP 5.6+ (PHP 7.0+ recommended). You'll also need to be running WordPress 4.7.0+ and have WooCommerce 3.5.0+.
+WooCommerce Mailchimp requires PHP 5.6+ (PHP 7.0+ recommended). You'll also need to be running WordPress 4.7.0+ and have WooCommerce 3.5.0+.
 
 = Documentation & Support =
 
@@ -100,17 +104,17 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 = Usage =
 
-1. Go to WooCommerce > Settings > MailChimp
+1. Go to WooCommerce > Settings > Mailchimp
 2. First, paste your MailChimp API Key to get started.
-3. Select whether you want customers to be subscribed to your MailChimp list after order creation, order processing or order completion (there's a difference in WooCommerce).
-4. Next, select your MailChimp list and select any interest groups (optional).
+3. Select whether you want customers to be subscribed to your Mailchimp list after order creation, order processing or order completion (there's a difference in WooCommerce).
+4. Next, select your Mailchimp list and select any interest groups (optional).
 5. Select your opt-in, double opt-in settings and hit `Save changes`.
-6. That's it, your WooCommerce store is now integrated with MailChimp!
+6. That's it, your WooCommerce store is now integrated with Mailchimp!
 
 == Screenshots ==
 
-1. WooCommerce MailChimp general settings screen.
-2. WooCommerce MailChimp troubleshooting screen.
+1. WooCommerce Mailchimp general settings screen.
+2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
 
