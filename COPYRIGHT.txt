@@ -1,7 +1,7 @@
 
  WooCommerce MailChimp
 
- Copyright 2018 "saintsystems" (Saint Systems) www.saintsystems.com
+ Copyright 2019 "saintsystems" (Saint Systems) www.saintsystems.com
 
  The files COPYRIGHT.txt and LICENSE.txt as well as ALL NOTICES IN THE
  HEADERS OF ALL FILES MUST BE KEPT INTACT.
