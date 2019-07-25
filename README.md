@@ -1,4 +1,4 @@
-WooCommerce MailChimp
+WooCommerce Mailchimp
 ======================
 [![Build Status](https://img.shields.io/travis/anderly/woocommerce-mailchimp/master.svg?style=flat-square)](https://travis-ci.org/anderly/woocommerce-mailchimp)
 [![WordPress tested](https://img.shields.io/wordpress/v/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
@@ -8,13 +8,13 @@ WooCommerce MailChimp
 [![WordPress Plugin Rating](https://img.shields.io/wordpress/plugin/r/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
 [![License](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)](http://opensource.org/licenses/GPL-3.0)
 
-WooCommerce MailChimp provides simple and flexible MailChimp integration for WooCommerce.
+WooCommerce Mailchimp provides simple and flexible Mailchimp integration for WooCommerce.
 
-Automatically subscribe customers to a designated MailChimp list and, optionally, MailChimp interest groups upon order creation or order completion. This can be done quietly or based on the user's consent with several opt-in settings that support international opt-in laws.
+Automatically subscribe customers to a designated MailCcimp list and, optionally, Mailchimp interest groups upon order creation or order completion. This can be done quietly or based on the user's consent with several opt-in settings that support international opt-in laws.
 
 Upgrade to [WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) for more advanced features including WooCommerce Subscriptions support and the ability to set product-specific lists, groups and tags.
 
-Here, you can browse the source of the [WooCommerce MailChimp](https://wordpress.org/plugins/woocommerce-mailchimp/) WordPress plugin, find and discuss open issues or contribute code to the plugin yourself.
+Here, you can browse the source of the [WooCommerce Mailchimp](https://wordpress.org/plugins/woocommerce-mailchimp/) WordPress plugin, find and discuss open issues or contribute code to the plugin yourself.
 
 Installation
 ------------
@@ -25,8 +25,7 @@ If you want to run the latest development version, you have two options:
 * You can download the repository .zip file: [woocommerce-mailchimp.zip](https://github.com/anderly/woocommerce-mailchimp/archive/master.zip)
 * You can clone the GitHub repository using Git `git clone https://github.com/anderly/woocommerce-mailchimp.git woocommerce-mailchimp
 
-This will download the latest development version of the WooCommerce MailChimp plugin. While this version is usually stable,
-it is not recommended for use in a production environment.
+This will download the latest development version of the WooCommerce Mailchimp plugin. While this version is usually stable, it is not recommended for use in a production environment.
 
 Bugs
 ----
@@ -35,12 +34,12 @@ If you think you've found a bug, [please raise an issue here](https://github.com
 Documentation & Support
 -------
 
-This is a developer's portal for the WooCommerce MailChimp plugin and should not be used for support. Please visit the
-[WooCommerce MailChimp support forum on WordPress.org](https://wordpress.org/support/plugin/woocommerce-mailchimp) for basic support and help from other users. Since this is a free plugin, we respond to these as we have time.
+This is a developer's portal for the WooCommerce Mailchimp plugin and should not be used for support. Please visit the
+[WooCommerce Mailchimp support forum on WordPress.org](https://wordpress.org/support/plugin/woocommerce-mailchimp) for basic support and help from other users. Since this is a free plugin, we respond to these as we have time.
 
 Online documentation and code samples are available via our [Help Center](https://support.saintsystems.com/hc/en-us/sections/201959566).
 
-Priority support is available for [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) customers.
+Priority support is available for [WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) customers.
 
 Contributions
 -------------
