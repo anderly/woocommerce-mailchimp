@@ -376,7 +376,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'desc_tip'    =>  true,
 					);
 
-				$settings = apply_filters( $this->namespace_prefixed( 'settings_general_after_interest_groups' ), $settings );
+				$settings = apply_filters( 'ss_wc_mailchimp_settings_general_after_interest_groups' , $settings );
 
 				$settings[] = array(
 						'id'          => $this->namespace_prefixed( 'occurs' ),
@@ -417,6 +417,8 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'no' => __( 'Automatically', 'woocommerce-mailchimp' ),
 					)
 				);
+
+				$settings = apply_filters( 'ss_wc_mailchimp_settings_general_after_display_opt_in' , $settings );
 
 				$settings[] = array(
 						'id'          => $this->namespace_prefixed( 'opt_in_label' ),

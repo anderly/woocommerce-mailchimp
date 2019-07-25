@@ -119,6 +119,46 @@ class SS_WC_MailChimp {
 	} //end function get_lists
 
 	/**
+	 * Get list
+	 *
+	 * @access public
+	 * @return mixed
+	 */
+	public function get_list_web_ids( $args = array() ) {
+
+		if ( ! $results = get_transient( 'sswcmc_list_web_ids' ) ) {
+
+			$resource = 'lists/';
+
+			if ( ! array_key_exists( 'count', $args ) ) {
+				$args['count'] = 100;
+			}
+
+			$response = $this->api->get( $resource, $args );
+
+			if ( ! $response ) {
+				return false;
+			}
+
+			$lists = $response['lists'];
+
+			$results = array();
+
+			foreach ( $lists as $list ) {
+
+				$results[ (string)$list['id'] ] = $list['web_id'];
+
+			}
+
+			set_transient( 'sswcmc_list_web_ids', $results, 60*15*1 );
+
+		}
+
+		return $results;
+
+	} //end function get_list_web_ids
+
+	/**
 	 * Get Subscriber
 	 * @param  string $list_id         The MailChimp list ID
 	 * @param  string $email_address   The user's email address
@@ -150,7 +190,7 @@ class SS_WC_MailChimp {
 	 * @param  boolean $double_opt_in  Whether to send a double opt-in email to confirm subscription
 	 * @return mixed $response         The MailChimp API response
 	 */
-	public function subscribe( $list_id, $email_address, $email_type, $merge_fields, $interests, $double_opt_in ) {
+	public function subscribe( $list_id, $email_address, $email_type, $merge_fields, $interests, $double_opt_in, $tags = array() ) {
 
 		$args = array(
 			'email_address' => $email_address,
@@ -178,6 +218,24 @@ class SS_WC_MailChimp {
 
 		if ( ! $response ) {
 			return false;
+		}
+
+		if ( is_array( $tags ) && !empty( $tags ) ) {
+
+			$args = array(
+				'tags' => array_map( function( $tag ) {
+					return array(
+						'name' => $tag,
+						'status' => 'active'
+					);
+				}, $tags)
+			);
+
+			do_action( 'sswcmc_log', __METHOD__ . ' Attempting to add tags to subscriber ('.$email_address.'): ' . print_r( $args, true ) );
+
+			$response_tags = $this->api->post( $resource . '/tags', $args );
+
+			do_action( 'sswcmc_log', __METHOD__ . ' Subscriber tags response: ' . print_r( $response_tags, true ) );
 		}
 
 		return $response;
@@ -403,7 +461,7 @@ class SS_WC_MailChimp {
 
 			foreach ( $tags as $tag ) {
 
-				$results[ $tag['id'] ] = $tag['name'];
+				$results[ $tag['name'] ] = $tag['name'];
 
 			}
 
