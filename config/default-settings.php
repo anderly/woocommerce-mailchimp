@@ -4,6 +4,7 @@ return array(
 	'enabled' => 'yes',
 	'list' => '',
 	'interest_groups' => '',
+	'tags' => '',
 	'display_opt_in' => 'no',
 	'occurs' => 'pending',
 	'double_opt_in' => 'no',

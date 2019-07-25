@@ -147,6 +147,16 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		}
 
 		/**
+		 * tags function.
+		 *
+		 * @access public
+		 * @return array
+		 */
+		public function tags() {
+			return $this->get_option( 'tags' );
+		}
+
+		/**
 		 * has_list function.
 		 *
 		 * @access public
@@ -311,11 +321,17 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 			if ( '' === $current_section ) {
 
+				$desc = __( 'Enter your MailChimp settings below to control how WooCommerce integrates with your MailChimp account.', 'woocommerce-mailchimp' );
+				$desc_pro = '';
+				if ( ! function_exists( 'SSWCMCPRO' ) ) {
+					$desc_pro = sprintf( __( '%sUpgrade to Pro%s to unlock several powerful features including %sWooCommerce Subscriptions%s support and product-specific lists, groups and tags.', 'woocommerce-mailchimp' ), '<p/><a href="https://www.saintsystems.com/products/woocommerce-mailchimp-pro/#utm_source=wp-plugin&utm_medium=woocommerce-mailchimp&utm_campaign=plugin-settings-page" target="_blank">', '</a>', '<a href="https://woocommerce.com/products/woocommerce-subscriptions/" target="_blank">', '</a>' );
+				}
+
 				$settings = array(
 					array(
 						'title' => __( 'MailChimp', 'woocommerce-mailchimp' ),
 						'type' 	=> 'title',
-						'desc' 	=> __( 'Enter your MailChimp settings below to control how WooCommerce integrates with your MailChimp account.', 'woocommerce-mailchimp' ),
+						'desc' 	=> $desc . $desc_pro,
 						'id' 	=> 'general_options',
 					),
 				);
@@ -324,9 +340,9 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'id'          => $this->namespace_prefixed( 'api_key' ),
 						'title'       => __( 'API Key', 'woocommerce-mailchimp' ),
 						'type'        => 'text',
-						'desc' => sprintf( __( '%sLogin to MailChimp%s to look up your api key.', 'woocommerce-mailchimp' ), '<br/><a href="https://admin.mailchimp.com/account/api/" target="_blank">', '</a>'
+						'desc' => sprintf( __( '%sLogin to Mailchimp%s to look up your api key.', 'woocommerce-mailchimp' ), '<br/><a href="https://admin.mailchimp.com/account/api/" target="_blank">', '</a>'
 						),
-						'placeholder' => __( 'Paste your MailChimp API key here', 'woocommerce-mailchimp' ),
+						'placeholder' => __( 'Paste your Mailchimp API key here', 'woocommerce-mailchimp' ),
 						'default'     => '',
 						'css'         => 'min-width:350px;',
 						'desc_tip'    => 'Your API Key is required for the plugin to communicate with your MailChimp account.',
@@ -341,12 +357,18 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'default'     => 'yes',
 					);
 
-				$mailchimp_lists = $this->get_lists();
+				if ( $this->has_api_key() ) {
+					$mailchimp_lists = $this->get_lists();
+				} else {
+					$mailchimp_lists = array();
+				}
 
 				if ( $this->has_api_key() && $this->has_list() ) {
 					$interest_groups = $this->get_interest_groups();
+					$tags = $this->get_tags();
 				} else {
 					$interest_groups = array();
+					$tags = array();
 				}
 
 				$settings[] = array(
@@ -365,7 +387,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'id'          => $this->namespace_prefixed( 'interest_groups' ),
 						'title'       => __( 'Interest Groups', 'woocommerce-mailchimp' ),
 						'type'        => 'multiselect',
-						'desc' => __( 'Optional: Interest groups to assign to subscribers.', 'woocommerce-mailchimp' ),
+						'desc'        => __( 'Optional: Interest groups to assign to subscribers.', 'woocommerce-mailchimp' ),
 						'default'     => '',
 						'options'     => $interest_groups,
 						'class'       => 'wc-enhanced-select',
@@ -377,6 +399,23 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 					);
 
 				$settings = apply_filters( 'ss_wc_mailchimp_settings_general_after_interest_groups' , $settings );
+
+				$settings[] = array(
+						'id'          => $this->namespace_prefixed( 'tags' ),
+						'title'       => __( 'Tags', 'woocommerce-mailchimp' ),
+						'type'        => 'multiselect',
+						'desc'        => __( 'Optional: Tags to assign to subscribers.', 'woocommerce-mailchimp' ),
+						'default'     => '',
+						'options'     => $tags,
+						'class'       => 'wc-enhanced-select',
+						'custom_attributes' => array(
+							'placeholder' => __( 'Select tags...', 'woocommerce-mailchimp' ),
+						),
+						'css'         => 'min-width: 350px;',
+						'desc_tip'    =>  true,
+					);
+
+				$settings = apply_filters( 'ss_wc_mailchimp_settings_general_after_tags' , $settings );
 
 				$settings[] = array(
 						'id'          => $this->namespace_prefixed( 'occurs' ),
@@ -629,6 +668,30 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 			}
 
 			return $interest_groups;
+
+		}
+
+		/**
+		 * get_tags function.
+		 *
+		 * @access public
+		 * @return void
+		 */
+		public function get_tags() {
+
+			if ( $this->mailchimp() && $this->has_list() ) {
+				$tags = $this->mailchimp()->get_tags( $this->get_list() );
+			} else {
+				return array();
+			}
+
+			if ( $tags === false ) {
+
+				return array();
+
+			}
+
+			return $tags;
 
 		}
 

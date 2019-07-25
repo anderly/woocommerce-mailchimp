@@ -10,6 +10,8 @@ var SS_WC_MailChimp = function($) {
 	var $mainList;
 	var $interestGroupsLoadingIndicator;
 	var $interestGroups;
+	var $tagsLoadingIndicator;
+	var $tags;
 	var $displayOptIn;
 	var $occurs;
 	var $optInLabel;
@@ -24,6 +26,7 @@ var SS_WC_MailChimp = function($) {
 		checkApiKey: checkApiKey,
 		loadLists: loadLists,
 		loadGroups: loadGroups,
+		loadTags: loadTags,
 	};
 
 	function init() {
@@ -33,6 +36,7 @@ var SS_WC_MailChimp = function($) {
 		initHandlers();
 		initLists();
 		initGroups();
+		initTags();
 
 	} //end function init
 
@@ -42,6 +46,7 @@ var SS_WC_MailChimp = function($) {
 		$apiKey = $('#' + namespace_prefixed('api_key'));
 		$mainList = $('#' + namespace_prefixed('list'));
 		$interestGroups = $('#' + namespace_prefixed('interest_groups'));
+		$tags = $('#' + namespace_prefixed('tags'));
 		$displayOptIn = $('#' + namespace_prefixed('display_opt_in'));
 		$occurs = $('#' + namespace_prefixed('occurs'));
 		$optInLabel = $('#' + namespace_prefixed('opt_in_label'));
@@ -52,9 +57,10 @@ var SS_WC_MailChimp = function($) {
 
 	function initHandlers() {
 		$mainList.closest('tr').hide();
-			
+
 		if ($mainList.val() === '') {
 			$interestGroups.attr('disabled','disabled');
+			$tags.attr('disabled','disabled');
 		}
 
 		$apiKey.change(function() {
@@ -65,9 +71,12 @@ var SS_WC_MailChimp = function($) {
 		$mainList.change(function() {
 			if ($mainList.val()) {
 				$interestGroups.removeAttr('disabled');
+				$tags.removeAttr('disabled');
 			} else {
 				$interestGroups.children().remove();
 				$interestGroups.attr('disabled','disabled');
+				$tags.children().remove();
+				$tags.attr('disabled','disabled');
 			}
 		});
 
@@ -82,6 +91,7 @@ var SS_WC_MailChimp = function($) {
 		$mainList.on('change', function() {
 			if ($mainList.val() !== '') {
 				loadGroups($apiKey.val(), $mainList.val());
+				loadTags($apiKey.val(), $mainList.val());
 			}
 		});
 
@@ -150,6 +160,31 @@ var SS_WC_MailChimp = function($) {
 		$interestGroups.parent().append($interestGroupsLoadingIndicator.hide());
 
 	} //end function initGroups
+
+	function initTags() {
+
+		// Reinitialize the <optgroup> elements by splitting out the option names
+		var $options = $tags.children('option').clone();
+
+		$tags.attr('data-placeholder', SS_WC_MailChimp_Messages.select_tags_placeholder);
+
+		$tags.select2('destroy').select2();
+		var tagsMessage = $('#ss-wc-mailchimp-tags-msg').length > 0 ? $('#ss-wc-mailchimp-tags-msg') : $('<div id="ss-wc-mailchimp-tags-msg" style="display: inline-block"/>');
+		$tags.after(tagsMessage);
+		if ($options.length === 0) {
+			tagsMessage.text(SS_WC_MailChimp_Messages.tags_not_enabled);
+			$tags.siblings('.select2-container').remove();
+			tagsMessage.show();
+		} else {
+			$tags.siblings('.select2-container').show();
+			tagsMessage.hide();
+		}
+
+		// Add the loading indicator for tags (set to hidden by default)
+		$tagsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_tags" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator">&nbsp;'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</span></div>');
+		$tags.parent().append($tagsLoadingIndicator.hide());
+
+	} //end function initTags
 
 	function checkApiKey(apiKey, shouldLoadLists = false) {
 
@@ -247,11 +282,11 @@ var SS_WC_MailChimp = function($) {
 					$mainList.select2('destroy');
 					$mainList.removeAttr('disabled');
 					$mainList.children().remove();
-					$.each(result, function(key, val) {   
-						$mainList	
+					$.each(result, function(key, val) {
+						$mainList
 							.append($('<option></option>')
 								.attr('value',key)
-								.text(val)); 
+								.text(val));
 					});
 					$mainList.select2();
 				}
@@ -314,7 +349,7 @@ var SS_WC_MailChimp = function($) {
 					$interestGroups.append(
 						$('<option></option>')
 							.attr('value',id)
-							.text(grouping)); 
+							.text(grouping));
 				});
 
 				initGroups();
@@ -322,6 +357,69 @@ var SS_WC_MailChimp = function($) {
 		);
 
 	} //end function loadGroups
+
+	function loadTags(apiKey, listId) {
+
+		/**
+		 * Load tags
+		 */
+		$tags.attr('disabled','disabled');
+
+		$tags.children().remove();
+
+		$tags.select2().hide();
+		$('#ss-wc-mailchimp-tags-msg').hide();
+		$tagsLoadingIndicator.show();
+		$tagsIndicator = $tagsLoadingIndicator.children().first();
+		$tagsIndicator.addClass('loading');
+		$.post(
+			ajaxurl,
+			{
+				'action': '' + namespace_prefixed('get_tags'),
+				'data': { 'api_key': apiKey, 'list_id': listId }
+			},
+			function(response) {
+				console.log(response);
+				$tagsLoadingIndicator.hide();
+				$tagsIndicator.removeClass('loading');
+				var result = [];
+
+				try {
+					result = $.parseJSON(response);
+				} catch (err) {
+					console.error(err);
+					alert(SS_WC_MailChimp_Messages.error_loading_tags);
+				}
+
+				if (result.error) {
+					$('#ss-wc-mailchimp-tags-msg').text(result.error).show();
+					$tags.children().remove();
+					$tags.select2('destroy');
+					$tags.hide();
+					return;
+				}
+
+				if (result.length === 0) {
+					$('#ss-wc-mailchimp-tags-msg').show();
+					initTags();
+					return;
+				}
+
+				$tags.show();
+				$tags.removeAttr('disabled');
+				$tags.children().remove();
+				$.each(result, function(id, grouping) {
+					$tags.append(
+						$('<option></option>')
+							.attr('value',id)
+							.text(grouping));
+				});
+
+				initTags();
+			}
+		);
+
+	} //end function loadTags
 
 	function toggleAllSettings( show_hide ) {
 		if (show_hide == 'show') {

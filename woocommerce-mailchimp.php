@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: WooCommerce MailChimp
+ * Plugin Name: WooCommerce Mailchimp
  * Plugin URI: https://www.saintsystems.com/products/woocommerce-mailchimp/
- * Description: WooCommerce MailChimp provides simple MailChimp integration for WooCommerce.
+ * Description: WooCommerce Mailchimp provides simple and flexible Mailchimp integration for WooCommerce.
  * Author: Saint Systems
  * Author URI: https://www.saintsystems.com
- * Version: 2.2.0
+ * Version: 2.3.0
  * WC tested up to: 3.6.5
  * Text Domain: woocommerce-mailchimp
  * Domain Path: languages

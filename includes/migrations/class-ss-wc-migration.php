@@ -22,6 +22,7 @@ abstract class SS_WC_MailChimp_Migration {
 			'enabled',
 			'list',
 			'interest_groups',
+			'tags',
 			'display_opt_in',
 			'occurs',
 			'double_opt_in',

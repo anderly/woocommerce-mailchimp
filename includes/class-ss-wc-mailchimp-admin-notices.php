@@ -5,7 +5,7 @@
  * @package   WooCommerce MailChimp
  * @author    Saint Systems, LLC
  * @link      http://www.saintsystems.com
- * @copyright Copyright 2016, Saint Systems, LLC
+ * @copyright Copyright 2019, Saint Systems, LLC
  *
  * @since 2.0.13
  */
@@ -33,7 +33,7 @@ class SS_WC_MailChimp_Admin_Notices {
 	}
 
 	/**
-	 * Dismiss a WooCommerce notice - stores the dismissed notices for 16 weeks
+	 * Dismiss a WooCommerce notice - stores the dismissed notices for 30 days
 	 * @return void
 	 */
 	public function dismiss_notice() {
@@ -57,8 +57,8 @@ class SS_WC_MailChimp_Admin_Notices {
 
 		$dismissed_notices = array_unique( $dismissed_notices );
 
-		// Remind users every 16 weeks
-		set_transient( 'ss_wc_mailchimp_dismissed_notices', $dismissed_notices, WEEK_IN_SECONDS * 16 );
+		// Remind users every 30 days
+		set_transient( 'ss_wc_mailchimp_dismissed_notices', $dismissed_notices, DAY_IN_SECONDS * 30 );
 
 	}
 

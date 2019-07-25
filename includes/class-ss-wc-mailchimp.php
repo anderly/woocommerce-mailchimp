@@ -110,7 +110,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( 'sswcmc_lists', $results, 60*15*1 );
+			set_transient( 'sswcmc_lists', $results, MINUTE_IN_SECONDS * 5 );
 
 		}
 
@@ -150,7 +150,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( 'sswcmc_list_web_ids', $results, 60*15*1 );
+			set_transient( 'sswcmc_list_web_ids', $results, MINUTE_IN_SECONDS * 5 );
 
 		}
 
@@ -223,12 +223,7 @@ class SS_WC_MailChimp {
 		if ( is_array( $tags ) && !empty( $tags ) ) {
 
 			$args = array(
-				'tags' => array_map( function( $tag ) {
-					return array(
-						'name' => $tag,
-						'status' => 'active'
-					);
-				}, $tags)
+				'tags' => $tags
 			);
 
 			do_action( 'sswcmc_log', __METHOD__ . ' Attempting to add tags to subscriber ('.$email_address.'): ' . print_r( $args, true ) );
@@ -316,7 +311,7 @@ class SS_WC_MailChimp {
 			}
 
 			// Cache list merge tags for 15 minutes
-			set_transient( "sswcmc_{$list_id}_merge_fields", $results, 60*15*1 );
+			set_transient( "sswcmc_{$list_id}_merge_fields", $results, MINUTE_IN_SECONDS * 5 );
 
 		}
 
@@ -353,7 +348,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( "sswcmc_{$list_id}_interest_categories", $results, 60*15*1 );
+			set_transient( "sswcmc_{$list_id}_interest_categories", $results, MINUTE_IN_SECONDS * 5 );
 
 		}
 
@@ -391,7 +386,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( "sswcmc_{$list_id}_{$interest_category_id }_interests", $results, 60*15*1 );
+			set_transient( "sswcmc_{$list_id}_{$interest_category_id }_interests", $results, MINUTE_IN_SECONDS * 5 );
 
 		}
 
@@ -465,7 +460,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( "sswcmc_{$list_id}_tags", $results, 60*15*1 );
+			set_transient( "sswcmc_{$list_id}_tags", $results, MINUTE_IN_SECONDS * 5 );
 
 		}
 

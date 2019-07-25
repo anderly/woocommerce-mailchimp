@@ -93,6 +93,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			add_action( 'wp_ajax_ss_wc_mailchimp_get_interest_groups', array( $this, 'ajax_get_interest_groups' ) );
 
+			add_action( 'wp_ajax_ss_wc_mailchimp_get_tags', array( $this, 'ajax_get_tags' ) );
+
 			add_action( 'wp_ajax_ss_wc_mailchimp_get_merge_fields', array( $this, 'ajax_get_merge_fields' ) );
 
 			add_action( 'queue_ss_wc_mailchimp_maybe_subscribe', array( $this, 'maybe_subscribe' ), 10, 6 );
@@ -236,6 +238,45 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		} //end function ajax_get_interest_groups
 
 		/**
+		 * Return tags for the passed MailChimp List to be used in select fields
+		 *
+		 * @access public
+		 * @return array
+		 */
+		public function ajax_get_tags() {
+
+			try {
+
+				if ( ! $_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
+
+					return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'ss_wc_mailchimp' ) ) );
+
+				}
+
+				if ( ! $_POST['data']['list_id'] || empty( $_POST['data']['list_id'] ) ) {
+
+					return $this->toJSON( array( '' => __( 'Please select a list from above.', 'ss_wc_mailchimp' ) ) );
+
+				}
+
+				$api_key = $_POST['data']['api_key'];
+				$list_id = $_POST['data']['list_id'];
+
+				$tags = $this->sswcmc->mailchimp( $api_key )->get_tags( $list_id );
+
+				$results = $tags;
+
+			} catch ( Exception $e ) {
+
+				return $this->toJSON( array( 'error' => $e->getMessage() ) );
+
+			}
+
+			return $this->toJSON( $results );
+
+		} //end function ajax_get_tags
+
+		/**
 		 * Return merge fields (a.k.a. merge tags) for the passed MailChimp List
 		 *
 		 * @access public
@@ -348,11 +389,16 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			$interest_groups = $this->sswcmc->interest_groups();
 
 			if ( ! empty( $interest_groups ) ) {
-				$interest_groups = array_fill_keys( $this->sswcmc->interest_groups(), true );
-
-				// Allow hooking into variables.
-				$interest_groups = apply_filters( 'ss_wc_mailchimp_subscribe_interest_groups', $interest_groups, $order_id, $email );
+				$interest_groups = array_fill_keys( $interest_groups, true );
 			}
+
+			// Allow hooking into interest groups.
+			$interest_groups = apply_filters( 'ss_wc_mailchimp_subscribe_interest_groups', $interest_groups, $order_id, $email );
+
+			$tags = $this->sswcmc->tags();
+
+			// Allow hooking into tags.
+			$tags = apply_filters( 'ss_wc_mailchimp_subscribe_tags', $tags, $order_id, $email );
 
 			// Allow hooking into variables.
 			$merge_tags = apply_filters( 'ss_wc_mailchimp_subscribe_merge_tags', $merge_tags, $order_id, $email );
@@ -363,6 +409,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				'email'             => $email,
 				'merge_tags'      	=> $merge_tags,
 				'interest_groups'   => $interest_groups,
+				'tags'              => $tags,
 				'email_type'        => 'html',
 				'double_opt_in'     => $this->sswcmc->double_opt_in(),
 			);
@@ -384,7 +431,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			if ( ! empty( $list_id ) && ( ! $subscribe_customer || empty( $subscribe_customer ) || 'yes' === $subscribe_customer ) ) {
 				// Call API.
-				$api_response = $this->sswcmc->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_opt_in );
+				$api_response = $this->sswcmc->mailchimp()->subscribe( $list_id, $email, $email_type, $merge_tags, $interest_groups, $double_opt_in, $tags );
 
 				// Log api response.
 				$this->log( sprintf( __( __METHOD__ . '(): MailChimp API response: %s', 'woocommerce-mailchimp' ), print_r( $api_response, true ) ) );
@@ -402,7 +449,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 					// Email admin.
 					$admin_email = get_option( 'admin_email' );
 					$admin_email = apply_filters( 'ss_wc_mailchimp_admin_email', $admin_email );
-					wp_mail( $admin_email, __( 'WooCommerce MailChimp subscription failed', 'woocommerce-mailchimp' ), $error_response );
+					wp_mail( $admin_email, __( 'WooCommerce Mailchimp subscription failed', 'woocommerce-mailchimp' ), $error_response );
 				} else {
 					// Hook on success.
 					do_action( 'ss_wc_mailchimp_subscription_success', $email, array( 'list_id' => $list_id, 'order_id' => $order_id ) );
