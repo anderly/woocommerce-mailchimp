@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * WooCommerce MailChimp plugin migrator class
@@ -6,28 +6,34 @@
 final class SS_WC_MailChimp_Migrator {
 
 	const VERSION_KEY = 'ss_wc_mailchimp_version';
+	const API_KEY = 'ss_wc_mailchimp_api_key';
+	const LIST_KEY = 'ss_wc_mailchimp_list';
 	const OLD_SETTINGS_KEY = 'woocommerce_mailchimp_settings';
 
 	protected static $versions = array(
 		'1.3.X',
 		'2.0',
 		'2.0.15',
+		'2.3.0',
+		'2.3.1',
 	);
 
 	public static function migrate( $target_version ) {
 
-		$old_settings = get_option( self::OLD_SETTINGS_KEY );
 		$current_version = get_option( self::VERSION_KEY );
+		$api_key = get_option( self::API_KEY );
+		$list = get_option( self::LIST_KEY );
 
-		if ( ! $old_settings && ! $current_version ) {
+		if ( ! $current_version && ! $api_key && ! $list ) {
 			// This is a new install, so no need to migrate
+			update_option( self::VERSION_KEY, $target_version );
 			return;
 		}
 
 		if ( ! $current_version ) {
-			$current_version = '1.3.X';
+			$current_version = '2.3.0';
 		}
-	
+
 		if ( $current_version !== $target_version ) {
 
 			// error_log( 'Need to migrate from ' . $current_version . ' to ' . $target_version );
@@ -44,8 +50,10 @@ final class SS_WC_MailChimp_Migrator {
 				$next_version = self::$versions[$next];
 
 				// error_log( 'Migrating from ' . $current_version . ' to ' . $target_version );
-				// 
+				//
 			    if ( file_exists( SS_WC_MAILCHIMP_DIR . "includes/migrations/class-ss-wc-migration-from-$current_version-to-$next_version.php" ) ) {
+
+					do_action( 'sswcmc_log', 'Migrating from ' . $current_version . ' to ' . $target_version );
 
 					require_once( SS_WC_MAILCHIMP_DIR . "includes/migrations/class-ss-wc-migration-from-$current_version-to-$next_version.php" );
 
@@ -55,8 +63,14 @@ final class SS_WC_MailChimp_Migrator {
 					if ( $migration->up() ) {
 						// Update the current plugin version
 						update_option( self::VERSION_KEY, $next_version );
+						do_action( 'sswcmc_log', 'Finished Migrating from ' . $current_version . ' to ' . $target_version );
 					}
 
+				} else {
+					// Update the current plugin version
+					do_action( 'sswcmc_log', 'No migration found from ' . $current_version . ' to ' . $next_version . '. Setting current version to: ' . $next_version );
+
+					update_option( self::VERSION_KEY, $next_version );
 				}
 			}
 			//update_option( self::VERSION_KEY, $target_version );

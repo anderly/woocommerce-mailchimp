@@ -456,7 +456,7 @@ class SS_WC_MailChimp {
 
 			foreach ( $tags as $tag ) {
 
-				$results[ $tag['name'] ] = $tag['name'];
+				$results[ $tag['id'] ] = $tag['name'];
 
 			}
 

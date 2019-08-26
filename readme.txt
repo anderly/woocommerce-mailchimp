@@ -4,9 +4,9 @@ Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp, ecommerce, email
 Requires at least: 4.7.0
 Tested up to: 5.2.2
-WC tested up to: 3.6.5
+WC tested up to: 3.7.0
 Requires PHP: 5.6
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -118,6 +118,11 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.3.1 - August 26, 2019
+- Fix tag retrieval to return tag IDs.
+- Fix migrations.
+- Tested up to WooCommerce 3.7.0
 
 #### 2.3.0 - July 25, 2019
 - Added support for tags on main list.
