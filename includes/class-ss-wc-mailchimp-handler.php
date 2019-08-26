@@ -397,6 +397,15 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			$tags = $this->sswcmc->tags();
 
+			$mc_tags = $this->sswcmc->mailchimp()->get_tags( $list_id );
+
+			$tags = array_map( function( $tag ) use ( $mc_tags ) {
+				return array(
+					'name' => $mc_tags[$tag],
+					'status' => 'active',
+				);
+			}, $tags );
+
 			// Allow hooking into tags.
 			$tags = apply_filters( 'ss_wc_mailchimp_subscribe_tags', $tags, $order_id, $email );
 
