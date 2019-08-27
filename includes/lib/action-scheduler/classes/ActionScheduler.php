@@ -85,6 +85,11 @@ abstract class ActionScheduler {
 		self::$plugin_file = $plugin_file;
 		spl_autoload_register( array( __CLASS__, 'autoload' ) );
 
+		/**
+		 * Fires in the early stages of Action Scheduler init hook.
+		 */
+		do_action( 'action_scheduler_pre_init' );
+
 		$store = self::store();
 		add_action( 'init', array( $store, 'init' ), 1, 0 );
 
@@ -96,6 +101,10 @@ abstract class ActionScheduler {
 
 		$admin_view = self::admin_view();
 		add_action( 'init', array( $admin_view, 'init' ), 0, 0 ); // run before $store::init()
+
+		if ( is_admin() ) {
+			add_action( 'current_screen', array( 'ActionScheduler_AdminHelp', 'add_help_tabs' ) );
+		}
 
 		require_once( self::plugin_path('functions.php') );
 

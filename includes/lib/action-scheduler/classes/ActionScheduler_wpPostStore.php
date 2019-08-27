@@ -42,8 +42,23 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 
 	protected function save_post_array( $post_array ) {
 		add_filter( 'wp_insert_post_data', array( $this, 'filter_insert_post_data' ), 10, 1 );
+		add_filter( 'pre_wp_unique_post_slug', array( $this, 'set_unique_post_slug' ), 10, 5 );
+
+		$has_kses = false !== has_filter( 'content_save_pre', 'wp_filter_post_kses' );
+
+		if ( $has_kses ) {
+			// Prevent KSES from corrupting JSON in post_content.
+			kses_remove_filters();
+		}
+
 		$post_id = wp_insert_post($post_array);
+
+		if ( $has_kses ) {
+			kses_init_filters();
+		}
+
 		remove_filter( 'wp_insert_post_data', array( $this, 'filter_insert_post_data' ), 10 );
+		remove_filter( 'pre_wp_unique_post_slug', array( $this, 'set_unique_post_slug' ), 10 );
 
 		if ( is_wp_error($post_id) || empty($post_id) ) {
 			throw new RuntimeException(__('Unable to save action.', 'action-scheduler'));
@@ -59,6 +74,41 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 			}
 		}
 		return $postdata;
+	}
+
+	/**
+	 * Create a (probably unique) post name for scheduled actions in a more performant manner than wp_unique_post_slug().
+	 *
+	 * When an action's post status is transitioned to something other than 'draft', 'pending' or 'auto-draft, like 'publish'
+	 * or 'failed' or 'trash', WordPress will find a unique slug (stored in post_name column) using the wp_unique_post_slug()
+	 * function. This is done to ensure URL uniqueness. The approach taken by wp_unique_post_slug() is to iterate over existing
+	 * post_name values that match, and append a number 1 greater than the largest. This makes sense when manually creating a
+	 * post from the Edit Post screen. It becomes a bottleneck when automatically processing thousands of actions, with a
+	 * database containing thousands of related post_name values.
+	 *
+	 * WordPress 5.1 introduces the 'pre_wp_unique_post_slug' filter for plugins to address this issue.
+	 *
+	 * We can short-circuit WordPress's wp_unique_post_slug() approach using the 'pre_wp_unique_post_slug' filter. This
+	 * method is available to be used as a callback on that filter. It provides a more scalable approach to generating a
+	 * post_name/slug that is probably unique. Because Action Scheduler never actually uses the post_name field, or an
+	 * action's slug, being probably unique is good enough.
+	 *
+	 * For more backstory on this issue, see:
+	 * - https://github.com/Prospress/action-scheduler/issues/44 and
+	 * - https://core.trac.wordpress.org/ticket/21112
+	 *
+	 * @param string $override_slug Short-circuit return value.
+	 * @param string $slug          The desired slug (post_name).
+	 * @param int    $post_ID       Post ID.
+	 * @param string $post_status   The post status.
+	 * @param string $post_type     Post type.
+	 * @return string
+	 */
+	public function set_unique_post_slug( $override_slug, $slug, $post_ID, $post_status, $post_type ) {
+		if ( self::POST_TYPE == $post_type ) {
+			$override_slug = uniqid( self::POST_TYPE . '-', true ) . '-' . wp_generate_password( 32, false );
+		}
+		return $override_slug;
 	}
 
 	protected function save_post_schedule( $post_id, $schedule ) {
@@ -94,17 +144,21 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 
 	protected function make_action_from_post( $post ) {
 		$hook = $post->post_title;
-		$args = json_decode( $post->post_content, true );
 
-		// Handle args that do not decode properly.
-		if ( JSON_ERROR_NONE !== json_last_error() || ! is_array( $args ) ) {
-			throw ActionScheduler_InvalidActionException::from_decoding_args( $post->ID );
-		}
+		try {
+			$args = json_decode( $post->post_content, true );
+			$this->validate_args( $args, $post->ID );
 
-		$schedule = get_post_meta( $post->ID, self::SCHEDULE_META_KEY, true );
-		if ( empty($schedule) ) {
+			$schedule = get_post_meta( $post->ID, self::SCHEDULE_META_KEY, true );
+			if ( empty( $schedule ) || ! is_a( $schedule, 'ActionScheduler_Schedule' ) ) {
+				throw ActionScheduler_InvalidActionException::from_decoding_args( $post->ID );
+			}
+		} catch ( ActionScheduler_InvalidActionException $exception ) {
 			$schedule = new ActionScheduler_NullSchedule();
+			$args = array();
+			do_action( 'action_scheduler_failed_fetch_action', $post->ID );
 		}
+
 		$group = wp_get_object_terms( $post->ID, self::GROUP_TAXONOMY, array('fields' => 'names') );
 		$group = empty( $group ) ? '' : reset($group);
 
@@ -253,15 +307,16 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 		$sql  = ( 'count' === $select_or_count ) ? 'SELECT count(p.ID)' : 'SELECT p.ID ';
 		$sql .= "FROM {$wpdb->posts} p";
 		$sql_params = array();
-		if ( ! empty( $query['group'] ) || 'group' === $query['orderby'] ) {
+		if ( empty( $query['group'] ) && 'group' === $query['orderby'] ) {
+			$sql .= " LEFT JOIN {$wpdb->term_relationships} tr ON tr.object_id=p.ID";
+			$sql .= " LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id=tt.term_taxonomy_id";
+			$sql .= " LEFT JOIN {$wpdb->terms} t ON tt.term_id=t.term_id";
+		} elseif ( ! empty( $query['group'] ) ) {
 			$sql .= " INNER JOIN {$wpdb->term_relationships} tr ON tr.object_id=p.ID";
 			$sql .= " INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id=tt.term_taxonomy_id";
 			$sql .= " INNER JOIN {$wpdb->terms} t ON tt.term_id=t.term_id";
-
-			if ( ! empty( $query['group'] ) ) {
-				$sql .= " AND t.slug=%s";
-				$sql_params[] = $query['group'];
-			}
+			$sql .= " AND t.slug=%s";
+			$sql_params[] = $query['group'];
 		}
 		$sql .= " WHERE post_type=%s";
 		$sql_params[] = self::POST_TYPE;
@@ -404,7 +459,9 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 			throw new InvalidArgumentException(sprintf(__('Unidentified action %s', 'action-scheduler'), $action_id));
 		}
 		do_action( 'action_scheduler_canceled_action', $action_id );
+		add_filter( 'pre_wp_unique_post_slug', array( $this, 'set_unique_post_slug' ), 10, 5 );
 		wp_trash_post($action_id);
+		remove_filter( 'pre_wp_unique_post_slug', array( $this, 'set_unique_post_slug' ), 10 );
 	}
 
 	public function delete_action( $action_id ) {
@@ -587,16 +644,9 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 				'ID'         => 'ASC',
 			),
 			'date_query'       => array(
-				'column' => 'post_date',
-				array(
-					'compare' => '<=',
-					'year'    => $date->format( 'Y' ),
-					'month'   => $date->format( 'n' ),
-					'day'     => $date->format( 'j' ),
-					'hour'    => $date->format( 'G' ),
-					'minute'  => $date->format( 'i' ),
-					'second'  => $date->format( 's' ),
-				),
+				'column' => 'post_date_gmt',
+				'before' => $date->format( 'Y-m-d H:i' ),
+				'inclusive' => true,
 			),
 			'tax_query' => array(
 				array(
@@ -685,7 +735,7 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 		$status = $this->get_post_column( $action_id, 'post_status' );
 
 		if ( $status === null ) {
-			throw new \InvalidArgumentException( __( 'Invalid action ID. No status found.', 'action-scheduler' ) );
+			throw new InvalidArgumentException( __( 'Invalid action ID. No status found.', 'action-scheduler' ) );
 		}
 
 		return $this->get_action_status_by_post_status( $status );
@@ -716,11 +766,13 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 			throw new InvalidArgumentException(sprintf(__('Unidentified action %s', 'action-scheduler'), $action_id));
 		}
 		add_filter( 'wp_insert_post_data', array( $this, 'filter_insert_post_data' ), 10, 1 );
+		add_filter( 'pre_wp_unique_post_slug', array( $this, 'set_unique_post_slug' ), 10, 5 );
 		$result = wp_update_post(array(
 			'ID' => $action_id,
 			'post_status' => 'publish',
 		), TRUE);
 		remove_filter( 'wp_insert_post_data', array( $this, 'filter_insert_post_data' ), 10 );
+		remove_filter( 'pre_wp_unique_post_slug', array( $this, 'set_unique_post_slug' ), 10 );
 		if ( is_wp_error($result) ) {
 			throw new RuntimeException($result->get_error_message());
 		}
@@ -753,5 +805,25 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 
 		$taxonomy_registrar = new ActionScheduler_wpPostStore_TaxonomyRegistrar();
 		$taxonomy_registrar->register();
+	}
+
+	/**
+	 * Validate that we could decode action arguments.
+	 *
+	 * @param mixed $args      The decoded arguments.
+	 * @param int   $action_id The action ID.
+	 *
+	 * @throws ActionScheduler_InvalidActionException When the decoded arguments are invalid.
+	 */
+	private function validate_args( $args, $action_id ) {
+		// Ensure we have an array of args.
+		if ( ! is_array( $args ) ) {
+			throw ActionScheduler_InvalidActionException::from_decoding_args( $action_id );
+		}
+
+		// Validate JSON decoding if possible.
+		if ( function_exists( 'json_last_error' ) && JSON_ERROR_NONE !== json_last_error() ) {
+			throw ActionScheduler_InvalidActionException::from_decoding_args( $action_id );
+		}
 	}
 }
