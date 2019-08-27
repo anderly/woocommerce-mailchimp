@@ -15,7 +15,7 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '2.3.1';
+	private static $version = '2.3.2';
 
 	/**
 	 * Plugin singleton instance
@@ -247,6 +247,66 @@ final class SS_WC_MailChimp_Plugin {
 	public function tags() {
 		return $this->settings['tags'];
 	}
+
+	/**
+	 * Get the global subscribe options for the passed $order_id
+	 *
+	 * @since  2.3.2
+	 * @access public
+	 * @param  $order_id int The order id.
+	 */
+	public function get_subscribe_options_for_order( $order_id ) {
+
+		// Get WC order
+		$order = wc_get_order( $order_id );
+
+		$order_id = method_exists( $order, 'get_id' ) ? $order->get_id() : $order->id;
+		$email = method_exists( $order, 'get_billing_email' ) ? $order->get_billing_email() : $order->billing_email;
+		$first_name = method_exists( $order, 'get_billing_first_name' ) ? $order->get_billing_first_name() : $order->billing_first_name;
+		$last_name = method_exists( $order, 'get_billing_last_name' ) ? $order->get_billing_last_name() : $order->billing_last_name;
+
+		$list_id = $this->get_list();
+
+		if ( ! $email ) {
+			return; // Email is required.
+		}
+
+		$merge_tags = array(
+			'FNAME' => $first_name,
+			'LNAME' => $last_name,
+		);
+
+		$interest_groups = $this->interest_groups();
+
+		if ( ! empty( $interest_groups ) ) {
+			$interest_groups = array_fill_keys( $interest_groups, true );
+		}
+
+		$tags = $this->tags();
+
+		$mc_tags = $this->mailchimp()->get_tags( $list_id );
+
+		$tags = array_map( function( $tag ) use ( $mc_tags ) {
+			return array(
+				'name' => $mc_tags[$tag],
+				'status' => 'active',
+			);
+		}, $tags );
+
+		// Set subscription options.
+		$subscribe_options = array(
+			'list_id'           => $list_id,
+			'email'             => $email,
+			'merge_tags'      	=> $merge_tags,
+			'interest_groups'   => $interest_groups,
+			'tags'              => $tags,
+			'email_type'        => 'html',
+			'double_opt_in'     => $this->double_opt_in(),
+		);
+
+		return $subscribe_options;
+
+	} //end function get_subscribe_options_for_order
 
 	/**
 	 * Whether or not an api key has been set.

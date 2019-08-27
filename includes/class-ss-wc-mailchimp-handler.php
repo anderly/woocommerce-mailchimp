@@ -125,7 +125,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				$this->log( sprintf( __( __METHOD__ . '(): Queueing maybe subscribe ($subscribe_customer: %s) for customer (%s) to list %s for order (%s)', 'woocommerce-mailchimp'), $subscribe_customer, $order_billing_email, $list_id, $order_id ) );
 
 				// Queue the subscription.
-				as_schedule_single_action( time(), 'queue_ss_wc_mailchimp_maybe_subscribe', array( $subscribe_customer, $order_id, $order_billing_first_name, $order_billing_last_name, $order_billing_email, $list_id ), 'sswcmc' );
+				as_schedule_single_action( time(), 'queue_ss_wc_mailchimp_maybe_subscribe', array( $order_id ), 'sswcmc' );
 
 			}
 		}
@@ -369,7 +369,16 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 * @param string $listid (default: 'false')
 		 * @return void
 		 */
-		public function maybe_subscribe( $subscribe_customer, $order_id, $first_name, $last_name, $email, $list_id = 'false' ) {
+		public function maybe_subscribe( $order_id ) {
+
+			// get the ss_wc_mailchimp_opt_in value from the post meta. "order_custom_fields" was removed with WooCommerce 2.1
+			$subscribe_customer = get_post_meta( $order_id, 'ss_wc_mailchimp_opt_in', true );
+
+			// Get the subscribe options
+			$subscribe_options = $this->sswcmc->get_subscribe_options_for_order( $order_id );
+
+			$email = $subscribe_options['email'];
+			$list_id = $subscribe_options['list_id'];
 
 			$this->log( sprintf( __( __METHOD__ . '(): Processing queued maybe_subscribe ($subscribe_customer: %s) for customer (%s) to list %s for order (%s)', 'woocommerce-mailchimp' ), $subscribe_customer, $email, $list_id, $order_id ) );
 
@@ -377,51 +386,14 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				return; // Email is required.
 			}
 
-			if ( 'false' == $list_id ) {
-				$list_id = $this->sswcmc->get_list();
-			}
-
-			$merge_tags = array(
-				'FNAME' => $first_name,
-				'LNAME' => $last_name,
-			);
-
-			$interest_groups = $this->sswcmc->interest_groups();
-
-			if ( ! empty( $interest_groups ) ) {
-				$interest_groups = array_fill_keys( $interest_groups, true );
-			}
-
 			// Allow hooking into interest groups.
-			$interest_groups = apply_filters( 'ss_wc_mailchimp_subscribe_interest_groups', $interest_groups, $order_id, $email );
-
-			$tags = $this->sswcmc->tags();
-
-			$mc_tags = $this->sswcmc->mailchimp()->get_tags( $list_id );
-
-			$tags = array_map( function( $tag ) use ( $mc_tags ) {
-				return array(
-					'name' => $mc_tags[$tag],
-					'status' => 'active',
-				);
-			}, $tags );
+			$subscribe_options['interest_groups'] = apply_filters( 'ss_wc_mailchimp_subscribe_interest_groups', $subscribe_options['interest_groups'], $order_id, $email );
 
 			// Allow hooking into tags.
-			$tags = apply_filters( 'ss_wc_mailchimp_subscribe_tags', $tags, $order_id, $email );
+			$subscribe_options['tags'] = apply_filters( 'ss_wc_mailchimp_subscribe_tags', $subscribe_options['tags'], $order_id, $email );
 
 			// Allow hooking into variables.
-			$merge_tags = apply_filters( 'ss_wc_mailchimp_subscribe_merge_tags', $merge_tags, $order_id, $email );
-
-			// Set subscription options.
-			$subscribe_options = array(
-				'list_id'           => $list_id,
-				'email'             => $email,
-				'merge_tags'      	=> $merge_tags,
-				'interest_groups'   => $interest_groups,
-				'tags'              => $tags,
-				'email_type'        => 'html',
-				'double_opt_in'     => $this->sswcmc->double_opt_in(),
-			);
+			$subscribe_options['merge_tags'] = apply_filters( 'ss_wc_mailchimp_subscribe_merge_tags', $subscribe_options['merge_tags'], $order_id, $email );
 
 			// Allow hooking into subscription options.
 			$options = apply_filters( 'ss_wc_mailchimp_subscribe_options', $subscribe_options, $order_id );
