@@ -16,6 +16,8 @@ final class SS_WC_MailChimp_Migrator {
 		'2.0.15',
 		'2.3.0',
 		'2.3.1',
+		'2.3.2',
+		'2.3.3',
 	);
 
 	public static function migrate( $target_version ) {
