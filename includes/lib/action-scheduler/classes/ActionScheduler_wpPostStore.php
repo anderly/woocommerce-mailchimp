@@ -19,7 +19,13 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 			$this->validate_action( $action );
 			$post_array = $this->create_post_array( $action, $scheduled_date );
 			$post_id = $this->save_post_array( $post_array );
-			$this->save_post_schedule( $post_id, $action->get_schedule() );
+			$schedule = $action->get_schedule();
+
+			if ( ! is_null( $scheduled_date ) && $schedule->is_recurring() ) {
+				$schedule = new ActionScheduler_IntervalSchedule( $scheduled_date, $schedule->interval_in_seconds() );
+			}
+
+			$this->save_post_schedule( $post_id, $schedule );
 			$this->save_action_group( $post_id, $action->get_group() );
 			do_action( 'action_scheduler_stored_action', $post_id );
 			return $post_id;
@@ -32,7 +38,7 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 		$post = array(
 			'post_type' => self::POST_TYPE,
 			'post_title' => $action->get_hook(),
-			'post_content' => json_encode($action->get_args(), JSON_UNESCAPED_UNICODE),
+			'post_content' => json_encode($action->get_args()),
 			'post_status' => ( $action->is_finished() ? 'publish' : 'pending' ),
 			'post_date_gmt' => $this->get_scheduled_date_string( $action, $scheduled_date ),
 			'post_date'     => $this->get_scheduled_date_string_local( $action, $scheduled_date ),
@@ -43,20 +49,7 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 	protected function save_post_array( $post_array ) {
 		add_filter( 'wp_insert_post_data', array( $this, 'filter_insert_post_data' ), 10, 1 );
 		add_filter( 'pre_wp_unique_post_slug', array( $this, 'set_unique_post_slug' ), 10, 5 );
-
-		$has_kses = false !== has_filter( 'content_save_pre', 'wp_filter_post_kses' );
-
-		if ( $has_kses ) {
-			// Prevent KSES from corrupting JSON in post_content.
-			kses_remove_filters();
-		}
-
 		$post_id = wp_insert_post($post_array);
-
-		if ( $has_kses ) {
-			kses_init_filters();
-		}
-
 		remove_filter( 'wp_insert_post_data', array( $this, 'filter_insert_post_data' ), 10 );
 		remove_filter( 'pre_wp_unique_post_slug', array( $this, 'set_unique_post_slug' ), 10 );
 
@@ -307,16 +300,15 @@ class ActionScheduler_wpPostStore extends ActionScheduler_Store {
 		$sql  = ( 'count' === $select_or_count ) ? 'SELECT count(p.ID)' : 'SELECT p.ID ';
 		$sql .= "FROM {$wpdb->posts} p";
 		$sql_params = array();
-		if ( empty( $query['group'] ) && 'group' === $query['orderby'] ) {
-			$sql .= " LEFT JOIN {$wpdb->term_relationships} tr ON tr.object_id=p.ID";
-			$sql .= " LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id=tt.term_taxonomy_id";
-			$sql .= " LEFT JOIN {$wpdb->terms} t ON tt.term_id=t.term_id";
-		} elseif ( ! empty( $query['group'] ) ) {
+		if ( ! empty( $query['group'] ) || 'group' === $query['orderby'] ) {
 			$sql .= " INNER JOIN {$wpdb->term_relationships} tr ON tr.object_id=p.ID";
 			$sql .= " INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id=tt.term_taxonomy_id";
 			$sql .= " INNER JOIN {$wpdb->terms} t ON tt.term_id=t.term_id";
-			$sql .= " AND t.slug=%s";
-			$sql_params[] = $query['group'];
+
+			if ( ! empty( $query['group'] ) ) {
+				$sql .= " AND t.slug=%s";
+				$sql_params[] = $query['group'];
+			}
 		}
 		$sql .= " WHERE post_type=%s";
 		$sql_params[] = self::POST_TYPE;

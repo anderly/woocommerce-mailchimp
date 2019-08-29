@@ -129,8 +129,8 @@ class ActionScheduler_wcSystemStatus {
 	/**
 	 * is triggered when invoking inaccessible methods in an object context.
 	 *
-	 * @param string $name
-	 * @param array  $arguments
+	 * @param $name      string
+	 * @param $arguments array
 	 *
 	 * @return mixed
 	 * @link https://php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.methods
