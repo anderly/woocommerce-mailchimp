@@ -78,19 +78,19 @@ If no custom translations are present, languages will be loaded in the following
 
 = Requirements =
 
-WooCommerce Mailchimp requires PHP 5.6+ (PHP 7.0+ recommended). You'll also need to be running WordPress 4.7.0+ and have WooCommerce 3.5.0+.
+WP WooCommerce Mailchimp requires PHP 5.6+ (PHP 7.0+ recommended). You'll also need to be running WordPress 4.7.0+ and have WooCommerce 3.5.0+.
 
 = Documentation & Support =
 
 Online documentation and code samples are available via our [Help Center](https://support.saintsystems.com/hc/en-us/sections/201959566).
 
 Please visit the
-[WooCommerce MailChimp support forum on WordPress.org](https://wordpress.org/support/plugin/woocommerce-mailchimp) for basic support and help from other users. Since this is a free plugin, we respond to these as we have time.
+[WP WooCommerce MailChimp support forum on WordPress.org](https://wordpress.org/support/plugin/woocommerce-mailchimp) for basic support and help from other users. Since this is a free plugin, we respond to these as we have time.
 
-Dedicated support will is available for [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) customers.
+Dedicated support will is available for [WP WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) customers.
 
 = Contribute =
-All development for WooCommerce MailChimp is [handled via GitHub](https://github.com/anderly/woocommerce-mailchimp). Opening new issues and submitting pull requests are welcome.
+All development for WP WooCommerce MailChimp is [handled via GitHub](https://github.com/anderly/woocommerce-mailchimp). Opening new issues and submitting pull requests are welcome.
 
 [Our public roadmap is available on Trello](https://trello.com/b/VWBdLVuI/woocommerce-mailchimp-development). We'd love it if you vote and comment on your favorite ideas.
 
