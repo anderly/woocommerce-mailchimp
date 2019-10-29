@@ -300,12 +300,12 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 			WC_Admin_Settings::save_fields( $settings );
 
-			if ( !isset( $_POST[ 'ss_wc_mailchimp_api_key' ] ) || empty( $_POST[ 'ss_wc_mailchimp_api_key' ] )  ) {
+			if ( ! isset( $_POST[ 'ss_wc_mailchimp_api_key' ] ) || empty( $_POST[ 'ss_wc_mailchimp_api_key' ] )  ) {
 				delete_transient( 'sswcmc_lists' );
 			}
 
 			$sswcmc = SSWCMC();
-			// Trigger reload of plugin settings
+			// Trigger reload of plugin settings.
 			$settings = $sswcmc->settings( true );
 
 		}

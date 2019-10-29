@@ -150,7 +150,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				}
 
-				$api_key = $_POST['data']['api_key'];
+				$api_key = sanitize_text_field( $_POST['data']['api_key'] );
 
 				$account = $this->sswcmc->mailchimp()->get_account( $api_key );
 
@@ -182,7 +182,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				}
 
-				$api_key = $_POST['data']['api_key'];
+				$api_key = sanitize_text_field( $_POST['data']['api_key'] );
 
 				$lists = $this->sswcmc->mailchimp( $api_key )->get_lists();
 
@@ -220,8 +220,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				}
 
-				$api_key = $_POST['data']['api_key'];
-				$list_id = $_POST['data']['list_id'];
+				$api_key = sanitize_text_field( $_POST['data']['api_key'] );
+				$list_id = sanitize_text_field( $_POST['data']['list_id'] );
 
 				$interest_groups = $this->sswcmc->mailchimp( $api_key )->get_interest_categories_with_interests( $list_id );
 
@@ -259,8 +259,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				}
 
-				$api_key = $_POST['data']['api_key'];
-				$list_id = $_POST['data']['list_id'];
+				$api_key = sanitize_text_field( $_POST['data']['api_key'] );
+				$list_id = sanitize_text_field( $_POST['data']['list_id'] );
 
 				$tags = $this->sswcmc->mailchimp( $api_key )->get_tags( $list_id );
 
@@ -298,8 +298,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				}
 
-				$api_key = $_POST['data']['api_key'];
-				$list_id = $_POST['data']['list_id'];
+				$api_key = sanitize_text_field( $_POST['data']['api_key'] );
+				$list_id = sanitize_text_field( $_POST['data']['list_id'] );
 
 				$merge_fields = $this->sswcmc->mailchimp( $api_key )->get_merge_fields( $list_id );
 

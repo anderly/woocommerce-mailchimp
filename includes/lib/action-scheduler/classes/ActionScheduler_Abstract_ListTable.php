@@ -533,9 +533,9 @@ abstract class ActionScheduler_Abstract_ListTable extends WP_List_Table {
 			}
 		}
 
-		$method = 'row_action_' . $_REQUEST['row_action'];
+		$method = 'row_action_' . sanitize_text_field( $_REQUEST['row_action'] );
 
-		if ( $_REQUEST['nonce'] === wp_create_nonce( $_REQUEST[ 'row_action' ] . '::' . $_REQUEST[ 'row_id' ] ) && method_exists( $this, $method ) ) {
+		if ( $_REQUEST['nonce'] === wp_create_nonce( sanitize_text_field( $_REQUEST[ 'row_action' ] ) . '::' . sanitize_text_field( $_REQUEST[ 'row_id' ] ) ) && method_exists( $this, $method ) ) {
 			$this->$method( $_REQUEST['row_id'] );
 		}
 

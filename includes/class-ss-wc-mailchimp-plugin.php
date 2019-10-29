@@ -15,7 +15,7 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '2.3.3';
+	private static $version = '2.3.4';
 
 	/**
 	 * Plugin singleton instance
@@ -620,11 +620,13 @@ final class SS_WC_MailChimp_Plugin {
 	 */
 	public function process_actions() {
 		if ( isset( $_POST['sswcmc-action'] ) ) {
-			do_action( 'sswcmc_' . $_POST['sswcmc-action'], $_POST );
+			$action = sanitize_key( $_POST['sswcmc-action'] );
+			do_action( 'sswcmc_' . $action, $_POST );
 		}
 
 		if ( isset( $_GET['sswcmc-action'] ) ) {
-			do_action( 'sswcmc_' . $_GET['sswcmc-action'], $_GET );
+			$action = sanitize_key( $_GET['sswcmc-action'] );
+			do_action( 'sswcmc_' . $action, $_GET );
 		}
 	}
 
