@@ -119,6 +119,10 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
+#### 2.3.4 - October 29, 2019
+- Change plugin display name.
+- Sanitize post data.
+
 #### 2.3.3 - August 29, 2019
 - Fix ActionScheduler 2.2.5 version.
 
