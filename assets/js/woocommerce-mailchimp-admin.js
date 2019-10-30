@@ -127,7 +127,7 @@ var SS_WC_MailChimp = function($) {
 	} //end function initAccount
 
 	function initLists() {
-		$listsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_lists" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator">&nbsp;'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</span></div>');
+		$listsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_lists" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator">&nbsp;'+SSWCMC.messages.connecting_to_mailchimp+'</span></div>');
 		$mainList.after($listsLoadingIndicator.hide());
 
 	} //end function initLists
@@ -141,13 +141,13 @@ var SS_WC_MailChimp = function($) {
 		var grouping;
 		var $options = $interestGroups.children('option').clone();
 
-		$interestGroups.attr('data-placeholder', SS_WC_MailChimp_Messages.select_groups_placeholder);
+		$interestGroups.attr('data-placeholder', SSWCMC.messages.select_groups_placeholder);
 
 		$interestGroups.select2('destroy').select2();
 		var groupsMessage = $('#ss-wc-mailchimp-groups-msg').length > 0 ? $('#ss-wc-mailchimp-groups-msg') : $('<div id="ss-wc-mailchimp-groups-msg" style="display: inline-block"/>');
 		$interestGroups.after(groupsMessage);
 		if ($options.length === 0) {
-			groupsMessage.text(SS_WC_MailChimp_Messages.interest_groups_not_enabled);
+			groupsMessage.text(SSWCMC.messages.interest_groups_not_enabled);
 			$interestGroups.siblings('.select2-container').remove();
 			groupsMessage.show();
 		} else {
@@ -156,7 +156,7 @@ var SS_WC_MailChimp = function($) {
 		}
 
 		// Add the loading indicator for groups (set to hidden by default)
-		$interestGroupsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_groups" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator">&nbsp;'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</span></div>');
+		$interestGroupsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_groups" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator">&nbsp;'+SSWCMC.messages.connecting_to_mailchimp+'</span></div>');
 		$interestGroups.parent().append($interestGroupsLoadingIndicator.hide());
 
 	} //end function initGroups
@@ -166,13 +166,13 @@ var SS_WC_MailChimp = function($) {
 		// Reinitialize the <optgroup> elements by splitting out the option names
 		var $options = $tags.children('option').clone();
 
-		$tags.attr('data-placeholder', SS_WC_MailChimp_Messages.select_tags_placeholder);
+		$tags.attr('data-placeholder', SSWCMC.messages.select_tags_placeholder);
 
 		$tags.select2('destroy').select2();
 		var tagsMessage = $('#ss-wc-mailchimp-tags-msg').length > 0 ? $('#ss-wc-mailchimp-tags-msg') : $('<div id="ss-wc-mailchimp-tags-msg" style="display: inline-block"/>');
 		$tags.after(tagsMessage);
 		if ($options.length === 0) {
-			tagsMessage.text(SS_WC_MailChimp_Messages.tags_not_enabled);
+			tagsMessage.text(SSWCMC.messages.tags_not_enabled);
 			$tags.siblings('.select2-container').remove();
 			tagsMessage.show();
 		} else {
@@ -181,7 +181,7 @@ var SS_WC_MailChimp = function($) {
 		}
 
 		// Add the loading indicator for tags (set to hidden by default)
-		$tagsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_tags" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator">&nbsp;'+SS_WC_MailChimp_Messages.connecting_to_mailchimp+'</span></div>');
+		$tagsLoadingIndicator = $('<div id="ss_wc_mailchimp_loading_tags" class="woocommerce-mailchimp-loading"><span class="woocommerce-mailchimp-loading-indicator">&nbsp;'+SSWCMC.messages.connecting_to_mailchimp+'</span></div>');
 		$tags.parent().append($tagsLoadingIndicator.hide());
 
 	} //end function initTags
@@ -204,12 +204,13 @@ var SS_WC_MailChimp = function($) {
 		$accountIndicator = $accountLoadingIndicator.children().first();
 		$accountIndicator.removeClass('success').removeClass('error');
 		$accountIndicator.addClass('loading');
-		$accountIndicator.html('&nbsp;'+SS_WC_MailChimp_Messages.connecting_to_mailchimp);
+		$accountIndicator.html('&nbsp;'+SSWCMC.messages.connecting_to_mailchimp);
 		$.post(
 			ajaxurl,
 			{
 				'action': '' + namespace_prefixed('get_account'),
-				'data': { 'api_key': apiKey }
+				'data': { 'api_key': apiKey },
+				'nonce': SSWCMC.nonces.get_account
 			},
 			function(response) {
 				console.log(response);
@@ -221,7 +222,7 @@ var SS_WC_MailChimp = function($) {
 				} catch (err) {
 					console.error(err);
 					$accountIndicator.addClass('error');
-					$accountIndicator.html('&nbsp;'+SS_WC_MailChimp_Messages.error_loading_account);
+					$accountIndicator.html('&nbsp;'+SSWCMC.messages.error_loading_account);
 					return;
 				}
 
@@ -233,7 +234,7 @@ var SS_WC_MailChimp = function($) {
 
 				if ( ! result.account_id ) {
 					$accountIndicator.addClass('error');
-					$accountIndicator.html('&nbsp;'+SS_WC_MailChimp_Messages.error_loading_account);
+					$accountIndicator.html('&nbsp;'+SSWCMC.messages.error_loading_account);
 					return;
 				}
 
@@ -263,7 +264,8 @@ var SS_WC_MailChimp = function($) {
 			ajaxurl,
 			{
 				'action': '' + namespace_prefixed('get_lists'),
-				'data': { 'api_key': apiKey }
+				'data': { 'api_key': apiKey },
+				'nonce': SSWCMC.nonces.get_lists
 			},
 			function(response) {
 				console.log(response);
@@ -275,7 +277,7 @@ var SS_WC_MailChimp = function($) {
 					result = $.parseJSON(response);
 				} catch (err) {
 					console.error(err);
-					alert(SS_WC_MailChimp_Messages.error_loading_lists);
+					alert(SSWCMC.messages.error_loading_lists);
 				}
 
 				if (result) {
@@ -313,7 +315,8 @@ var SS_WC_MailChimp = function($) {
 			ajaxurl,
 			{
 				'action': '' + namespace_prefixed('get_interest_groups'),
-				'data': { 'api_key': apiKey, 'list_id': listId }
+				'data': { 'api_key': apiKey, 'list_id': listId },
+				'nonce': SSWCMC.nonces.get_interest_groups
 			},
 			function(response) {
 				console.log(response);
@@ -325,7 +328,7 @@ var SS_WC_MailChimp = function($) {
 					result = $.parseJSON(response);
 				} catch (err) {
 					console.error(err);
-					alert(SS_WC_MailChimp_Messages.error_loading_groups);
+					alert(SSWCMC.messages.error_loading_groups);
 				}
 
 				if (result.error) {
@@ -376,7 +379,8 @@ var SS_WC_MailChimp = function($) {
 			ajaxurl,
 			{
 				'action': '' + namespace_prefixed('get_tags'),
-				'data': { 'api_key': apiKey, 'list_id': listId }
+				'data': { 'api_key': apiKey, 'list_id': listId },
+				'nonce': SSWCMC.nonces.get_tags
 			},
 			function(response) {
 				console.log(response);
@@ -388,7 +392,7 @@ var SS_WC_MailChimp = function($) {
 					result = $.parseJSON(response);
 				} catch (err) {
 					console.error(err);
-					alert(SS_WC_MailChimp_Messages.error_loading_tags);
+					alert(SSWCMC.messages.error_loading_tags);
 				}
 
 				if (result.error) {

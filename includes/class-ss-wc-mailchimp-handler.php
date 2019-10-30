@@ -140,6 +140,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			try {
 
+				check_ajax_referer( 'sswcmc_get_account', 'nonce' );
+
 				if ( ! isset( $_POST['data'] ) ) {
 					throw new Exception( __( __METHOD__ . ': $_POST[\'data\'] not provided.', 'woocommerce-mailchimp' ) );
 				}
@@ -176,6 +178,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			try {
 
+				check_ajax_referer( 'sswcmc_get_lists', 'nonce' );
+
 				if ( ! $_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
 					return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'woocommerce-mailchimp' ) ) );
@@ -207,6 +211,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		public function ajax_get_interest_groups() {
 
 			try {
+
+				check_ajax_referer( 'sswcmc_get_interest_groups', 'nonce' );
 
 				if ( ! $_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
@@ -247,6 +253,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 			try {
 
+				check_ajax_referer( 'sswcmc_get_tags', 'nonce' );
+
 				if ( ! $_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 
 					return $this->toJSON( array( '' => __( 'Enter your api key above to see your lists', 'ss_wc_mailchimp' ) ) );
@@ -285,6 +293,8 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		public function ajax_get_merge_fields() {
 
 			try {
+
+				check_ajax_referer( 'sswcmc_get_merge_fields', 'nonce' );
 
 				if ( !$_POST['data']['api_key'] || empty( $_POST['data']['api_key'] ) ) {
 

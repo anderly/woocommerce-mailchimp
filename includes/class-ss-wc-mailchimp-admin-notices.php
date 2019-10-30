@@ -38,26 +38,27 @@ class SS_WC_MailChimp_Admin_Notices {
 	 */
 	public function dismiss_notice() {
 
-		// No dismiss sent
 		if ( empty( $_GET['sswcmc-dismiss'] ) ) {
 			return;
 		}
 
-		// Invalid nonce
-		if ( !wp_verify_nonce( $_GET['sswcmc-dismiss'], 'dismiss' ) ) {
+		// Invalid nonce.
+		if ( ! wp_verify_nonce( sanitize_key( $_GET['sswcmc-dismiss'] ), 'dismiss' ) ) {
 			return;
 		}
 
-		$notice_id = esc_attr( $_GET['notice'] );
+		if ( isset( $_GET['notice'] ) ) {
+			$notice_id = esc_attr( sanitize_text_field( wp_unslash( $_GET['notice'] ) ) );
+		}
 
-		//don't display a message if use has dismissed the message for this version
-		$dismissed_notices = (array)get_transient( 'ss_wc_mailchimp_dismissed_notices' );
+		// Don't display a message if use has dismissed the message for this version.
+		$dismissed_notices = (array) get_transient( 'ss_wc_mailchimp_dismissed_notices' );
 
 		$dismissed_notices[] = $notice_id;
 
 		$dismissed_notices = array_unique( $dismissed_notices );
 
-		// Remind users every 30 days
+		// Remind users every 30 days.
 		set_transient( 'ss_wc_mailchimp_dismissed_notices', $dismissed_notices, DAY_IN_SECONDS * 30 );
 
 	}
@@ -73,21 +74,22 @@ class SS_WC_MailChimp_Admin_Notices {
 	 * @param  string $notice            Notice array, set using `add_notice()`.
 	 * @return boolean                   True: show notice; False: hide notice
 	 */
-	function _maybe_show_notice( $notice ) {
+	public function maybe_show_notice( $notice ) {
 
 		// There are no dismissed notices.
-		if( empty( self::$dismissed_notices ) ) {
+		if ( empty( self::$dismissed_notices ) ) {
 			return true;
 		}
 
-		// Has the
-		$is_dismissed = !empty( $notice['dismiss'] ) && in_array( $notice['dismiss'], self::$dismissed_notices );
+		// Has the notice been dismissed?
+		$is_dismissed = ! empty( $notice['dismiss'] ) && in_array( $notice['dismiss'], self::$dismissed_notices );
 
 		return $is_dismissed ? false : true;
 	}
 
 	/**
 	 * Get admin notices
+	 *
 	 * @since 1.12
 	 * @return array
 	 */
@@ -113,7 +115,7 @@ class SS_WC_MailChimp_Admin_Notices {
 			return false;
 		}
 
-		// or they don't have admin capabilities
+		// Or, they don't have admin capabilities.
 		if ( ! is_super_admin() ) {
 			return false;
 		}
@@ -132,38 +134,39 @@ class SS_WC_MailChimp_Admin_Notices {
 
 		/**
 		 * Modify the notices displayed
+		 *
 		 * @since 2.0.13
 		 */
 		$notices = apply_filters( 'ss_wc_mailchimp/admin/notices', self::$admin_notices );
 
-		if( empty( $notices ) || ! $this->check_show_multisite_notices() ) {
+		if ( empty( $notices ) || ! $this->check_show_multisite_notices() ) {
 			return;
 		}
 
-		//don't display a message if use has dismissed the message for this version
-		self::$dismissed_notices = isset( $_GET['show-dismissed-notices'] ) ? array() : (array)get_transient( 'ss_wc_mailchimp_dismissed_notices' );
+		// Don't display a message if use has dismissed the message for this version.
+		self::$dismissed_notices = isset( $_GET['show-dismissed-notices'] ) ? array() : (array) get_transient( 'ss_wc_mailchimp_dismissed_notices' );
 
-		foreach( $notices as $notice ) {
+		foreach ( $notices as $notice ) {
 
-			if( false === $this->_maybe_show_notice( $notice ) ) {
+			if ( false === $this->maybe_show_notice( $notice ) ) {
 				continue;
 			}
 
 			echo '<div id="message" class="notice '. sswcmc_sanitize_html_class( $notice['class'] ).'">';
 
-			if( !empty( $notice['title'] ) ) {
-				echo '<h3>'.esc_html( $notice['title'] ) .'</h3>';
+			if ( ! empty( $notice['title'] ) ) {
+				echo '<h3>' . esc_html( $notice['title'] ) . '</h3>';
 			}
 
-			echo wpautop( $notice['message'] );
+			echo esc_html( wpautop( $notice['message'] ) );
 
-			if( !empty( $notice['dismiss'] ) ) {
+			if ( ! empty( $notice['dismiss'] ) ) {
 
-				$dismiss = esc_attr($notice['dismiss']);
+				$dismiss = esc_attr( $notice['dismiss'] );
 
 				$url = esc_url( add_query_arg( array( 'sswcmc-dismiss' => wp_create_nonce( 'dismiss' ), 'notice' => $dismiss ) ) );
 
-				echo wpautop( '<a href="'.$url.'" data-notice="'.$dismiss.'" class="button-small button button-secondary">'.esc_html__( 'Dismiss', 'woocommerce-mailchimp' ).'</a>' );
+				echo wpautop( '<a href="' . $url . '" data-notice="' . $dismiss . '" class="button-small button button-secondary">' . esc_html__( 'Dismiss', 'woocommerce-mailchimp' ) . '</a>' );
 			}
 
 			echo '<div class="clear"></div>';
@@ -171,17 +174,18 @@ class SS_WC_MailChimp_Admin_Notices {
 
 		}
 
-		//reset the notices handler
+		// Reset the notices handler.
 		self::$admin_notices = array();
 	}
 
 	/**
 	 * Add a notice to be displayed in the admin.
+	 *
 	 * @param array $notice Array with `class` and `message` keys. The message is not escaped.
 	 */
 	public static function add_notice( $notice = array() ) {
 
-		if( !isset( $notice['message'] ) ) {
+		if ( ! isset( $notice['message'] ) ) {
 			do_action( 'ss_wc_mailchimp_log_error', 'SSWCMC_Admin[add_notice] Notice not set', $notice );
 			return;
 		}

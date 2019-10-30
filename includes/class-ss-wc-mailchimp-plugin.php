@@ -590,7 +590,7 @@ final class SS_WC_MailChimp_Plugin {
 		wp_register_style( 'woocommerce-mailchimp', SS_WC_MAILCHIMP_URL . 'assets/css/style.css', array(), self::version() );
 
 		// Localize javascript messages.
-		$translation_array = array(
+		$translations = array(
 			'connecting_to_mailchimp'     => __( 'Connecting to Mailchimp', 'woocommerce-mailchimp' ),
 			'error_loading_account'       => __( 'Error. Please check your api key.', 'woocommerce-mailchimp' ),
 			'error_loading_groups'        => __( 'Error loading groups. Please check your Mailchimp Interest Groups for the selected list.', 'woocommerce-mailchimp' ),
@@ -600,7 +600,21 @@ final class SS_WC_MailChimp_Plugin {
 			'select_tags_placeholder'     => __( 'Select one or more tags (optional)', 'woocommerce-mailchimp' ),
 			'tags_not_enabled'            => __( 'This list does not have tags enabled', 'woocommerce-mailchimp' ),
 		);
-		wp_localize_script( 'woocommerce-mailchimp-admin', 'SS_WC_MailChimp_Messages', $translation_array );
+
+		$nonces = array(
+			'get_account'         => wp_create_nonce( 'sswcmc_get_account' ),
+			'get_lists'           => wp_create_nonce( 'sswcmc_get_lists' ),
+			'get_interest_groups' => wp_create_nonce( 'sswcmc_get_interest_groups' ),
+			'get_tags'            => wp_create_nonce( 'sswcmc_get_tags' ),
+			'get_merge_fields'    => wp_create_nonce( 'sswcmc_merge_fields' ),
+		);
+
+		$sswcmc = array(
+			'messages' => $translations,
+			'nonces'   => $nonces,
+		);
+
+		wp_localize_script( 'woocommerce-mailchimp-admin', 'SSWCMC', $sswcmc );
 
 		// Scripts.
 		wp_enqueue_script( 'woocommerce-mailchimp-admin' );
