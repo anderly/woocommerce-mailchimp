@@ -66,7 +66,7 @@ var SS_WC_MailChimp = function($) {
 		$apiKey.change(function() {
 			checkApiKey($apiKey.val(), true);
 		});
-		checkApiKey($apiKey.val(), false)
+		checkApiKey($apiKey.val(), false);
 
 		$mainList.change(function() {
 			if ($mainList.val()) {
@@ -186,7 +186,9 @@ var SS_WC_MailChimp = function($) {
 
 	} //end function initTags
 
-	function checkApiKey(apiKey, shouldLoadLists = false) {
+	function checkApiKey(apiKey, shouldLoadLists) {
+
+		shouldLoadLists = false;
 
 		if ( $apiKey.val() === '' ) {
 			toggleAllSettings('hide');
