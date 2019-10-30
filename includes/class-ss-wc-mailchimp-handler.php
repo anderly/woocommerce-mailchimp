@@ -340,7 +340,11 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 */
 		private function to_json( $response ) {
 
-			wp_send_json( $response, '200' );
+			// Commented out due to json_encode not preserving quotes around MailChimp ids
+			// header('Content-Type: application/json');
+			echo wp_json_encode( $response );
+			exit();
+			//wp_send_json( $response, '200' );
 
 		} //end function to_json
 
