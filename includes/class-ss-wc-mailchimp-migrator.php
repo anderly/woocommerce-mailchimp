@@ -45,6 +45,10 @@ final class SS_WC_MailChimp_Migrator {
 			$start = array_search( $current_version, self::$versions );
 
 			// error_log( 'Starting at migration ' . $start );
+			if ( ! $start ) {
+				update_option( self::VERSION_KEY, $target_version );
+				return;
+			}
 
 			for ($start; $start < count(self::$versions) - 1; $start++) {
 			    $next = $start + 1;
