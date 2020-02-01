@@ -286,6 +286,7 @@ final class SS_WC_MailChimp_Plugin {
 
 		$mc_tags = $this->mailchimp()->get_tags( $list_id );
 
+		if ( ! is_array( $tags ) ) $tags = array();
 		$tags = array_map( function( $tag ) use ( $mc_tags ) {
 			return array(
 				'name'   => $mc_tags[ $tag ],
