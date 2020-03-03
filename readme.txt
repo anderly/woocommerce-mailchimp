@@ -6,7 +6,7 @@ Requires at least: 4.7.0
 Tested up to: 5.3.2
 WC tested up to: 3.9.1
 Requires PHP: 5.6
-Stable tag: 2.3.9
+Stable tag: 2.3.10
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -118,6 +118,10 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.3.10 - March 3, 2020
+- Increase API return limit count to 500.
+- Tested up to WooCommerce 3.9.2
 
 #### 2.3.9 - February 1, 2020
 - Fix for migration version detection.

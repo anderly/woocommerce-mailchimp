@@ -69,7 +69,7 @@ class SS_WC_MailChimp_API {
 	public function get( $resource, $args = array() ) {
 
 		if ( is_array( $args) && ! array_key_exists( 'count', $args ) ) {
-			$args['count'] = 10;
+			$args['count'] = 100;
 		}
 
 		return $this->api_request( 'GET', $resource, $args );

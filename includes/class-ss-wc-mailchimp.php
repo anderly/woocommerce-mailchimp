@@ -91,7 +91,7 @@ class SS_WC_MailChimp {
 			$resource = 'lists';
 
 			if ( ! array_key_exists( 'count', $args ) ) {
-				$args['count'] = 100;
+				$args['count'] = 500;
 			}
 
 			$response = $this->api->get( $resource, $args );
@@ -131,7 +131,7 @@ class SS_WC_MailChimp {
 			$resource = 'lists/';
 
 			if ( ! array_key_exists( 'count', $args ) ) {
-				$args['count'] = 100;
+				$args['count'] = 500;
 			}
 
 			$response = $this->api->get( $resource, $args );
@@ -332,7 +332,7 @@ class SS_WC_MailChimp {
 
 			$resource = "lists/$list_id/interest-categories";
 
-			$response = $this->api->get( $resource, array( 'count' => 100 ) );
+			$response = $this->api->get( $resource, array( 'count' => 500 ) );
 
 			if ( ! $response ) {
 				return false;
@@ -370,7 +370,7 @@ class SS_WC_MailChimp {
 
 			$resource = "lists/$list_id/interest-categories/$interest_category_id/interests";
 
-			$response = $this->api->get( $resource, array( 'count' => 100 ) );
+			$response = $this->api->get( $resource, array( 'count' => 500 ) );
 
 			if ( ! $response ) {
 				return false;
@@ -444,7 +444,7 @@ class SS_WC_MailChimp {
 
 			$resource = "lists/$list_id/segments?type=static";
 
-			$response = $this->api->get( $resource, array( 'count' => 100 ) );
+			$response = $this->api->get( $resource, array( 'count' => 500 ) );
 
 			if ( ! $response ) {
 				return false;

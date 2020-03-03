@@ -51,13 +51,13 @@ final class SS_WC_MailChimp_Migrator {
 			}
 
 			for ($start; $start < count(self::$versions) - 1; $start++) {
-			    $next = $start + 1;
-			    $current_version = self::$versions[$start];
+				$next = $start + 1;
+				$current_version = self::$versions[$start];
 				$next_version = self::$versions[$next];
 
 				// error_log( 'Migrating from ' . $current_version . ' to ' . $target_version );
 				//
-			    if ( file_exists( SS_WC_MAILCHIMP_DIR . "includes/migrations/class-ss-wc-migration-from-$current_version-to-$next_version.php" ) ) {
+				if ( file_exists( SS_WC_MAILCHIMP_DIR . "includes/migrations/class-ss-wc-migration-from-$current_version-to-$next_version.php" ) ) {
 
 					do_action( 'sswcmc_log', 'Migrating from ' . $current_version . ' to ' . $target_version );
 
