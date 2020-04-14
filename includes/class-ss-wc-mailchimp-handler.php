@@ -28,13 +28,6 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		private static $instance = null;
 
 		/**
-		 * SS_WC_MailChimp_Plugin instance
-		 *
-		 * @var SS_WC_MailChimp_Plugin
-		 */
-		private $sswcmc = null;
-
-		/**
 		 * Constructor
 		 *
 		 * @access public
