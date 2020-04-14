@@ -6,7 +6,7 @@ Requires at least: 4.7.0
 Tested up to: 5.4.0
 WC tested up to: 4.0.1
 Requires PHP: 5.6
-Stable tag: 2.3.11
+Stable tag: 2.3.12
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -119,7 +119,10 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
-#### 2.3.10 - March 3, 2020
+#### 2.3.12 - April 14, 2020
+- Remove explicit private variable to fix integration issue with Aero Checkout.
+
+#### 2.3.11 - April 8, 2020
 - Tested up to WordPress 5.4
 - Tested up to WooCommerce 4.0.1
 
