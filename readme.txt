@@ -3,10 +3,10 @@ Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp, ecommerce, email
 Requires at least: 4.7.0
-Tested up to: 5.4.0
-WC tested up to: 4.0.1
+Tested up to: 5.6.0
+WC tested up to: 4.8.0
 Requires PHP: 5.6
-Stable tag: 2.3.12
+Stable tag: 2.3.13
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -118,6 +118,10 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.3.13 - January 5, 2021
+- Bump WP and WC tested versions.
+- Fix for category interests not returning (issue #29)
 
 #### 2.3.12 - April 14, 2020
 - Remove explicit private variable to fix integration issue with Aero Checkout.
