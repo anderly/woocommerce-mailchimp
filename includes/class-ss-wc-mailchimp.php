@@ -416,7 +416,7 @@ class SS_WC_MailChimp {
 			$interests = $this->get_interest_category_interests( $list_id, $category_id );
 
 			if ( ! $interests ) {
-				return false;
+				continue;
 			}
 
 			foreach ( $interests as $interest_id => $interest ) {
