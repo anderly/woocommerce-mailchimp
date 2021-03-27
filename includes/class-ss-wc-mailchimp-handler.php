@@ -422,6 +422,12 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			// Allow hooking into subscription options.
 			$options = apply_filters( 'ss_wc_mailchimp_subscribe_options', $subscribe_options, $order_id );
 
+			/**
+			 * Allow overriding whether to subscribe the customer
+			 * @since 2.4.1
+			*/
+			$subscribe_customer = apply_filters( 'ss_wc_mailchimp_subscribe_customer', $subscribe_customer, $subscribe_options, $order_id );
+
 			// Extract options into variables.
 			extract( $options );
 

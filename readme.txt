@@ -6,7 +6,7 @@ Requires at least: 4.7.0
 Tested up to: 5.7.0
 WC tested up to: 5.1.0
 Requires PHP: 5.6
-Stable tag: 2.4.0
+Stable tag: 2.4.1
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -118,6 +118,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.4.1 - March 27, 2021
+- Added new `ss_wc_mailchimp_subscribe_customer` hook to allow easier override of whether or not to subscribe the customer.
 
 #### 2.4.0 - March 24, 2021
 - Tested up to WordPress 5.7
