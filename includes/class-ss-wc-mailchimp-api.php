@@ -171,16 +171,17 @@ class SS_WC_MailChimp_API {
 
 		// print_r($url);
 		// die();
+		do_action( 'sswcmc_log', "MailChimp API Call RESOURCE: $url \n METHOD: $method \n BODY: " . print_r( $request_args, true ) );
 
 		$raw_response = wp_remote_request( $url, $request_args );
 
 		$this->last_response = $raw_response;
 
-		// $this->maybe_log( $url, $method, $args, $raw_response );
-
 		if ( is_wp_error( $raw_response ) ) {
 
 			$this->last_error = new WP_Error( 'ss-wc-mc-api-request-error', $raw_response->get_error_message(), $this->format_error( $resource, $method, $raw_response ) );
+
+			$this->maybe_log( $url, $method, $args, $raw_response );
 
 			return false;
 
@@ -193,6 +194,8 @@ class SS_WC_MailChimp_API {
 			$error = json_decode( $json, true );
 
 			$this->last_error = new WP_Error( 'ss-wc-mc-api-request-error', $error['detail'], $this->format_error( $resource, $method, $raw_response ) );
+
+			$this->maybe_log( $url, $method, $args, $raw_response );
 
 			return false;
 

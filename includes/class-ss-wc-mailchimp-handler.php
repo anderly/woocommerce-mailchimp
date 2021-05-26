@@ -429,7 +429,14 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			$subscribe_customer = apply_filters( 'ss_wc_mailchimp_subscribe_customer', $subscribe_customer, $subscribe_options, $order_id );
 
 			// Extract options into variables.
-			extract( $options );
+			// extract( $options );
+			$list_id = !empty ($options['list_id'] ) ? $options['list_id'] : null;
+			$email = !empty ($options['$email'] ) ? $options['$email'] : null;
+			$email_type = !empty ($options['$email_type'] ) ? $options['$email_type'] : null;
+			$merge_tags = !empty ($options['$merge_tags'] ) ? $options['$merge_tags'] : null;
+			$interest_groups = !empty ($options['$interest_groups'] ) ? $options['$interest_groups'] : null;
+			$double_opt_in = !empty ($options['$double_opt_in'] ) ? $options['$double_opt_in'] : null;
+			$tags = !empty ($options['$tags'] ) ? $options['$tags'] : null;
 
 			// Log.
 			$this->log( sprintf( __( '%1$s(): Maybe subscribing customer ($subscribe_customer: %2$s) to MailChimp: %3$s', 'woocommerce-mailchimp' ), __METHOD__, $subscribe_customer, print_r( $options, true ) ) );
