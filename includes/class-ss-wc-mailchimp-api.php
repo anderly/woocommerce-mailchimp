@@ -193,7 +193,7 @@ class SS_WC_MailChimp_API {
 
 			$error = json_decode( $json, true );
 
-			$this->last_error = new WP_Error( 'ss-wc-mc-api-request-error', $error['detail'], $this->format_error( $resource, $method, $raw_response ) );
+			$this->last_error = new WP_Error( 'ss-wc-mc-api-request-error', $error['detail'] . $this->concat_errors( $error ), $this->format_error( $resource, $method, $raw_response ) );
 
 			$this->maybe_log( $url, $method, $args, $raw_response );
 
@@ -250,6 +250,23 @@ class SS_WC_MailChimp_API {
 			'method'   => $method,
 			'response' => json_encode($response),
 		);
+	}
+
+	/**
+	 * Concatenates Mailchimp API errors array into string.
+	 * @param  array  $error 
+	 * @return string String representation of the concatenated Mailchimp API errors.
+	 */
+	private function concat_errors( $error ) {
+		
+		if ( !is_array( $error ) || !is_array( $error['errors'] ) ) {
+			return '';
+		}
+	
+		$fields = array_map(function($err) { 
+			return '{ field: ' . $err['field'] . ', message: ' . $err['message'] . ' }';
+		}, $error['errors'] );
+		return ' (' . implode( ', ', $fields ) . ')';
 	}
 
 	/**
