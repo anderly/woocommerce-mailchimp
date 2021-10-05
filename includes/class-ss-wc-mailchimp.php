@@ -196,8 +196,11 @@ class SS_WC_MailChimp {
 			'email_address' => $email_address,
 			'status'        => $double_opt_in ? 'pending' : 'subscribed',
 			'email_type'    => $email_type,
-			'merge_fields'  => $merge_fields,
 		);
+
+		if ( is_array( $merge_fields ) && !empty( $merge_fields ) ) {
+			$args['merge_fields'] = $merge_fields;
+		}
 
 		if ( is_array( $interests ) && !empty( $interests ) ) {
 			$args['interests'] = $interests;

@@ -3,10 +3,10 @@ Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp, ecommerce, email
 Requires at least: 4.7.0
-Tested up to: 5.7.2
-WC tested up to: 5.3.0
+Tested up to: 5.8.1
+WC tested up to: 5.7.1
 Requires PHP: 5.6
-Stable tag: 2.4.4
+Stable tag: 2.4.5
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -118,6 +118,11 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.4.5 - Oct 5, 2021
+- Only send merge fields if not empty.
+- Bump WC tested version up to 5.7.1.
+- Bump WP tested version up to 5.8.1.
 
 #### 2.4.4 - May 26, 2021
 - Fix typo.
