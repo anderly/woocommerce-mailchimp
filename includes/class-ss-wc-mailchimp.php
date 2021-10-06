@@ -277,7 +277,7 @@ class SS_WC_MailChimp {
 	 */
 	public function get_subscriber_hash( $email_address ) {
 
-		return md5( strtolower( $email_address ) );
+		return md5( strtolower( trim( $email_address ) ) );
 
 	} //end function get_subscriber_hash
 
