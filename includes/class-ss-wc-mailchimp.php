@@ -215,7 +215,7 @@ class SS_WC_MailChimp {
 
 		$subscriber_hash = $this->get_subscriber_hash( $email_address );
 
-		$resource = "lists/$list_id/members/$subscriber_hash";
+		$resource = "lists/$list_id/members/$subscriber_hash?skip_merge_validation=true";
 
 		$response = $this->api->put( $resource, $args );
 
