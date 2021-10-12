@@ -215,7 +215,9 @@ class SS_WC_MailChimp {
 
 		$subscriber_hash = $this->get_subscriber_hash( $email_address );
 
-		$resource = "lists/$list_id/members/$subscriber_hash?skip_merge_validation=true";
+		$base_resource = "lists/$list_id/members/$subscriber_hash";
+
+		$resource = "$base_resource?skip_merge_validation=true";
 
 		$response = $this->api->put( $resource, $args );
 
@@ -231,7 +233,7 @@ class SS_WC_MailChimp {
 
 			do_action( 'sswcmc_log', __METHOD__ . ' Attempting to add tags to subscriber ('.$email_address.'): ' . print_r( $args, true ) );
 
-			$response_tags = $this->api->post( $resource . '/tags', $args );
+			$response_tags = $this->api->post( $base_resource . '/tags', $args );
 
 			do_action( 'sswcmc_log', __METHOD__ . ' Subscriber tags response: ' . print_r( $response_tags, true ) );
 		}
