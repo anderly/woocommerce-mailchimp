@@ -230,8 +230,10 @@ class SS_WC_MailChimp_API {
 	 */
 	private function maybe_log( $resource, $method, $args, $response ) {
 
-		if ( isset( $response['_links'] ) ) {
-			unset( $response['_links'] );
+		if ( ! is_wp_error( $response ) ) {
+			if ( isset( $response['_links'] ) ) {
+				unset( $response['_links'] );
+			}
 		}
 
 		do_action( 'sswcmc_log', "MailChimp API Call RESOURCE: $resource \n METHOD: $method \n BODY: " . print_r( $args, true ) . " \n RESPONSE: " . print_r( $response, true ) );
