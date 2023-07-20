@@ -6,8 +6,8 @@ Requires at least: 4.7.0
 Tested up to: 6.2.2
 WC tested up to: 7.9.0
 Requires PHP: 5.6
-Stable tag: 2.4.10
-Version: 2.4.10
+Stable tag: 2.4.11
+Version: 2.4.11
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -119,6 +119,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.4.11 - Jul 20, 2023
+- PHP 8+ exception bug fix - check if array key exists.
 
 #### 2.4.10 - Jul 19, 2023
 - Bump WC tested version up to 7.9.0.

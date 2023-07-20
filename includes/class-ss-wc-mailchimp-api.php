@@ -256,16 +256,16 @@ class SS_WC_MailChimp_API {
 
 	/**
 	 * Concatenates Mailchimp API errors array into string.
-	 * @param  array  $error 
+	 * @param  array  $error
 	 * @return string String representation of the concatenated Mailchimp API errors.
 	 */
 	private function concat_errors( $error ) {
-		
-		if ( !is_array( $error ) || !is_array( $error['errors'] ) ) {
+
+		if ( !is_array( $error ) || !isset( $error['errors'] ) || !is_array( $error['errors'] ) ) {
 			return '';
 		}
-	
-		$fields = array_map(function($err) { 
+
+		$fields = array_map(function($err) {
 			return '{ field: ' . $err['field'] . ', message: ' . $err['message'] . ' }';
 		}, $error['errors'] );
 		return ' (' . implode( ', ', $fields ) . ')';
