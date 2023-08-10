@@ -20,12 +20,40 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 		/**
 		 *
-		 *
-		 * Plugin singleton instance
+		 * Class singleton instance
 		 *
 		 * @var SS_WC_MailChimp_Handler
 		 */
 		private static $instance = null;
+
+		/**
+		 *
+		 * Main Plugin instance
+		 *
+		 * @var SS_WC_MailChimp_Plugin
+		 */
+		private $sswcmc = null;
+
+		/**
+		 * Id
+		 *
+		 * @var string
+		 */
+		private $id = null;
+
+		/**
+		 * Namespace
+		 *
+		 * @var string
+		 */
+		private $namespace = null;
+
+		/**
+		 * Label
+		 *
+		 * @var string
+		 */
+		private $label = null;
 
 		/**
 		 * Constructor
@@ -123,7 +151,7 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 				$order = $this->wc_get_order( $id );
 
 				// Get the ss_wc_mailchimp_opt_in value from the post meta ("order_custom_fields" was removed with WooCommerce 2.1).
-				$subscribe_customer = get_post_meta( $id, 'ss_wc_mailchimp_opt_in', true );
+				$subscribe_customer = $order->get_meta( 'ss_wc_mailchimp_opt_in', true );
 
 				$order_id                 = method_exists( $order, 'get_id' ) ? $order->get_id() : $order->id;
 				$order_billing_email      = method_exists( $order, 'get_billing_email' ) ? $order->get_billing_email() : $order->billing_email;
@@ -395,8 +423,10 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 */
 		public function maybe_subscribe( $order_id ) {
 
-			// Get the ss_wc_mailchimp_opt_in value from the post meta ("order_custom_fields" was removed with WooCommerce 2.1).
-			$subscribe_customer = get_post_meta( $order_id, 'ss_wc_mailchimp_opt_in', true );
+			$order = $this->wc_get_order( $order_id );
+
+			// Get the ss_wc_mailchimp_opt_in value from the order meta ("order_custom_fields" was removed with WooCommerce 2.1).
+			$subscribe_customer = $order->get_meta( 'ss_wc_mailchimp_opt_in', true );
 
 			// Get the subscribe options.
 			$subscribe_options = $this->sswcmc->get_subscribe_options_for_order( $order_id );
@@ -512,7 +542,13 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			if ( $this->sswcmc->display_opt_in() ) {
 				$opt_in = isset( $_POST['ss_wc_mailchimp_opt_in'] ) ? 'yes' : 'no';
 
-				update_post_meta( $order_id, 'ss_wc_mailchimp_opt_in', $opt_in );
+				$order = $this->wc_get_order( $order_id );
+
+				// update_post_meta( $order_id, 'ss_wc_mailchimp_opt_in', $opt_in );
+
+				$order->update_meta_data( 'ss_wc_mailchimp_opt_in', $opt_in );
+				$order->save();
+
 			}
 		}
 
