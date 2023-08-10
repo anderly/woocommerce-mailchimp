@@ -3,11 +3,11 @@ Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp, ecommerce, email
 Requires at least: 4.7.0
-Tested up to: 6.2.2
-WC tested up to: 7.9.0
+Tested up to: 6.3
+WC tested up to: 8.0.1
 Requires PHP: 5.6
-Stable tag: 2.4.11
-Version: 2.4.11
+Stable tag: 2.4.12
+Version: 2.4.12
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -119,6 +119,11 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.4.12 - Aug 10, 2023
+- Support for WooCommerce HPOS (High Performance Order Storage).
+- Bump WC tested version up to 8.0.1.
+- Bump WP tested version up to 6.3.
 
 #### 2.4.11 - Jul 20, 2023
 - PHP 8+ exception bug fix - check if array key exists.

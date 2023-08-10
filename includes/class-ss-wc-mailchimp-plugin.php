@@ -15,7 +15,7 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '2.4.11';
+	private static $version = '2.4.12';
 
 	/**
 	 * Plugin singleton instance
@@ -473,6 +473,16 @@ final class SS_WC_MailChimp_Plugin {
 			add_action( 'admin_init', array( $this, 'process_actions' ) );
 
 		}
+
+		// Declare compatibility with custom order tables for WooCommerce.
+		add_action(
+			'before_woocommerce_init',
+			function () {
+				if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+					\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', SS_WC_MAILCHIMP_FILE, true );
+				}
+			}
+		);
 
 	} //end function add_hooks
 
