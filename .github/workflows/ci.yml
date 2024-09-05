@@ -10,8 +10,8 @@ jobs:
     strategy:
       matrix:
         # We test against the earliest and latest PHP versions for each major supported version.
-        php: [ '5.6', '7.0', '7.4', '8.0' ]
-        wp: [ '5.2', '5.3', '5.4', '5.5', '5.6', 'latest' ]
+        php: [ '5.6', '7.0', '7.4', '8.0', '8.1', '8.2' ]
+        wp: [ '5.2', '5.3', '5.4', '5.5', '5.6', '5.7', '5.8', '5.9', '6.0', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', 'latest' ]
         multisite: [ '0', '1' ]
         exclude:
           # Earlier versions of WordPress do not support PHP 7.4+
