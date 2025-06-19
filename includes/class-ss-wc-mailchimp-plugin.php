@@ -46,11 +46,32 @@ final class SS_WC_MailChimp_Plugin {
 	private $mailchimp;
 
 	/**
+	 * Plugin logger instance
+	 *
+	 * @var SSWCMC_Logger
+	 */
+	private $logger;
+
+	/**
+	 * Plugin handler instance
+	 *
+	 * @var SS_WC_MailChimp_Handler
+	 */
+	private $handler;
+
+	/**
 	 * Plugin compatibility checker
 	 *
 	 * @var SS_WC_MailChimp_Compatibility
 	 */
 	public $compatibility;
+
+	/**
+	 * Plugin admin notices
+	 *
+	 * @var SS_WC_MailChimp_Admin_Notices
+	 */
+	public $admin_notices;
 
 	/**
 	 * Returns the plugin version
