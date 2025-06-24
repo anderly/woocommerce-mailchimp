@@ -20,6 +20,21 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 		private static $instance;
 
 		/**
+		 * The namespace for the settings
+		 */
+		public $namespace;
+
+		/**
+		 * The API key for MailChimp
+		 */
+		public $api_key;
+
+		/**
+		 * Whether the plugin is enabled
+		 */
+		public $enabled;
+
+		/**
 		 * Singleton instance
 		 *
 		 * @return SS_WC_Settings_MailChimp   SS_WC_Settings_MailChimp object

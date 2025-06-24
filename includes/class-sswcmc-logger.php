@@ -13,6 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 final class SSWCMC_Logger {
 
 	/**
+	 * The main plugin instance.
+	 *
+	 * @var SS_WC_MailChimp_Plugin
+	 */
+	private $sswcmc;
+
+	/**
 	 * Plugin singleton instance
 	 *
 	 * @var SSWCMC_Logger
