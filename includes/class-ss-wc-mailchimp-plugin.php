@@ -102,7 +102,6 @@ final class SS_WC_MailChimp_Plugin {
 			self::$instance->handler       = SS_WC_MailChimp_Handler::get_instance();
 			self::$instance->compatibility = SS_WC_MailChimp_Compatibility::get_instance();
 			self::$instance->admin_notices = new SS_WC_MailChimp_Admin_Notices();
-			self::$instance->load_plugin_textdomain();
 
 			self::update();
 			self::$instance->add_hooks();
@@ -479,6 +478,9 @@ final class SS_WC_MailChimp_Plugin {
 		/** Register hooks that are fired when the plugin is activated and deactivated. */
 		register_activation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'activate' ) );
 		register_deactivation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'deactivate' ) );
+
+		// Load plugin textdomain on init hook
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 		// Add the "Settings" links on the Plugins administration screen.
 		if ( is_admin() ) {
