@@ -15,7 +15,7 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '2.4.17';
+	private static $version = '2.5.0';
 
 	/**
 	 * Plugin singleton instance
@@ -394,7 +394,8 @@ final class SS_WC_MailChimp_Plugin {
 			require_once SS_WC_MAILCHIMP_DIR . 'includes/class-ss-wc-mailchimp.php';
 			$this->mailchimp = new SS_WC_MailChimp( $api_key, $debug );
 
-			delete_transient( 'sswcmc_lists' );
+			// Don't delete the transient here - it defeats the purpose of caching
+			// delete_transient( 'sswcmc_lists' );
 		}
 
 		return $this->mailchimp;
@@ -479,8 +480,11 @@ final class SS_WC_MailChimp_Plugin {
 		register_activation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'activate' ) );
 		register_deactivation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'deactivate' ) );
 
-		// Load plugin textdomain on init hook
-		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+		// Load plugin textdomain on plugins_loaded hook (fix for just-in-time translation loading)
+		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
+
+		// Register AJAX handlers - must be done on every request, not just admin
+		add_action( 'wp_ajax_ss_wc_mailchimp_clear_cache', array( $this, 'ajax_clear_cache' ) );
 
 		// Add the "Settings" links on the Plugins administration screen.
 		if ( is_admin() ) {
@@ -740,5 +744,40 @@ final class SS_WC_MailChimp_Plugin {
 		return $this->namespace . '_' . $suffix;
 
 	} // end function namespace_prefixed
+
+	/**
+	 * AJAX handler for clearing the cache
+	 *
+	 * @since 2.5.0
+	 */
+	public function ajax_clear_cache() {
+		// Verify nonce
+		if ( ! check_ajax_referer( 'ss_wc_mailchimp_clear_cache', 'security', false ) ) {
+			wp_send_json_error( __( 'Security check failed', 'woocommerce-mailchimp' ) );
+			return;
+		}
+
+		// Check user capabilities
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action', 'woocommerce-mailchimp' ) );
+			return;
+		}
+
+		try {
+			// Get the mailchimp instance
+			$mailchimp = $this->mailchimp();
+			if ( ! $mailchimp ) {
+				wp_send_json_error( __( 'Unable to get MailChimp instance', 'woocommerce-mailchimp' ) );
+				return;
+			}
+
+			// Clear the cache
+			$mailchimp->clear_cache();
+
+			wp_send_json_success( __( 'Cache cleared successfully', 'woocommerce-mailchimp' ) );
+		} catch ( Exception $e ) {
+			wp_send_json_error( sprintf( __( 'Error clearing cache: %s', 'woocommerce-mailchimp' ), $e->getMessage() ) );
+		}
+	}
 
 } //end final class SS_WC_MailChimp_Plugin

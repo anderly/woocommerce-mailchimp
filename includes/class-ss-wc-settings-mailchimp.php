@@ -296,6 +296,59 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 	 				$(document).ready(function() {
 	 					SS_WC_MailChimp.init();
+	 					
+	 					// Handle cache clear button
+	 					$('#ss_wc_mailchimp_clear_cache').on('click', function(e) {
+	 						e.preventDefault();
+	 						var button = $(this);
+	 						var message = $('.ss-wc-mailchimp-cache-message');
+	 						
+	 						button.prop('disabled', true);
+	 						message.show().html('<span style=\"color: #999;\">" . __('Clearing cache...', 'woocommerce-mailchimp') . "</span>');
+	 						
+	 						console.log('Sending AJAX request to clear cache...');
+	 						
+	 						$.ajax({
+	 							url: '" . admin_url('admin-ajax.php') . "',
+	 							type: 'POST',
+	 							dataType: 'json',
+	 							data: {
+	 								action: 'ss_wc_mailchimp_clear_cache',
+	 								security: '" . wp_create_nonce('ss_wc_mailchimp_clear_cache') . "'
+	 							},
+	 							success: function(response) {
+	 								console.log('AJAX response:', response);
+	 								if (response && response.success) {
+	 									message.html('<span style=\"color: #46b450;\">" . __('Cache cleared successfully!', 'woocommerce-mailchimp') . "</span>');
+	 									// Reload the page after clearing cache to refresh the lists
+	 									setTimeout(function() {
+	 										window.location.reload();
+	 									}, 1000);
+	 								} else {
+	 									var errorMsg = (response && response.data) ? response.data : '" . __('Error clearing cache.', 'woocommerce-mailchimp') . "';
+	 									message.html('<span style=\"color: #dc3232;\">' + errorMsg + '</span>');
+	 									button.prop('disabled', false);
+	 								}
+	 							},
+	 							error: function(xhr, status, error) {
+	 								console.error('AJAX error:', status, error);
+	 								console.error('Response text:', xhr.responseText);
+	 								var errorMsg = '" . __('Error clearing cache.', 'woocommerce-mailchimp') . "';
+	 								if (xhr.responseText) {
+	 									try {
+	 										var response = JSON.parse(xhr.responseText);
+	 										if (response && response.data) {
+	 											errorMsg = response.data;
+	 										}
+	 									} catch(e) {
+	 										console.error('Could not parse error response');
+	 									}
+	 								}
+	 								message.html('<span style=\"color: #dc3232;\">' + errorMsg + ' " . __('Please check console for details.', 'woocommerce-mailchimp') . "</span>');
+	 								button.prop('disabled', false);
+	 							}
+	 						});
+	 					});
 	 				});
 
 	 			})(jQuery);
@@ -362,6 +415,15 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 						'css'         => 'min-width:350px;',
 						'desc_tip'    => 'Your API Key is required for the plugin to communicate with your MailChimp account.',
 					);
+
+				if ( $this->has_api_key() ) {
+					$settings[] = array(
+						'title'       => __( 'Clear Cache', 'woocommerce-mailchimp' ),
+						'type'        => 'title',
+						'desc'        => '<button type="button" class="button button-secondary" id="ss_wc_mailchimp_clear_cache">' . __( 'Clear MailChimp Cache', 'woocommerce-mailchimp' ) . '</button><span class="ss-wc-mailchimp-cache-message" style="margin-left: 10px; display: inline-block;"></span><br/><small>' . __( 'Clear cached lists, groups, and tags data from MailChimp. Data is cached for 24 hours to improve performance.', 'woocommerce-mailchimp' ) . '</small>',
+						'id'          => 'clear_cache_options',
+					);
+				}
 
 				$settings[] = array(
 						'id'          => $this->namespace_prefixed( 'enabled' ),

@@ -3,11 +3,11 @@ Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: woocommerce, mailchimp, ecommerce, email
 Requires at least: 4.7.0
-Tested up to: 6.8.1
-WC tested up to: 9.9.5
+Tested up to: 6.8.3
+WC tested up to: 10.3.0
 Requires PHP: 5.6
-Stable tag: 2.4.17
-Version: 2.4.17
+Stable tag: 2.5.0
+Version: 2.5.0
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -119,6 +119,10 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.5.0 - Oct 22, 2025
+- Add additional caching of MailChimp lists, interest groups, segments and categories.
+- Add explicit cache clearing to settings page.
 
 #### 2.4.17 - Jul 7, 2025
 - Move load of plugin text domain to after init.

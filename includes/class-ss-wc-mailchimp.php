@@ -86,7 +86,11 @@ class SS_WC_MailChimp {
 	 */
 	public function get_lists( $args = array() ) {
 
-		if ( ! $results = get_transient( 'sswcmc_lists' ) ) {
+		$results = get_transient( 'sswcmc_lists' );
+		
+		if ( false === $results ) {
+
+			do_action( 'sswcmc_log', __METHOD__ . ' Cache miss - fetching lists from API' );
 
 			$resource = 'lists';
 
@@ -110,8 +114,14 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( 'sswcmc_lists', $results, MINUTE_IN_SECONDS * 5 );
+			// Ensure we have valid data before caching
+			if ( ! empty( $results ) ) {
+				set_transient( 'sswcmc_lists', $results, DAY_IN_SECONDS );
+				do_action( 'sswcmc_log', __METHOD__ . ' Cached ' . count($results) . ' lists for 24 hours' );
+			}
 
+		} else {
+			do_action( 'sswcmc_log', __METHOD__ . ' Cache hit - using cached lists' );
 		}
 
 		return $results;
@@ -150,7 +160,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( 'sswcmc_list_web_ids', $results, MINUTE_IN_SECONDS * 5 );
+			set_transient( 'sswcmc_list_web_ids', $results, DAY_IN_SECONDS );
 
 		}
 
@@ -315,8 +325,8 @@ class SS_WC_MailChimp {
 
 			}
 
-			// Cache list merge tags for 15 minutes
-			set_transient( "sswcmc_{$list_id}_merge_fields", $results, MINUTE_IN_SECONDS * 5 );
+			// Cache list merge tags for 1 day
+			set_transient( "sswcmc_{$list_id}_merge_fields", $results, DAY_IN_SECONDS );
 
 		}
 
@@ -353,7 +363,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( "sswcmc_{$list_id}_interest_categories", $results, MINUTE_IN_SECONDS * 5 );
+			set_transient( "sswcmc_{$list_id}_interest_categories", $results, DAY_IN_SECONDS );
 
 		}
 
@@ -391,7 +401,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( "sswcmc_{$list_id}_{$interest_category_id }_interests", $results, MINUTE_IN_SECONDS * 5 );
+			set_transient( "sswcmc_{$list_id}_{$interest_category_id }_interests", $results, DAY_IN_SECONDS );
 
 		}
 
@@ -465,7 +475,7 @@ class SS_WC_MailChimp {
 
 			}
 
-			set_transient( "sswcmc_{$list_id}_tags", $results, MINUTE_IN_SECONDS * 5 );
+			set_transient( "sswcmc_{$list_id}_tags", $results, DAY_IN_SECONDS );
 
 		}
 
@@ -492,5 +502,34 @@ class SS_WC_MailChimp {
 		return $this->api->get_error_message();
 
 	} //end get_error_message
+
+	/**
+	 * Clear all MailChimp transient caches
+	 * @return void
+	 */
+	public function clear_cache() {
+
+		// Delete main transients
+		delete_transient( 'sswcmc_lists' );
+		delete_transient( 'sswcmc_list_web_ids' );
+
+		// Delete list-specific transients
+		// We need to clear all possible list-specific transients
+		global $wpdb;
+		
+		// Clear merge fields, interest categories, interests, and tags transients
+		$wpdb->query( 
+			$wpdb->prepare( 
+				"DELETE FROM {$wpdb->options} 
+				WHERE option_name LIKE %s 
+				OR option_name LIKE %s", 
+				'%_transient_sswcmc_%',
+				'%_transient_timeout_sswcmc_%'
+			)
+		);
+
+		do_action( 'sswcmc_log', __METHOD__ . ' MailChimp cache cleared' );
+
+	} //end clear_cache
 
 } //end class SS_WC_MailChimp
