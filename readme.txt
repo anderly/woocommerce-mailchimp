@@ -6,8 +6,8 @@ Requires at least: 4.7.0
 Tested up to: 6.8.3
 WC tested up to: 10.3.0
 Requires PHP: 5.6
-Stable tag: 2.5.0
-Version: 2.5.0
+Stable tag: 2.5.1
+Version: 2.5.1
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -119,6 +119,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 2.5.1 - Oct 27, 2025
+- Fix plugin text domain hook.
 
 #### 2.5.0 - Oct 22, 2025
 - Add additional caching of MailChimp lists, interest groups, segments and categories.

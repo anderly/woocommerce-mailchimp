@@ -15,7 +15,7 @@ final class SS_WC_MailChimp_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '2.5.0';
+	private static $version = '2.5.1';
 
 	/**
 	 * Plugin singleton instance
@@ -480,8 +480,8 @@ final class SS_WC_MailChimp_Plugin {
 		register_activation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'activate' ) );
 		register_deactivation_hook( SS_WC_MAILCHIMP_FILE, array( __CLASS__, 'deactivate' ) );
 
-		// Load plugin textdomain on plugins_loaded hook (fix for just-in-time translation loading)
-		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
+		// Load plugin textdomain on init hook (fix for just-in-time translation loading in WP 6.7+)
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 		// Register AJAX handlers - must be done on every request, not just admin
 		add_action( 'wp_ajax_ss_wc_mailchimp_clear_cache', array( $this, 'ajax_clear_cache' ) );
