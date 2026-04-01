@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.2...v3.0.3) (2026-04-01)
+
+
+### Bug Fixes
+
+* remove release-please markers from readme.txt Stable tag ([180a048](https://github.com/anderly/woocommerce-mailchimp/commit/180a048d9d8bfc629cf699638aef7f0781c4b3db))
+
 ## [3.0.2](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.1...v3.0.2) (2026-04-01)
 
 
