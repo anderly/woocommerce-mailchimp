@@ -6,7 +6,7 @@
  * Author: Saint Systems
  * Author URI: https://www.saintsystems.com
  * Version: 2.5.1 x-release-please-version
- * WC tested up to: 10.3.0
+ * WC tested up to: 10.6.2
  * Text Domain: woocommerce-mailchimp
  * Domain Path: languages
  *
