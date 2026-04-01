@@ -8,10 +8,6 @@
       "extra-files": [
         {
           "type": "generic",
-          "path": "readme.txt"
-        },
-        {
-          "type": "generic",
           "path": "woocommerce-mailchimp.php"
         },
         {

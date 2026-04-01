@@ -94,11 +94,15 @@ jobs:
           mv readme.txt.tmp readme.txt
           rm /tmp/new_entry.txt
 
+          # Update Stable tag and Version in readme.txt header
+          sed -i "s/^Stable tag: .*/Stable tag: $VERSION/" readme.txt
+          sed -i "s/^Version: .*/Version: $VERSION/" readme.txt
+
           # Commit and push the change
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add readme.txt
-          git diff --staged --quiet || git commit -m "chore: sync readme.txt changelog for v$VERSION"
+          git diff --staged --quiet || git commit -m "chore: sync readme.txt version and changelog for v$VERSION"
           git push
 
       # --- Release created: build zip, upload to GitHub, deploy to WordPress.org SVN ---
