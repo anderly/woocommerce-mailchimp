@@ -23,7 +23,7 @@ class Test_SSWCMC extends SSWCMC_Unit_Test_Case {
 	 *
 	 * @since 2.1.12
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->sswcmc = SSWCMC();

@@ -122,6 +122,15 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 			// Maybe save the "opt-in" field on the checkout.
 			add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'maybe_save_checkout_fields' ) );
 
+			// WooCommerce Blocks checkout support.
+			add_action( 'woocommerce_blocks_checkout_block_registration', array( $this, 'register_checkout_block_integration' ) );
+			add_action( 'woocommerce_store_api_checkout_update_order_from_request', array( $this, 'maybe_save_checkout_fields_blocks' ), 10, 2 );
+
+			// Register Store API endpoint data so the checkout accepts our extension namespace.
+			if ( function_exists( 'woocommerce_store_api_register_endpoint_data' ) ) {
+				$this->register_store_api_endpoint_data();
+			}
+
 			add_action( 'wp_ajax_ss_wc_mailchimp_get_account', array( $this, 'ajax_get_account' ) );
 
 			add_action( 'wp_ajax_ss_wc_mailchimp_get_lists', array( $this, 'ajax_get_lists' ) );
@@ -520,6 +529,10 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 		 */
 		public function maybe_add_checkout_fields() {
 
+			if ( $this->is_block_based_checkout() ) {
+				return;
+			}
+
 			if ( $this->sswcmc->is_valid() ) {
 				if ( $this->sswcmc->display_opt_in() ) {
 					do_action( 'ss_wc_mailchimp_before_opt_in_checkbox' );
@@ -544,12 +557,112 @@ if ( ! class_exists( 'SS_WC_MailChimp_Handler' ) ) {
 
 				$order = $this->wc_get_order( $order_id );
 
-				// update_post_meta( $order_id, 'ss_wc_mailchimp_opt_in', $opt_in );
-
 				$order->update_meta_data( 'ss_wc_mailchimp_opt_in', $opt_in );
 				$order->save();
 
 			}
+		}
+
+		/**
+		 * When the WooCommerce Blocks checkout form is submitted, save opt-in value.
+		 *
+		 * @since 2.5.2
+		 *
+		 * @param \WC_Order        $order   The order object.
+		 * @param \WP_REST_Request $request The Store API request (available when using
+		 *                                  woocommerce_store_api_checkout_update_order_from_request).
+		 */
+		public function maybe_save_checkout_fields_blocks( $order, $request = null ) {
+			if ( $this->sswcmc->display_opt_in() ) {
+				$mailchimp_data = array();
+
+				if ( $request instanceof \WP_REST_Request ) {
+					$extensions     = $request->get_param( 'extensions' );
+					$mailchimp_data = isset( $extensions['woocommerce-mailchimp'] ) ? $extensions['woocommerce-mailchimp'] : array();
+				}
+
+				$opt_in = ! empty( $mailchimp_data['ss_wc_mailchimp_opt_in'] ) ? 'yes' : 'no';
+
+				$order->update_meta_data( 'ss_wc_mailchimp_opt_in', $opt_in );
+				$order->save();
+			}
+		}
+
+		/**
+		 * Register extension data schema with the WooCommerce Store API.
+		 *
+		 * This tells the Store API to accept our 'woocommerce-mailchimp' extension
+		 * namespace during checkout, allowing the block checkout JS to send opt-in
+		 * data back to the server.
+		 *
+		 * @since 2.5.3
+		 */
+		public function register_store_api_endpoint_data() {
+			woocommerce_store_api_register_endpoint_data(
+				array(
+					'endpoint'        => 'checkout',
+					'namespace'       => 'woocommerce-mailchimp',
+					'data_callback'   => function () {
+						return array(
+							'ss_wc_mailchimp_opt_in' => false,
+						);
+					},
+					'schema_callback' => function () {
+						return array(
+							'ss_wc_mailchimp_opt_in' => array(
+								'description' => __( 'Whether the customer opted in to the mailing list.', 'woocommerce-mailchimp' ),
+								'type'        => 'boolean',
+								'context'     => array( 'view', 'edit' ),
+								'optional'    => true,
+								'default'     => false,
+							),
+						);
+					},
+					'schema_type'     => ARRAY_A,
+				)
+			);
+		}
+
+		/**
+		 * Register the checkout block integration.
+		 *
+		 * @since 2.5.2
+		 *
+		 * @param object $integration_registry The integration registry.
+		 */
+		public function register_checkout_block_integration( $integration_registry ) {
+			if ( ! interface_exists( 'Automattic\WooCommerce\Blocks\Integrations\IntegrationInterface' ) ) {
+				return;
+			}
+
+			require_once dirname( SS_WC_MAILCHIMP_FILE ) . '/includes/class-ss-wc-mailchimp-blocks-integration.php';
+
+			$integration_registry->register( new SS_WC_MailChimp_Blocks_Integration( $this->sswcmc ) );
+		}
+
+		/**
+		 * Check if the current checkout page is using WooCommerce Blocks.
+		 *
+		 * @since 2.5.2
+		 * @return bool
+		 */
+		private function is_block_based_checkout() {
+			if ( ! function_exists( 'has_block' ) ) {
+				return false;
+			}
+
+			if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+				return false;
+			}
+
+			if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+				$checkout_page_id = wc_get_page_id( 'checkout' );
+				if ( $checkout_page_id && has_block( 'woocommerce/checkout', $checkout_page_id ) ) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		/**
