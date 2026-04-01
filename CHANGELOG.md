@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.5](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.4...v3.0.5) (2026-04-01)
+
+
+### Bug Fixes
+
+* bump WP tested up to 6.9.4 ([a802b86](https://github.com/anderly/woocommerce-mailchimp/commit/a802b863905b7fd5bfbdcf7ec8bca68d4b84841f))
+
 ## [3.0.4](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.3...v3.0.4) (2026-04-01)
 
 
