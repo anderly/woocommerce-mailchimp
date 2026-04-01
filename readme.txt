@@ -120,6 +120,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
+#### 3.0.1 - Apr 1, 2026
+- Fix: use full SVN trunk checkout in release workflow
+
 #### 3.0.0 - Apr 1, 2026
 - Minimum requirements raised to PHP 7.4+, WordPress 6.2+, and WooCommerce 8.3+. Sites running older versions must upgrade before updating this plugin.
 - Feature: add block-based checkout support
