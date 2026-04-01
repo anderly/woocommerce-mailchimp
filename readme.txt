@@ -19,7 +19,7 @@ WP WooCommerce Mailchimp provides simple and flexible Mailchimp integration for 
 Automatically subscribe customers to a designated Mailchimp list and, optionally, Mailchimp interest groups and tags upon order creation or order completion.
 This can be done quietly or based on the user's consent with several opt-in settings that support international opt-in laws.
 
-Upgrade to [WP WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) for more advanced features including WooCommerce Subscriptions support and the ability to set product-specific lists, groups and tags.
+**Works with both Classic and Block-Based Checkout** — fully compatible with WooCommerce's default block checkout (the default since WooCommerce 8.3) and the traditional shortcode checkout.
 
 = Features =
 
@@ -31,16 +31,34 @@ Upgrade to [WP WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/
 
 **Works with Mailchimp Interest Groups and Tags**
 
-- Set one or more interest groups to add users to based on the selected Mailchimp list.
-- Set one or more tags to add users to based on the selected Mailchimp list.
+- Set one or more interest groups to add users to based on the selected Mailchimp list
+- Set one or more tags to add users to based on the selected Mailchimp list
+
+**Block Checkout Support**
+
+- Opt-in checkbox renders natively in WooCommerce's block-based checkout
+- Matches WooCommerce's native checkout styling
+- Fully backward compatible with classic shortcode checkout
 
 **Opt-In Settings**
 
-- MailChimp double opt-in support (control whether a double opt-in email is sent to the customer)
-- Optionally, display an opt-in checkbox on the checkout page (this is required in some countries)
+- Mailchimp double opt-in support (control whether a double opt-in email is sent to the customer)
+- Optionally, display an opt-in checkbox on the checkout page (required in some countries)
 - Control the label displayed next to the opt-in checkbox
 - Control whether or not the opt-in checkbox is checked or unchecked by default
-- Control the placement of the opt-in checkbox on the checkout page
+- Control the placement of the opt-in checkbox on the checkout page (classic checkout)
+
+= Upgrade to Pro =
+
+[WP WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) unlocks powerful features for growing stores:
+
+- **Per-Product Mailchimp Settings** — assign different lists, interest groups, and tags per product
+- **Per-Variation Mailchimp Settings** — different Mailchimp mappings for each product variation (Monthly vs Annual, Small vs Large, etc.)
+- **Merge Field Mapping** — map any WooCommerce order, customer, or product field to Mailchimp merge fields without writing code. Set global defaults with per-product and per-variation overrides.
+- **WooCommerce Subscriptions Integration** — sync Mailchimp membership with subscription lifecycle (active, cancelled, expired)
+- **Subscription Expiration Actions** — automatically unsubscribe, remove tags, or remove interest groups when a subscription expires
+
+[Learn more about WP WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/)
 
 = Translation Support =
 
@@ -79,7 +97,7 @@ If no custom translations are present, languages will be loaded in the following
 
 = Requirements =
 
-WP WooCommerce Mailchimp requires PHP 5.6+ (PHP 7.0+ recommended). You'll also need to be running WordPress 4.7.0+ and have WooCommerce 3.5.0+.
+WP WooCommerce Mailchimp requires PHP 7.4+, WordPress 6.2+, and WooCommerce 8.3+.
 
 = Documentation & Support =
 
@@ -88,16 +106,13 @@ Online documentation and code samples are available via our [Help Center](https:
 Please visit the
 [WP WooCommerce MailChimp support forum on WordPress.org](https://wordpress.org/support/plugin/woocommerce-mailchimp) for basic support and help from other users. Since this is a free plugin, we respond to these as we have time.
 
-Dedicated support will is available for [WP WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) customers.
+Dedicated support is available for [WP WooCommerce Mailchimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) customers.
 
 = Contribute =
-All development for WP WooCommerce MailChimp is [handled via GitHub](https://github.com/anderly/woocommerce-mailchimp). Opening new issues and submitting pull requests are welcome.
 
-[Our public roadmap is available on Trello](https://trello.com/b/VWBdLVuI/woocommerce-mailchimp-development). We'd love it if you vote and comment on your favorite ideas.
+All development for WP WooCommerce Mailchimp is [handled via GitHub](https://github.com/anderly/woocommerce-mailchimp). Opening new issues and submitting pull requests are welcome.
 
-You can also keep up to date with [WooCommerce MailChimp Pro](https://www.saintsystems.com/products/woocommerce-mailchimp-pro/) development by [subscribing to our newsletter](http://eepurl.com/bxcewL).
-
-Also, if you enjoy using the software [we'd love it if you could give us a review](https://wordpress.org/support/plugin/woocommerce-mailchimp/reviews/?rate=5#new-post)!
+If you enjoy using the plugin, [we'd love it if you could give us a review](https://wordpress.org/support/plugin/woocommerce-mailchimp/reviews/?rate=5#new-post)!
 
 == Installation ==
 
