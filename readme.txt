@@ -6,8 +6,8 @@ Requires at least: 4.7.0
 Tested up to: 6.8.3
 WC tested up to: 10.3.0
 Requires PHP: 5.6
-Stable tag: 2.5.1
-Version: 2.5.1
+Stable tag: 2.5.1 <!-- x-release-please-version -->
+Version: 2.5.1 <!-- x-release-please-version -->
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
