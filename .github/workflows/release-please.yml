@@ -141,15 +141,15 @@ jobs:
 
           echo "Deploying ${PLUGIN_SLUG} v${VERSION} to WordPress.org SVN..."
 
-          # Checkout SVN trunk (shallow, non-recursive for speed)
-          svn checkout "${SVN_REPO}/trunk" /tmp/svn-trunk --depth empty
-          svn checkout "${SVN_REPO}/tags" /tmp/svn-tags --depth empty
+          # Full checkout of trunk so SVN tracks existing files
+          svn checkout "${SVN_REPO}/trunk" /tmp/svn-trunk
 
-          # Replace trunk with built plugin files
-          rm -rf /tmp/svn-trunk/*
+          # Replace trunk contents with built plugin files
+          # Remove all files except .svn metadata, then copy new files in
+          find /tmp/svn-trunk -mindepth 1 -not -path '*/.svn*' -delete
           rsync -av /tmp/woocommerce-mailchimp/ /tmp/svn-trunk/
 
-          # Add new / remove deleted files
+          # Add new files / remove deleted files
           cd /tmp/svn-trunk
           svn add --force . --auto-props --parents --depth infinity -q
           svn status | grep '^!' | awk '{print $2}' | xargs -r svn rm --force
