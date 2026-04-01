@@ -45,7 +45,7 @@ jobs:
           echo "Syncing changelog for version $VERSION on branch $BRANCH"
 
           # Check if this version already exists in readme.txt changelog
-          if grep -q "^= $VERSION =" readme.txt; then
+          if grep -q "^#### $VERSION " readme.txt; then
             echo "Changelog for $VERSION already exists in readme.txt, skipping."
             exit 0
           fi
@@ -71,7 +71,7 @@ jobs:
               PREFIX=""
             elif echo "$line" | grep -q '^\* '; then
               clean=$(echo "$line" | sed 's/ *(\[[#a-f0-9]*\]([^)]*))//g' | sed 's/^\* //')
-              CHANGELOG_ENTRY="${CHANGELOG_ENTRY}*   ${PREFIX}${clean}"$'\n'
+              CHANGELOG_ENTRY="${CHANGELOG_ENTRY}- ${PREFIX}${clean}"$'\n'
             fi
           done <<< "$SECTION"
 
@@ -83,8 +83,11 @@ jobs:
           echo "Changelog entries:"
           echo "$CHANGELOG_ENTRY"
 
-          # Write new changelog entry to temp file
-          printf '= %s =\n%s' "$VERSION" "$CHANGELOG_ENTRY" > /tmp/new_entry.txt
+          # Get today's date for the header
+          TODAY=$(date +"%b %-d, %Y")
+
+          # Write new changelog entry to temp file matching existing format
+          printf '#### %s - %s\n%s' "$VERSION" "$TODAY" "$CHANGELOG_ENTRY" > /tmp/new_entry.txt
 
           # Insert after the == Changelog == line
           awk '/^== Changelog ==/ {print; print ""; system("cat /tmp/new_entry.txt"); next} 1' readme.txt > readme.txt.tmp
