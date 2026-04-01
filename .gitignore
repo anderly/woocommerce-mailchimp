@@ -6,3 +6,4 @@ release.sh
 # Unit tests
 phpcs.xml.dist
 vendor
+.phpunit.result.cache
