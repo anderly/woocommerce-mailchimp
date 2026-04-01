@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.4](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.3...v3.0.4) (2026-04-01)
+
+
+### Bug Fixes
+
+* rewrite SVN deploy to match proven release.sh approach ([8c3d090](https://github.com/anderly/woocommerce-mailchimp/commit/8c3d0909aabf91c8fe85f818f1b0d1c8f46b09c1))
+
 ## [3.0.3](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.2...v3.0.3) (2026-04-01)
 
 
