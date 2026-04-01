@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.0...v3.0.1) (2026-04-01)
+
+
+### Bug Fixes
+
+* use full SVN trunk checkout in release workflow ([1064216](https://github.com/anderly/woocommerce-mailchimp/commit/1064216d50f94b66d0ff2c558f65a1ef82a83ac7))
+
 ## [3.0.0](https://github.com/anderly/woocommerce-mailchimp/compare/2.5.1...v3.0.0) (2026-04-01)
 
 
