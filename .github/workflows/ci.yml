@@ -1,41 +1,52 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
 
 jobs:
   test:
-    name: PHP ${{ matrix.php }} WP ${{ matrix.wp }} MU ${{ matrix.multisite }}
+    name: PHP ${{ matrix.php }} / WP ${{ matrix.wp }} / WC ${{ matrix.wc }}
     timeout-minutes: 15
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        # We test against the earliest and latest PHP versions for each major supported version.
-        php: [ '5.6', '7.0', '7.4', '8.0', '8.1', '8.2' ]
-        wp: [ '5.2', '5.3', '5.4', '5.5', '5.6', '5.7', '5.8', '5.9', '6.0', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', 'latest' ]
-        multisite: [ '0', '1' ]
-        exclude:
-          # Earlier versions of WordPress do not support PHP 7.4+
-          - php: 7.4
-            wp: 5.2
-          - php: 8.0
-            wp: 5.2
-          - php: 8.0
-            wp: 5.3
-          - php: 8.0
-            wp: 5.4
-          - php: 8.0
-            wp: 5.5
+        include:
+          # Oldest supported combo
+          - php: '7.4'
+            wp: '6.2'
+            wc: '8.3.0'
+          # Mid-range
+          - php: '8.1'
+            wp: '6.6'
+            wc: '9.4.0'
+          # Current stable
+          - php: '8.2'
+            wp: 'latest'
+            wc: 'latest'
+          # Latest PHP versions against latest WP/WC
+          - php: '8.3'
+            wp: 'latest'
+            wc: 'latest'
+          - php: '8.4'
+            wp: 'latest'
+            wc: 'latest'
+
     services:
       database:
-        image: mysql:5.6
+        image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -45,49 +56,37 @@ jobs:
           extensions: mysql
           coverage: none
 
-      - name: Tool versions
-        run: |
-          php --version
-          composer --version
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Get cached composer directories
-        uses: actions/cache@v2
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
         with:
-          path: ./vendor
-          key: ${{ runner.os }}-${{ hashFiles('./composer.lock') }}
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
 
-      - name: Setup and install composer
-        run: composer install
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
 
-      - name: Setup PHPUnit
+      - name: Install WooCommerce
         run: |
-          # PHPUnit 5.7 when using PHP 5.6 - 7.0.
-          if [ "$(php -r "echo version_compare( PHP_VERSION, '7.1', '<' );")" ]; then
-            curl -L https://phar.phpunit.de/phpunit-5.7.phar -o /tmp/phpunit
-            OVERWRITE=1
-          # PHPUnit 7.5 when using PHP 7.1 - 7.4.
-          elif [ "$(php -r "echo version_compare( PHP_VERSION, '8.0', '<' );")" ]; then
-            curl -L https://phar.phpunit.de/phpunit-7.5.phar -o /tmp/phpunit
-            OVERWRITE=1
-          # PHPUnit 7.5 (Custom Fork) when using PHP 8.0+.
+          if [ "${{ matrix.wc }}" = "latest" ]; then
+            WC_VERSION=$(curl -s https://api.wordpress.org/plugins/info/1.0/woocommerce.json | python3 -c "import sys,json; print(json.load(sys.stdin)['version'])")
           else
-            curl -L https://github.com/woocommerce/phpunit/archive/add-compatibility-with-php8-to-phpunit-7.zip -o /tmp/phpunit-7.5-fork.zip
-            unzip -d /tmp/phpunit-fork /tmp/phpunit-7.5-fork.zip
-            composer --working-dir=/tmp/phpunit-fork/phpunit-add-compatibility-with-php8-to-phpunit-7 install
-            rm ./vendor/bin/phpunit
-            ln -sf /tmp/phpunit-fork/phpunit-add-compatibility-with-php8-to-phpunit-7/phpunit ./vendor/bin/phpunit
+            WC_VERSION="${{ matrix.wc }}"
           fi
+          echo "Installing WooCommerce ${WC_VERSION}"
+          mkdir -p /tmp/woocommerce
+          curl -sL "https://downloads.wordpress.org/plugin/woocommerce.${WC_VERSION}.zip" -o /tmp/woocommerce.zip
+          unzip -q /tmp/woocommerce.zip -d /tmp/
+          echo "WC_PATH=/tmp/woocommerce" >> $GITHUB_ENV
 
-          if [ $OVERWRITE ]; then
-            rm ./vendor/bin/phpunit
-            chmod +x /tmp/phpunit
-            mv /tmp/phpunit ./vendor/bin/phpunit
-          fi
-
-      - name: Init DB and WP
+      - name: Install WordPress test suite
         run: ./tests/bin/install.sh wordpress_test root root 127.0.0.1 ${{ matrix.wp }}
 
       - name: Run tests
-        run: |
-          ./vendor/bin/phpunit --version
-          WP_MULTISITE=${{ matrix.multisite }} ./vendor/bin/phpunit
+        env:
+          WC_PATH: ${{ env.WC_PATH }}
+        run: vendor/bin/phpunit

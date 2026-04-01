@@ -408,13 +408,13 @@ final class SS_WC_MailChimp_Plugin {
 	private function define_constants() {
 
 		// Minimum supported version of WordPress.
-		$this->define( 'SS_WC_MAILCHIMP_MIN_WP_VERSION', '4.7.0' );
+		$this->define( 'SS_WC_MAILCHIMP_MIN_WP_VERSION', '6.2.0' );
 
 		// Minimum supported version of WooCommerce.
-		$this->define( 'SS_WC_MAILCHIMP_MIN_WC_VERSION', '3.5.0' );
+		$this->define( 'SS_WC_MAILCHIMP_MIN_WC_VERSION', '8.3.0' );
 
 		// Minimum supported version of PHP.
-		$this->define( 'SS_WC_MAILCHIMP_MIN_PHP_VERSION', '5.6.0' );
+		$this->define( 'SS_WC_MAILCHIMP_MIN_PHP_VERSION', '7.4.0' );
 
 		// Plugin version.
 		$this->define( 'SS_WC_MAILCHIMP_VERSION', self::version() );
