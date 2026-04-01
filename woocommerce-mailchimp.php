@@ -35,8 +35,8 @@ define( 'SS_WC_MAILCHIMP_FILE', __FILE__ );
  */
 require_once( 'includes/class-ss-wc-mailchimp-plugin.php' );
 
-// Include Action Scheduler Library.
-require_once( 'includes/lib/action-scheduler/action-scheduler.php' );
+// Action Scheduler is bundled with WooCommerce 8.3+ (our minimum requirement).
+// No need to include a separate copy.
 
 function SSWCMC() {
 	return SS_WC_MailChimp_Plugin::get_instance();

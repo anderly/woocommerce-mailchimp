@@ -67,4 +67,17 @@ class Test_SSWCMC extends SSWCMC_Unit_Test_Case {
 	public function test_wc_class_instances() {
 		$this->assertInstanceOf('SS_WC_MailChimp_Plugin', $this->sswcmc );
 	}
+
+	/**
+	 * Test that Action Scheduler functions are available from WooCommerce.
+	 *
+	 * The plugin no longer bundles Action Scheduler — it relies on
+	 * WooCommerce 8.3+ which includes it.
+	 *
+	 * @since 3.0.6
+	 */
+	public function test_action_scheduler_available() {
+		$this->assertTrue( function_exists( 'as_schedule_single_action' ), 'as_schedule_single_action should be available from WooCommerce' );
+		$this->assertTrue( function_exists( 'as_get_scheduled_actions' ), 'as_get_scheduled_actions should be available from WooCommerce' );
+	}
 }
