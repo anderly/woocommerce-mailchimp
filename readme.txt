@@ -120,6 +120,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
+#### 3.0.2 - Apr 1, 2026
+- Fix: use block annotation for version marker in plugin header
+
 #### 3.0.1 - Apr 1, 2026
 - Fix: use full SVN trunk checkout in release workflow
 
