@@ -145,35 +145,33 @@ jobs:
 
           echo "Deploying ${PLUGIN_SLUG} v${VERSION} to WordPress.org SVN..."
 
-          # Full checkout of trunk so SVN tracks existing files
-          svn checkout "${SVN_REPO}/trunk" /tmp/svn-trunk
+          # Checkout the full SVN repo (trunk + tags)
+          svn checkout "${SVN_REPO}" /tmp/svn-repo
 
           # Replace trunk contents with built plugin files
-          # Remove all files except .svn metadata, then copy new files in
-          find /tmp/svn-trunk -mindepth 1 -not -path '*/.svn*' -delete
-          rsync -av /tmp/woocommerce-mailchimp/ /tmp/svn-trunk/
+          rm -rf /tmp/svn-repo/trunk
+          cp -R /tmp/woocommerce-mailchimp /tmp/svn-repo/trunk
 
-          # Add new files / remove deleted files
-          cd /tmp/svn-trunk
-          svn add --force . --auto-props --parents --depth infinity -q
-          svn status | grep '^!' | awk '{print $2}' | xargs -r svn rm --force
+          cd /tmp/svn-repo
 
-          # Commit trunk
+          # Add new files
+          svn add --force * --auto-props --parents --depth infinity -q
+
+          # Remove deleted files
+          MISSING_PATHS=$(svn status | sed -e '/^!/!d' -e 's/^!//')
+          for MISSING_PATH in $MISSING_PATHS; do
+            svn rm --force "$MISSING_PATH"
+          done
+
+          # Copy trunk to tag (local working copy operation)
+          svn copy trunk "tags/${VERSION}"
+
+          # Single commit: trunk update + tag creation
           svn commit \
             --username "${SVN_USERNAME}" \
             --password "${SVN_PASSWORD}" \
             --non-interactive \
             --no-auth-cache \
             -m "Release ${VERSION}, see readme.txt for the changelog."
-
-          # Create SVN tag from trunk
-          svn copy \
-            "${SVN_REPO}/trunk" \
-            "${SVN_REPO}/tags/${VERSION}" \
-            --username "${SVN_USERNAME}" \
-            --password "${SVN_PASSWORD}" \
-            --non-interactive \
-            --no-auth-cache \
-            -m "Tag ${VERSION}"
 
           echo "Successfully deployed v${VERSION} to WordPress.org"
