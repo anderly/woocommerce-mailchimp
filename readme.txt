@@ -120,6 +120,14 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 
 == Changelog ==
 
+#### 3.0.0 - Apr 1, 2026
+- Minimum requirements raised to PHP 7.4+, WordPress 6.2+, and WooCommerce 8.3+. Sites running older versions must upgrade before updating this plugin.
+- Feature: add block-based checkout support
+- Fix: install SVN in CI for WordPress test suite setup
+- Fix: match existing readme.txt changelog format in release-please workflow
+- Fix: symlink WooCommerce for test bootstrap and add SVN to release workflow
+- mark 3.0 release
+
 #### 2.5.1 - Oct 27, 2025
 - Fix plugin text domain hook.
 
