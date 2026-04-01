@@ -123,6 +123,10 @@ jobs:
         run: |
           gh release upload ${{ steps.release.outputs.tag_name }} woocommerce-mailchimp.zip
 
+      - name: Install SVN
+        if: ${{ steps.release.outputs.release_created }}
+        run: sudo apt-get update && sudo apt-get install -y subversion
+
       - name: Deploy to WordPress.org SVN
         if: ${{ steps.release.outputs.release_created }}
         env:

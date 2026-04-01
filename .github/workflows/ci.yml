@@ -78,10 +78,10 @@ jobs:
             WC_VERSION="${{ matrix.wc }}"
           fi
           echo "Installing WooCommerce ${WC_VERSION}"
-          mkdir -p /tmp/woocommerce
           curl -sL "https://downloads.wordpress.org/plugin/woocommerce.${WC_VERSION}.zip" -o /tmp/woocommerce.zip
           unzip -q /tmp/woocommerce.zip -d /tmp/
-          echo "WC_PATH=/tmp/woocommerce" >> $GITHUB_ENV
+          # Bootstrap expects WC as a sibling directory (../woocommerce/)
+          ln -s /tmp/woocommerce "$GITHUB_WORKSPACE/../woocommerce"
 
       - name: Install SVN
         run: sudo apt-get update && sudo apt-get install -y subversion
@@ -90,6 +90,4 @@ jobs:
         run: ./tests/bin/install.sh wordpress_test root root 127.0.0.1 ${{ matrix.wp }}
 
       - name: Run tests
-        env:
-          WC_PATH: ${{ env.WC_PATH }}
         run: vendor/bin/phpunit
