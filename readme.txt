@@ -6,8 +6,8 @@ Requires at least: 6.2
 Tested up to: 6.8.3
 WC tested up to: 10.6.2
 Requires PHP: 7.4
-Stable tag: 3.0.1 <!-- x-release-please-version -->
-Version: 3.0.1 <!-- x-release-please-version -->
+Stable tag: 3.0.2 <!-- x-release-please-version -->
+Version: 3.0.2 <!-- x-release-please-version -->
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -119,6 +119,9 @@ Also, if you enjoy using the software [we'd love it if you could give us a revie
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 3.0.2 - Apr 1, 2026
+- Fix: use block annotation for version marker in plugin header
 
 #### 3.0.1 - Apr 1, 2026
 - Fix: use full SVN trunk checkout in release workflow
