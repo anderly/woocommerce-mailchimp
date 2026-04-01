@@ -83,6 +83,9 @@ jobs:
           unzip -q /tmp/woocommerce.zip -d /tmp/
           echo "WC_PATH=/tmp/woocommerce" >> $GITHUB_ENV
 
+      - name: Install SVN
+        run: sudo apt-get update && sudo apt-get install -y subversion
+
       - name: Install WordPress test suite
         run: ./tests/bin/install.sh wordpress_test root root 127.0.0.1 ${{ matrix.wp }}
 
