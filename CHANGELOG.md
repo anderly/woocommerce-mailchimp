@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.2](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.1...v3.0.2) (2026-04-01)
+
+
+### Bug Fixes
+
+* use block annotation for version marker in plugin header ([248434b](https://github.com/anderly/woocommerce-mailchimp/commit/248434b2977dce1db62a45c1648e10a16038b85d))
+
 ## [3.0.1](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.0...v3.0.1) (2026-04-01)
 
 
