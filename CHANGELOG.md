@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/anderly/woocommerce-mailchimp/compare/v3.1.0...v3.2.0) (2026-04-02)
+
+
+### Features
+
+* add Upgrade to Pro upsell on settings page and style plugin row link ([d02e046](https://github.com/anderly/woocommerce-mailchimp/commit/d02e0467fdab32de54e99f1c1a1e887a76677b0b))
+
 ## [3.1.0](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.5...v3.1.0) (2026-04-02)
 
 
