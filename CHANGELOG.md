@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.1.0](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.5...v3.1.0) (2026-04-02)
+
+
+### Features
+
+* remove bundled Action Scheduler in favor of WooCommerce built-in ([dd6c9df](https://github.com/anderly/woocommerce-mailchimp/commit/dd6c9df89ed55d7ab7833af2fe5944fe975aa503))
+
+
+### Bug Fixes
+
+* remove bundled Action Scheduler — use WooCommerce's built-in copy ([abe2d20](https://github.com/anderly/woocommerce-mailchimp/commit/abe2d20f6b51de24f9c164ae1c77774b0b9f277d))
+* update readme with block checkout, pro features, and requirements ([9471dd5](https://github.com/anderly/woocommerce-mailchimp/commit/9471dd5c747e26fd875923ee5f08410acde036ac))
+* use --ignore-platform-reqs for composer install in CI ([0cc96f4](https://github.com/anderly/woocommerce-mailchimp/commit/0cc96f4744f8a1beffd0ef123cc8496cba50b52f))
+
 ## [3.0.5](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.4...v3.0.5) (2026-04-01)
 
 
