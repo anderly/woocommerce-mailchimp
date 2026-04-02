@@ -1,6 +1,6 @@
 WP WooCommerce Mailchimp
 ======================
-[![Build Status](https://img.shields.io/travis/anderly/woocommerce-mailchimp/master.svg?style=flat-square)](https://travis-ci.org/anderly/woocommerce-mailchimp)
+[![CI](https://github.com/anderly/woocommerce-mailchimp/actions/workflows/ci.yml/badge.svg)](https://github.com/anderly/woocommerce-mailchimp/actions/workflows/ci.yml)
 [![WordPress tested](https://img.shields.io/wordpress/v/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
 [![WordPress Plugin version](https://img.shields.io/wordpress/plugin/v/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
 [![WordPress Plugin Downloads](https://img.shields.io/wordpress/plugin/dt/woocommerce-mailchimp.svg?style=flat-square)](https://wordpress.org/plugins/woocommerce-mailchimp/)
