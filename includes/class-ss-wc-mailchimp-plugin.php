@@ -588,7 +588,7 @@ final class SS_WC_MailChimp_Plugin {
 			);
 
 			if ( ! function_exists( 'SSWCMCPRO' ) ) {
-				$row_meta['upgrade'] = '<a href="' . esc_url( apply_filters( 'ss_wc_mailchimp_support_url', 'https://www.saintsystems.com/products/woocommerce-mailchimp-pro/#utm_source=wp-plugin&utm_medium=woocommerce-mailchimp&utm_campaign=plugins-upgrade-link' ) ) . '" aria-label="' . esc_attr__( 'Upgrade to WooCommerce Mailchimp Pro', 'woocommerce-mailchimp' ) . '" target="_blank">' . esc_html__( 'Upgrade to Pro', 'woocommerce-mailchimp' ) . '</a>';
+				$row_meta['upgrade'] = '<a href="' . esc_url( apply_filters( 'ss_wc_mailchimp_support_url', 'https://www.saintsystems.com/products/woocommerce-mailchimp-pro/?utm_source=wp-plugin&utm_medium=woocommerce-mailchimp&utm_campaign=plugins-upgrade-link' ) ) . '" aria-label="' . esc_attr__( 'Upgrade to WooCommerce Mailchimp Pro', 'woocommerce-mailchimp' ) . '" target="_blank" style="color: #0a7b30; font-weight: 600;">' . esc_html__( 'Upgrade to Pro', 'woocommerce-mailchimp' ) . '</a>';
 			}
 
 			return array_merge( $links, $row_meta );

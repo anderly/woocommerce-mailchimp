@@ -356,6 +356,51 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 			do_action( 'ss_wc_mailchimp_after_settings_enqueue_js' );
 
+			// Render Pro upsell sidebar card if Pro is not active.
+			if ( ! function_exists( 'SSWCMCPRO' ) ) {
+				$this->render_pro_upsell_card();
+			}
+
+		}
+
+		/**
+		 * Render the Pro upsell sidebar card on the settings page.
+		 *
+		 * @since 3.1.0
+		 */
+		private function render_pro_upsell_card() {
+			$pro_url = 'https://www.saintsystems.com/products/woocommerce-mailchimp-pro/?utm_source=wp-plugin&utm_medium=woocommerce-mailchimp&utm_campaign=settings-page';
+			?>
+			<div id="ss-wc-mailchimp-pro-upsell" class="card" style="display: none; max-width: 320px; margin-top: 160px; padding: 20px; position: sticky; top: 52px;">
+				<h2 style="margin-top: 0; font-size: 16px;"><?php _e( 'WP WooCommerce Mailchimp Pro', 'woocommerce-mailchimp' ); ?></h2>
+				<p style="color: #555;"><?php _e( 'Unlock powerful features for growing stores:', 'woocommerce-mailchimp' ); ?></p>
+				<ul style="list-style: disc; padding-left: 20px; color: #555;">
+					<li><?php _e( 'Per-product Mailchimp lists, groups & tags', 'woocommerce-mailchimp' ); ?></li>
+					<li><?php _e( 'Per-variation Mailchimp settings', 'woocommerce-mailchimp' ); ?></li>
+					<li><?php _e( 'Merge field mapping (30+ fields)', 'woocommerce-mailchimp' ); ?></li>
+					<li><?php _e( 'WooCommerce Subscriptions integration', 'woocommerce-mailchimp' ); ?></li>
+					<li><?php _e( 'Subscription expiration actions', 'woocommerce-mailchimp' ); ?></li>
+					<li><?php _e( 'Priority email support', 'woocommerce-mailchimp' ); ?></li>
+				</ul>
+				<p>
+					<a href="<?php echo esc_url( $pro_url ); ?>" class="button button-primary" target="_blank" style="width: 100%; text-align: center;">
+						<?php _e( 'Upgrade to Pro', 'woocommerce-mailchimp' ); ?>
+					</a>
+				</p>
+			</div>
+			<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				var $card = $('#ss-wc-mailchimp-pro-upsell');
+				var $form = $card.closest('form');
+				if ( $form.length ) {
+					// Wrap the form content in a flex container with the card as sidebar.
+					$form.wrapInner('<div style="flex: 1; min-width: 0;"></div>');
+					$form.css({ display: 'flex', gap: '20px', 'align-items': 'flex-start', 'margin-top': '20px' });
+					$card.appendTo($form).show();
+				}
+			});
+			</script>
+			<?php
 		}
 
 		/**
@@ -391,9 +436,6 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 				$desc = __( 'Enter your MailChimp settings below to control how WooCommerce integrates with your MailChimp account.', 'woocommerce-mailchimp' );
 				$desc_pro = '';
-				if ( ! function_exists( 'SSWCMCPRO' ) ) {
-					$desc_pro = sprintf( __( '%sUpgrade to Pro%s to unlock several powerful features including %sWooCommerce Subscriptions%s support and product-specific lists, groups and tags.', 'woocommerce-mailchimp' ), '<p/><a href="https://www.saintsystems.com/products/woocommerce-mailchimp-pro/#utm_source=wp-plugin&utm_medium=woocommerce-mailchimp&utm_campaign=plugin-settings-page" target="_blank">', '</a>', '<a href="https://woocommerce.com/products/woocommerce-subscriptions/" target="_blank">', '</a>' );
-				}
 
 				$settings = array(
 					array(
