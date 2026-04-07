@@ -6,8 +6,8 @@ Requires at least: 6.2
 Tested up to: 6.9.4
 WC tested up to: 10.6.2
 Requires PHP: 7.4
-Stable tag: 3.1.0
-Version: 3.1.0
+Stable tag: 3.2.0
+Version: 3.2.0
 License: GPLv3
 
 Simple and flexible Mailchimp integration for WooCommerce.
@@ -134,6 +134,10 @@ If you enjoy using the plugin, [we'd love it if you could give us a review](http
 2. WooCommerce Mailchimp troubleshooting screen.
 
 == Changelog ==
+
+#### 3.2.0 - Apr 7, 2026
+- Feature: add Upgrade to Pro upsell on settings page and style plugin row link
+- Fix: remove early __() calls in constructors to resolve WP 6.7+ textdomain notice
 
 #### 3.1.0 - Apr 2, 2026
 - Feature: remove bundled Action Scheduler in favor of WooCommerce built-in
