@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.2.0](https://github.com/anderly/woocommerce-mailchimp/compare/v3.1.0...v3.2.0) (2026-04-07)
+
+
+### Features
+
+* add Upgrade to Pro upsell on settings page and style plugin row link ([d02e046](https://github.com/anderly/woocommerce-mailchimp/commit/d02e0467fdab32de54e99f1c1a1e887a76677b0b))
+
+
+### Bug Fixes
+
+* remove early __() calls in constructors to resolve WP 6.7+ textdomain notice ([b2b9101](https://github.com/anderly/woocommerce-mailchimp/commit/b2b91017cdfcea68abcfc3bc68782246d841a3c4))
+
 ## [3.1.0](https://github.com/anderly/woocommerce-mailchimp/compare/v3.0.5...v3.1.0) (2026-04-02)
 
 
