@@ -58,7 +58,7 @@ if ( ! class_exists( 'SS_WC_Settings_MailChimp' ) ) {
 
 			$this->id         = 'mailchimp';
 			$this->namespace  = 'ss_wc_' . $this->id;
-			$this->label      = __( 'MailChimp', 'woocommerce-mailchimp' );
+			$this->label      = 'MailChimp';
 			$this->init();
 
 			$this->register_hooks();
